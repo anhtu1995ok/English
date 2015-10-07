@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Component -->
+    <color name="secondary_action_bar">#009688</color>
+    <color name="action_bar">#F44336</color>
+    <color name="color_e0e0e0">#E0E0E0</color>
+    <color name="color_f0f0f0">#F0F0F0</color>
+    <color name="color_bdbdbd">#BDBDBD</color>
+    <color name="sep_light">#b0b0b0</color>
+    <color name="blue">#2196F3</color>
+    <color name="color_90CAF9">#90CAF9</color>
+    <color name="list_background">#FFF</color>
+    <color name="list_background_pressed">#E0E0E0</color>
+    <color name="list_divider">#f0f0f0</color>
+    <color name="toggle_selected">#8BC34A</color>
+    <!-- Transperent -->
+    <color name="bg_red_20">#66795548</color>
+    <color name="bg_null">#00000000</color>
+    <color name="bg_tranperent_95">#F2000000</color>
+    <color name="bg_tranperent_90">#E6000000</color>
+    <color name="bg_tranperent_85">#D9000000</color>
+    <color name="bg_tranperent_80">#CC000000</color>
+    <color name="bg_tranperent_75">#BF000000</color>
+    <color name="bg_tranperent_70">#B3000000</color>
+    <color name="bg_tranperent_65">#A6000000</color>
+    <color name="bg_tranperent_60">#99000000</color>
+    <color name="bg_tranperent_55">#8C000000</color>
+    <color name="bg_tranperent_50">#80000000</color>
+    <color name="bg_tranperent_45">#73000000</color>
+    <color name="bg_tranperent_40">#66000000</color>
+    <color name="bg_tranperent_35">#59000000</color>
+    <color name="bg_tranperent_30">#4D000000</color>
+    <color name="bg_tranperent_25">#40000000</color>
+    <color name="bg_tranperent_20">#33000000</color>
+    <color name="bg_tranperent_15">#26000000</color>
+    <color name="bg_tranperent_10">#1A000000</color>
+    <color name="bg_tranperent_5">#0D000000</color>
+    <color name="bg_deep_blue_50">#993F51B5</color>
+    <color name="bg_white_75">#BFFFFFFF</color>
+    <color name="bg_white_70">#B3FFFFFF</color>
+    <color name="bg_white_60">#99FFFFFF</color>
+    <color name="bg_white_50">#80FFFFFF</color>
+    <color name="bg_white_40">#66FFFFFF</color>
+    <color name="bg_white_35">#59FFFFFF</color>
+    <color name="bg_white_30">#4DFFFFFF</color>
+    <color name="bg_white_25">#40FFFFFF</color>
+    <color name="bg_white_20">#33FFFFFF</color>
+    <color name="bg_white_15">#26FFFFFF</color>
+    <color name="bg_white_10">#1AFFFFFF</color>
+    <color name="bg_white_5">#0DFFFFFF</color>
+    <color name="bg_white_0">#00FFFFFF</color>
+    <!-- Text -->
+    <color name="text_color">#3d3d3d</color>
+    <color name="Color6d6d6d">#6d6d6d</color>
+    <color name="text_color_disable">#9d9d9d</color>
+    <color name="counter_text_bg">#cfcfcf</color>
+    <!-- Other -->
+    <color name="F44336">#F44336</color>
+
+</resources>

@@ -1,0 +1,44 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/home_horizontal_bg"
+    android:orientation="vertical" >
+
+    <com.sileria.android.view.HorzListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="2" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/leftarrow"
+            android:layout_width="80dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_leftarrow" />
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_home_backtoschool" />
+
+        <ImageView
+            android:id="@+id/rightarrow"
+            android:layout_width="80dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_rightarrow" />
+    </LinearLayout>
+
+</LinearLayout>

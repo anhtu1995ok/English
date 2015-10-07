@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:contentDescription="@string/image_description"
+        android:src="@drawable/ic_pig" />
+
+    <ImageView
+        android:id="@+id/star"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="-20dp"
+        android:contentDescription="@string/image_description"
+        android:src="@drawable/ic_star" />
+
+</LinearLayout>
