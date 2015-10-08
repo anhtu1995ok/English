@@ -17,11 +17,7 @@
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="2"
-        android:animationCache="false"
-        android:scrollingCache="false"
-        android:smoothScrollbar="true" />
+        android:layout_weight="2" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -2,12 +2,12 @@ package com.android.sjsofteducationapp;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
+import com.android.sjsofteducationapp.model.ImageDrag;
+import com.meg7.widget.SvgImageView;
+
 import android.content.ClipData;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.DragEvent;
 import android.view.MotionEvent;
@@ -20,10 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.android.sjsofteducationapp.model.ImageDrag;
-import com.meg7.widget.SvgImageView;
-
-public class StudyActivity extends Activity implements OnClickListener {
+public class StudyActivity extends MasterActivity implements OnClickListener {
 	private LinearLayout mainLayout, layoutContent;
 	private SvgImageView image1, image2, image3, image4;
 	private SvgImageView imageDrag1, imageDrag2, imageDrag3, imageDrag4;

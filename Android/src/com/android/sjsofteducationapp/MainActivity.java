@@ -4,11 +4,8 @@ import java.util.ArrayList;
 
 import com.android.sjsofteducationapp.adapter.HorizontalListViewAdapter;
 import com.android.sjsofteducationapp.model.Home;
-import com.android.sjsofteducationapp.service.BackGroundMusicService;
-import com.android.sjsofteducationapp.utils.Media;
 import com.sileria.android.view.HorzListView;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,11 +13,10 @@ import android.view.View.OnClickListener;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity implements OnClickListener, OnItemClickListener {
+public class MainActivity extends MasterActivity implements OnClickListener, OnItemClickListener {
 
 	HorzListView listView;
 	HorizontalListViewAdapter adapter;
@@ -28,7 +24,6 @@ public class MainActivity extends Activity implements OnClickListener, OnItemCli
 	ImageView image, leftArrow, rightArrow;
 	int position = 0;
 	Intent intent;
-	BackGroundMusicService service;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +50,6 @@ public class MainActivity extends Activity implements OnClickListener, OnItemCli
 		leftArrow.setOnClickListener(this);
 		rightArrow.setOnClickListener(this);
 
-		service = BackGroundMusicService.getInstance(getApplicationContext());
-
 	}
 
 	private void initData() {
@@ -70,6 +63,7 @@ public class MainActivity extends Activity implements OnClickListener, OnItemCli
 	@Override
 	public void onClick(View v) {
 		int max = data.size();
+		Toast.makeText(getApplicationContext(), "x : " + listView.getScrollX(), Toast.LENGTH_SHORT).show();
 		switch (v.getId()) {
 		case R.id.image:
 			Toast.makeText(getApplicationContext(), "BackToSchool", Toast.LENGTH_SHORT).show();
@@ -85,7 +79,7 @@ public class MainActivity extends Activity implements OnClickListener, OnItemCli
 			}
 			break;
 		case R.id.rightarrow:
-			if (position < max) {
+			if (position < max - 2) {
 				position++;
 				listView.setSelection(position);
 				Toast.makeText(getApplicationContext(), "right pos : " + position, Toast.LENGTH_SHORT).show();
@@ -94,27 +88,6 @@ public class MainActivity extends Activity implements OnClickListener, OnItemCli
 		default:
 			break;
 		}
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		service.stop();
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		Media media = service.getMedia(getApplicationContext());
-		if (media.isPlaying()) {
-			media.pause();
-		}
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-		service.getMedia(getApplicationContext()).setPlay();
 	}
 
 	@Override
@@ -129,6 +102,12 @@ public class MainActivity extends Activity implements OnClickListener, OnItemCli
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(intent);
 		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		service.stop();
 	}
 
 }
