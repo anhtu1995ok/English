@@ -4,13 +4,15 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.ClipData;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnDragListener;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
 import android.view.WindowManager;
@@ -19,11 +21,12 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.sjsofteducationapp.model.ImageDrag;
+import com.meg7.widget.SvgImageView;
 
 public class StudyActivity extends Activity implements OnClickListener {
 	private LinearLayout mainLayout, layoutContent;
-	private ImageView image1, image2, image3, image4;
-	private ImageView imageDrag1, imageDrag2, imageDrag3, imageDrag4;
+	private SvgImageView image1, image2, image3, image4;
+	private SvgImageView imageDrag1, imageDrag2, imageDrag3, imageDrag4;
 	private ImageView imageContent;
 	private ImageView back;
 	private ArrayList<ImageDrag> imageDrags;
@@ -44,14 +47,14 @@ public class StudyActivity extends Activity implements OnClickListener {
 		layoutContent = (LinearLayout) findViewById(R.id.layout_content);
 		imageContent = (ImageView) findViewById(R.id.image_content);
 		back = (ImageView) findViewById(R.id.back);
-		image1 = (ImageView) findViewById(R.id.image1);
-		image2 = (ImageView) findViewById(R.id.image2);
-		image3 = (ImageView) findViewById(R.id.image3);
-		image4 = (ImageView) findViewById(R.id.image4);
-		imageDrag1 = (ImageView) findViewById(R.id.image_drag1);
-		imageDrag2 = (ImageView) findViewById(R.id.image_drag2);
-		imageDrag3 = (ImageView) findViewById(R.id.image_drag3);
-		imageDrag4 = (ImageView) findViewById(R.id.image_drag4);
+		image1 = (SvgImageView) findViewById(R.id.image1);
+		image2 = (SvgImageView) findViewById(R.id.image2);
+		image3 = (SvgImageView) findViewById(R.id.image3);
+		image4 = (SvgImageView) findViewById(R.id.image4);
+		imageDrag1 = (SvgImageView) findViewById(R.id.image_drag1);
+		imageDrag2 = (SvgImageView) findViewById(R.id.image_drag2);
+		imageDrag3 = (SvgImageView) findViewById(R.id.image_drag3);
+		imageDrag4 = (SvgImageView) findViewById(R.id.image_drag4);
 		// mainLayout.setOnDragListener(new OnDragListener() {
 		//
 		// @Override
@@ -78,6 +81,15 @@ public class StudyActivity extends Activity implements OnClickListener {
 						int iWidth = height / 2 - (marginTop * 2);
 						int iHeight = height / 2 - (marginTop * 2);
 
+						Bitmap bitmap1 = createImage(getBitmapFromView(imageContent), (width / 2) - iWidth - marginLeft, marginTop + 8, iWidth, iHeight);
+						image1.setImageBitmap(bitmap1);
+						Bitmap bitmap2 = createImage(getBitmapFromView(imageContent), (width / 2) + marginLeft, marginTop + 8, iWidth, iHeight);
+						image2.setImageBitmap(bitmap2);
+						Bitmap bitmap3 = createImage(getBitmapFromView(imageContent), (width / 2) - iWidth - marginLeft, (height/2) + marginTop + 8, iWidth, iHeight);
+						image3.setImageBitmap(bitmap3);
+						Bitmap bitmap4 = createImage(getBitmapFromView(imageContent), (width / 2) + marginLeft, (height/2) + marginTop + 8, iWidth, iHeight);
+						image4.setImageBitmap(bitmap4);
+						
 						LinearLayout.LayoutParams params5 = new LinearLayout.LayoutParams(
 								iWidth, iHeight);
 						params5.topMargin = marginTop;
@@ -122,27 +134,19 @@ public class StudyActivity extends Activity implements OnClickListener {
 				});
 		back.setOnClickListener(this);
 		imageDrags = new ArrayList<ImageDrag>();
-		imageDrags.add(new ImageDrag(image1, imageDrag1, R.drawable.img1,
-				R.drawable.img_drag_1, 0));
-		imageDrags.add(new ImageDrag(image2, imageDrag2, R.drawable.img2,
-				R.drawable.img_drag_1, 1));
-		imageDrags.add(new ImageDrag(image3, imageDrag4, R.drawable.img4,
-				R.drawable.img_drag_1, 2));
-		imageDrags.add(new ImageDrag(image4, imageDrag3, R.drawable.img3,
-				R.drawable.img_drag_1, 3));
-
+		imageDrags.add(new ImageDrag(image1, imageDrag1, R.raw.shape_circle_2, 0));
+		imageDrags.add(new ImageDrag(image2, imageDrag2, R.raw.shape_flower, 1));
+		imageDrags.add(new ImageDrag(image3, imageDrag3, R.raw.shape_heart, 2));
+		imageDrags.add(new ImageDrag(image4, imageDrag4, R.raw.shape_star, 3));
 		for (int i = 0; i < imageDrags.size(); i++) {
 			final int p = i;
-			imageDrags.get(p).getImageView()
-					.setImageResource(imageDrags.get(p).getIdDrawable());
+			imageDrags.get(p).getImageView().setSvgRaw(imageDrags.get(p).getIdRawDrag());
+			imageDrags.get(p).getDragImageView().setSvgRaw(imageDrags.get(p).getIdRawDrag());
 			imageDrags.get(p).getImageView()
 					.setOnTouchListener(new View.OnTouchListener() {
 						@Override
 						public boolean onTouch(View v, MotionEvent event) {
 							if (event.getAction() == MotionEvent.ACTION_DOWN) {
-								// imageTouch =
-								// imageDrags.get(p).getImageView();
-								// imageTouch.setVisibility(View.INVISIBLE);
 								ClipData data = ClipData.newPlainText("", "");
 								View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
 										v);
@@ -163,10 +167,8 @@ public class StudyActivity extends Activity implements OnClickListener {
 							case DragEvent.ACTION_DROP:
 								if (((Integer) event.getLocalState()) == imageDrags
 										.get(p).getPosition()) {
-									// Glide.with(DragImageActivity.this).load(imageDrags.get(p).getFile()).into(dragImages.get(p).getDragImageView());
 									imageDrags.get(p).getDragImageView()
 											.setVisibility(View.INVISIBLE);
-									// imageDrags.get(p).getDragImageView().setImageResource(imageDrags.get(p).getIdDrawable());
 									imageDrags.get(p).getImageView()
 											.setVisibility(View.INVISIBLE);
 									imageDrags.get(p).setDrag(true);
@@ -196,7 +198,24 @@ public class StudyActivity extends Activity implements OnClickListener {
 		}
 		return true;
 	}
+	
+	private Bitmap createImage(Bitmap bitmap, int startX, int startY, int width, int height){
+		Bitmap newBitmap = Bitmap.createBitmap(bitmap, startX, startY, width, height);
+		return newBitmap;
+	}
 
+	 public static Bitmap getBitmapFromView(View view) {
+	        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),Bitmap.Config.ARGB_8888);
+	        Canvas canvas = new Canvas(returnedBitmap);
+//	        Drawable bgDrawable =view.getBackground();
+//	        if (bgDrawable!=null) 
+//	            bgDrawable.draw(canvas);
+//	        else 
+//	            canvas.drawColor(Color.WHITE);
+	        view.draw(canvas);
+	        return returnedBitmap;
+	    }
+	 
 	@Override
 	public void onClick(View v) {
 		int id = v.getId();

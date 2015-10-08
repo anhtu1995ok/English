@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_study"
-    android:id="@+id/main_layout"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -32,19 +33,23 @@
             android:layout_marginLeft="30dp"
             android:orientation="vertical" >
 
-            <ImageView
+            <com.meg7.widget.SvgImageView
                 android:id="@+id/image1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/img1" />
+                android:scaleType="centerCrop"
+                android:src="@drawable/img1"
+                app:svg_raw_resource="@raw/shape_star" />
 
-            <ImageView
+            <com.meg7.widget.SvgImageView
                 android:id="@+id/image2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/img3" />
+                android:scaleType="centerCrop"
+                android:src="@drawable/drag"
+                app:svg_raw_resource="@raw/shape_heart" />
         </LinearLayout>
 
         <FrameLayout
@@ -78,19 +83,23 @@
                     android:layout_weight="1"
                     android:orientation="horizontal" >
 
-                    <ImageView
+                    <com.meg7.widget.SvgImageView
                         android:id="@+id/image_drag1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:src="@drawable/img_drag_1" />
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/drag"
+                        app:svg_raw_resource="@raw/shape_star" />
 
-                    <ImageView
+                    <com.meg7.widget.SvgImageView
                         android:id="@+id/image_drag2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:src="@drawable/img_drag_1" />
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/drag"
+                        app:svg_raw_resource="@raw/shape_heart" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -99,19 +108,23 @@
                     android:layout_weight="1"
                     android:orientation="horizontal" >
 
-                    <ImageView
+                    <com.meg7.widget.SvgImageView
                         android:id="@+id/image_drag3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:src="@drawable/img_drag_1" />
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/drag"
+                        app:svg_raw_resource="@raw/shape_circle_2" />
 
-                    <ImageView
+                    <com.meg7.widget.SvgImageView
                         android:id="@+id/image_drag4"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:src="@drawable/img_drag_1" />
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/drag"
+                        app:svg_raw_resource="@raw/shape_flower" />
                 </LinearLayout>
             </LinearLayout>
         </FrameLayout>
@@ -123,19 +136,23 @@
             android:layout_marginRight="30dp"
             android:orientation="vertical" >
 
-            <ImageView
+            <com.meg7.widget.SvgImageView
                 android:id="@+id/image3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/img4" />
+                android:scaleType="centerCrop"
+                android:src="@drawable/drag"
+                app:svg_raw_resource="@raw/shape_circle_2" />
 
-            <ImageView
+            <com.meg7.widget.SvgImageView
                 android:id="@+id/image4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/img2" />
+                android:scaleType="centerCrop"
+                android:src="@drawable/drag"
+                app:svg_raw_resource="@raw/shape_flower" />
         </LinearLayout>
     </FrameLayout>
 
