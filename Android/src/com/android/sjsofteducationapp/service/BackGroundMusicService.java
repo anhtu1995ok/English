@@ -28,6 +28,10 @@ public class BackGroundMusicService extends Service {
 	private BackGroundMusicService(Context context) {
 		media = Media.getInstance(context, R.raw.thememusic);
 	}
+	
+	public Media getMedia(Context context){
+		return Media.getInstance(context, R.raw.thememusic);
+	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
