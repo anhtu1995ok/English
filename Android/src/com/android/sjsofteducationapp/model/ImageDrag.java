@@ -1,17 +1,21 @@
 package com.android.sjsofteducationapp.model;
 
+import android.graphics.Bitmap;
+
 import com.meg7.widget.SvgImageView;
 
 public class ImageDrag {
 	private SvgImageView imageView;
 	private SvgImageView dragImageView;
+	private Bitmap bitmap;
 	private int idRawDrag;
 	private int position;
 	private boolean drag;
-	public ImageDrag(SvgImageView imageView, SvgImageView dragImageView,
+	public ImageDrag(SvgImageView imageView, SvgImageView dragImageView, Bitmap bitmap,
 			int idRawDrag, int position) {
 		this.imageView = imageView;
 		this.dragImageView = dragImageView;
+		this.bitmap = bitmap;
 		this.idRawDrag = idRawDrag;
 		this.position = position;
 		this.drag = false;
@@ -46,5 +50,11 @@ public class ImageDrag {
 	public void setDrag(boolean drag) {
 		this.drag = drag;
 	}
-
+	public Bitmap getBitmap() {
+		return bitmap;
+	}
+	public void setBitmap(Bitmap bitmap) {
+		this.bitmap = bitmap;
+	}
+	
 }

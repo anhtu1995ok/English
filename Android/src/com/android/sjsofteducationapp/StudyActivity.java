@@ -1,9 +1,8 @@
 package com.android.sjsofteducationapp;
 
 import java.util.ArrayList;
-
-import com.android.sjsofteducationapp.model.ImageDrag;
-import com.meg7.widget.SvgImageView;
+import java.util.Collections;
+import java.util.Random;
 
 import android.content.ClipData;
 import android.graphics.Bitmap;
@@ -20,13 +19,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.sjsofteducationapp.model.ImageDrag;
+import com.meg7.widget.SvgImageView;
+
 public class StudyActivity extends MasterActivity implements OnClickListener {
 	private LinearLayout mainLayout, layoutContent;
 	private SvgImageView image1, image2, image3, image4;
 	private SvgImageView imageDrag1, imageDrag2, imageDrag3, imageDrag4;
 	private ImageView imageContent;
 	private ImageView back;
+	private Bitmap bitmap1, bitmap2, bitmap3, bitmap4;
+	private ArrayList<SvgImageView> arrImage, arrImageDrag;
 	private ArrayList<ImageDrag> imageDrags;
+	private ArrayList<Integer> idRawSvgs;
+	private ArrayList<Integer> idRawSvgRandoms;
+	private long seed;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +43,12 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_study);
 
+		seed = System.nanoTime();
+		
+		createArraySvg();
 		initView();
+		createArrayImage();
+		createArrayImageDrag();
 	}
 
 	private void initView() {
@@ -52,17 +64,7 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 		imageDrag2 = (SvgImageView) findViewById(R.id.image_drag2);
 		imageDrag3 = (SvgImageView) findViewById(R.id.image_drag3);
 		imageDrag4 = (SvgImageView) findViewById(R.id.image_drag4);
-		// mainLayout.setOnDragListener(new OnDragListener() {
-		//
-		// @Override
-		// public boolean onDrag(View arg0, DragEvent arg1) {
-		// if (arg1.getAction() == DragEvent.ACTION_DROP) {
-		// imageTouch.setVisibility(View.VISIBLE);
-		// return true;
-		// }
-		// return false;
-		// }
-		// });
+
 		layoutContent.getViewTreeObserver().addOnGlobalLayoutListener(
 				new OnGlobalLayoutListener() {
 
@@ -78,15 +80,19 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 						int iWidth = height / 2 - (marginTop * 2);
 						int iHeight = height / 2 - (marginTop * 2);
 
-						Bitmap bitmap1 = createImage(getBitmapFromView(imageContent), (width / 2) - iWidth - marginLeft, marginTop + 8, iWidth, iHeight);
-						image1.setImageBitmap(bitmap1);
-						Bitmap bitmap2 = createImage(getBitmapFromView(imageContent), (width / 2) + marginLeft, marginTop + 8, iWidth, iHeight);
-						image2.setImageBitmap(bitmap2);
-						Bitmap bitmap3 = createImage(getBitmapFromView(imageContent), (width / 2) - iWidth - marginLeft, (height/2) + marginTop + 8, iWidth, iHeight);
-						image3.setImageBitmap(bitmap3);
-						Bitmap bitmap4 = createImage(getBitmapFromView(imageContent), (width / 2) + marginLeft, (height/2) + marginTop + 8, iWidth, iHeight);
-						image4.setImageBitmap(bitmap4);
-						
+						bitmap1 = createImage(getBitmapFromView(imageContent),
+								(width / 2) - iWidth - marginLeft,
+								marginTop + 8, iWidth, iHeight);
+						bitmap2 = createImage(getBitmapFromView(imageContent),
+								(width / 2) + marginLeft, marginTop + 8,
+								iWidth, iHeight);
+						bitmap3 = createImage(getBitmapFromView(imageContent),
+								(width / 2) - iWidth - marginLeft, (height / 2)
+										+ marginTop + 8, iWidth, iHeight);
+						bitmap4 = createImage(getBitmapFromView(imageContent),
+								(width / 2) + marginLeft, (height / 2)
+										+ marginTop + 8, iWidth, iHeight);
+
 						LinearLayout.LayoutParams params5 = new LinearLayout.LayoutParams(
 								iWidth, iHeight);
 						params5.topMargin = marginTop;
@@ -120,27 +126,66 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 						params4.leftMargin = marginLeft * 2;
 						imageDrag4.setLayoutParams(params4);
 
-						// Log.d("TuNT", "w" + layoutContent.getWidth());
-						// Log.d("TuNT", "h" + layoutContent.getHeight());
-						// Log.d("TuNT", "x" + layoutContent.getX());
-						// Log.d("TuNT", "y" + layoutContent.getY());
-
+						createView();
 						layoutContent.getViewTreeObserver()
 								.removeGlobalOnLayoutListener(this);
 					}
 				});
 		back.setOnClickListener(this);
+	}
+
+	// tao array svg
+	private void createArraySvg() {
+		idRawSvgs = new ArrayList<Integer>();
+		idRawSvgs.add(R.raw.shape_5);
+		idRawSvgs.add(R.raw.shape_circle_2);
+		idRawSvgs.add(R.raw.shape_flower);
+		idRawSvgs.add(R.raw.shape_heart);
+		idRawSvgs.add(R.raw.shape_star);
+		idRawSvgs.add(R.raw.shape_star_2);
+		idRawSvgs.add(R.raw.shape_star_3);
+		Collections.shuffle(idRawSvgs, new Random(seed));
+	}
+
+	private void createArrayImage() {
+		arrImage = new ArrayList<SvgImageView>();
+		arrImage.add(image1);
+		arrImage.add(image2);
+		arrImage.add(image3);
+		arrImage.add(image4);
+		Collections.shuffle(arrImage, new Random(seed));
+	}
+
+	private void createArrayImageDrag() {
+		arrImageDrag = new ArrayList<SvgImageView>();
+		arrImageDrag.add(imageDrag1);
+		arrImageDrag.add(imageDrag2);
+		arrImageDrag.add(imageDrag3);
+		arrImageDrag.add(imageDrag4);
+		Collections.shuffle(arrImageDrag, new Random(seed));
+	}
+
+	// khoi tao view
+	private void createView() {
 		imageDrags = new ArrayList<ImageDrag>();
-		imageDrags.add(new ImageDrag(image1, imageDrag1, R.raw.shape_circle_2, 0));
-		imageDrags.add(new ImageDrag(image2, imageDrag2, R.raw.shape_flower, 1));
-		imageDrags.add(new ImageDrag(image3, imageDrag3, R.raw.shape_heart, 2));
-		imageDrags.add(new ImageDrag(image4, imageDrag4, R.raw.shape_star, 3));
+		imageDrags.add(new ImageDrag(arrImage.get(0), imageDrag1, bitmap1,
+				idRawSvgs.get(0), 0));
+		imageDrags.add(new ImageDrag(arrImage.get(1), imageDrag2, bitmap2,
+				idRawSvgs.get(1), 1));
+		imageDrags.add(new ImageDrag(arrImage.get(2), imageDrag3, bitmap3,
+				idRawSvgs.get(2), 2));
+		imageDrags.add(new ImageDrag(arrImage.get(3), imageDrag4, bitmap4,
+				idRawSvgs.get(3), 3));
 		for (int i = 0; i < imageDrags.size(); i++) {
 			final int p = i;
-			imageDrags.get(p).getImageView().setSvgRaw(imageDrags.get(p).getIdRawDrag());
-			imageDrags.get(p).getDragImageView().setSvgRaw(imageDrags.get(p).getIdRawDrag());
-			imageDrags.get(p).getImageView()
-					.setOnTouchListener(new View.OnTouchListener() {
+			final ImageDrag imageDrag = imageDrags.get(p);
+			imageDrag.getImageView().setImageBitmap(imageDrag.getBitmap());
+			imageDrag.getImageView()
+					.setSvgRaw(imageDrags.get(p).getIdRawDrag());
+			imageDrag.getDragImageView().setSvgRaw(
+					imageDrags.get(p).getIdRawDrag());
+			imageDrag.getImageView().setOnTouchListener(
+					new View.OnTouchListener() {
 						@Override
 						public boolean onTouch(View v, MotionEvent event) {
 							if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -156,19 +201,19 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 						}
 					});
 
-			imageDrags.get(p).getDragImageView()
-					.setOnDragListener(new View.OnDragListener() {
+			imageDrag.getDragImageView().setOnDragListener(
+					new View.OnDragListener() {
 						@Override
 						public boolean onDrag(View v, DragEvent event) {
 							switch (event.getAction()) {
 							case DragEvent.ACTION_DROP:
-								if (((Integer) event.getLocalState()) == imageDrags
-										.get(p).getPosition()) {
-									imageDrags.get(p).getDragImageView()
-											.setVisibility(View.INVISIBLE);
-									imageDrags.get(p).getImageView()
-											.setVisibility(View.INVISIBLE);
-									imageDrags.get(p).setDrag(true);
+								if (((Integer) event.getLocalState()) == imageDrag
+										.getPosition()) {
+									imageDrag.getDragImageView().setVisibility(
+											View.INVISIBLE);
+									imageDrag.getImageView().setVisibility(
+											View.INVISIBLE);
+									imageDrag.setDrag(true);
 									if (checkSuccess()) {
 										Toast.makeText(StudyActivity.this,
 												"success", Toast.LENGTH_SHORT)
@@ -195,24 +240,27 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 		}
 		return true;
 	}
-	
-	private Bitmap createImage(Bitmap bitmap, int startX, int startY, int width, int height){
-		Bitmap newBitmap = Bitmap.createBitmap(bitmap, startX, startY, width, height);
+
+	private Bitmap createImage(Bitmap bitmap, int startX, int startY,
+			int width, int height) {
+		Bitmap newBitmap = Bitmap.createBitmap(bitmap, startX, startY, width,
+				height);
 		return newBitmap;
 	}
 
-	 public static Bitmap getBitmapFromView(View view) {
-	        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),Bitmap.Config.ARGB_8888);
-	        Canvas canvas = new Canvas(returnedBitmap);
-//	        Drawable bgDrawable =view.getBackground();
-//	        if (bgDrawable!=null) 
-//	            bgDrawable.draw(canvas);
-//	        else 
-//	            canvas.drawColor(Color.WHITE);
-	        view.draw(canvas);
-	        return returnedBitmap;
-	    }
-	 
+	public static Bitmap getBitmapFromView(View view) {
+		Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(),
+				view.getHeight(), Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(returnedBitmap);
+		// Drawable bgDrawable =view.getBackground();
+		// if (bgDrawable!=null)
+		// bgDrawable.draw(canvas);
+		// else
+		// canvas.drawColor(Color.WHITE);
+		view.draw(canvas);
+		return returnedBitmap;
+	}
+
 	@Override
 	public void onClick(View v) {
 		int id = v.getId();
