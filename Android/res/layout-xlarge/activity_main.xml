@@ -16,6 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_weight="1"
         android:orientation="horizontal" >
 
@@ -23,25 +25,26 @@
             android:id="@+id/leftarrow"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            android:layout_marginLeft="10dp"
+            android:contentDescription="@string/image_description"
             android:src="@drawable/ic_leftarrow" />
 
         <ImageView
             android:id="@+id/image"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:scaleType="centerInside"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:contentDescription="@string/image_description"
+            android:scaleType="centerInside"
             android:src="@drawable/ic_home_backtoschool" />
 
         <ImageView
             android:id="@+id/rightarrow"
             android:layout_width="90dp"
             android:layout_height="90dp"
-            android:layout_marginRight="10dp"
+            android:contentDescription="@string/image_description"
             android:src="@drawable/ic_rightarrow" />
     </LinearLayout>
 

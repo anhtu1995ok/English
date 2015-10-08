@@ -10,14 +10,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Toast;
 
-public class SubjectActivity extends Activity implements OnItemClickListener, OnClickListener {
+public class SubjectActivity extends Activity implements OnClickListener {
 
 	HorzListView listView;
 	SubjectAdapter adapter;
@@ -34,7 +30,6 @@ public class SubjectActivity extends Activity implements OnItemClickListener, On
 		listView = (HorzListView) findViewById(R.id.listView);
 		adapter = new SubjectAdapter(getApplicationContext(), R.layout.item_subject, data);
 		listView.setAdapter(adapter);
-		listView.setOnItemClickListener(this);
 
 		image = (ImageView) findViewById(R.id.image);
 		leftArrow = (ImageView) findViewById(R.id.leftarrow);
@@ -55,31 +50,23 @@ public class SubjectActivity extends Activity implements OnItemClickListener, On
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		Home home = (Home) arg0.getAdapter().getItem(arg2);
-		String title = home.getTitle();
-		Toast.makeText(getApplicationContext(), title, Toast.LENGTH_SHORT).show();
-	}
-
-	@Override
 	public void onClick(View v) {
+		int x = listView.getScrollX();
 		switch (v.getId()) {
 		case R.id.image:
 			Toast.makeText(getApplicationContext(), "Zoo", Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.leftarrow:
-			if (position != 0) {
+			if (position != 0 && x > 0) {
 				position--;
 				listView.setSelection(position);
 			}
 			break;
 		case R.id.rightarrow:
-
-			if (position < 1) {
+			if (position < 1 && x > 0) {
 				position++;
 				listView.setSelection(position);
 			}
-
 			break;
 		case R.id.home:
 			finish();

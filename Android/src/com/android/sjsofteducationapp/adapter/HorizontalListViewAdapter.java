@@ -3,16 +3,22 @@ package com.android.sjsofteducationapp.adapter;
 import java.util.ArrayList;
 
 import com.android.sjsofteducationapp.R;
+import com.android.sjsofteducationapp.SubjectActivity;
 import com.android.sjsofteducationapp.model.Home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class HorizontalListViewAdapter extends ArrayAdapter<Home> {
 	private Context context;
@@ -48,6 +54,7 @@ public class HorizontalListViewAdapter extends ArrayAdapter<Home> {
 			convertView = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(resource,
 					parent, false);
 			holder = new ViewHolder();
+			holder.main = (LinearLayout) convertView.findViewById(R.id.main);
 			holder.image = (ImageView) convertView.findViewById(R.id.image);
 			holder.title = (TextView) convertView.findViewById(R.id.title);
 
@@ -55,7 +62,7 @@ public class HorizontalListViewAdapter extends ArrayAdapter<Home> {
 		}
 
 		int imageUrl = home.getUrl_image();
-		String title = home.getTitle();
+		final String title = home.getTitle();
 		holder.image.setImageResource(imageUrl);
 
 		try {
@@ -65,6 +72,21 @@ public class HorizontalListViewAdapter extends ArrayAdapter<Home> {
 			holder.title.setText(title);
 		} catch (Exception e) {
 		}
+		
+		holder.main.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				holder.main.startAnimation(AnimationUtils.loadAnimation(context,
+						R.anim.abc_fade_in));
+				Toast.makeText(context, title, Toast.LENGTH_SHORT).show();
+				if (title.equalsIgnoreCase("Animals")) {
+					Intent intent = new Intent(context, SubjectActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					context.startActivity(intent);
+				}
+			}
+		});
 
 		return convertView;
 	}
@@ -72,6 +94,7 @@ public class HorizontalListViewAdapter extends ArrayAdapter<Home> {
 	private class ViewHolder {
 		ImageView image;
 		TextView title;
+		LinearLayout main;
 	}
 
 }

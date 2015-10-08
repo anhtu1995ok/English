@@ -8,9 +8,12 @@ import com.android.sjsofteducationapp.model.Home;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 public class SubjectAdapter extends ArrayAdapter<Home> {
 	private Context context;
@@ -46,6 +49,7 @@ public class SubjectAdapter extends ArrayAdapter<Home> {
 			convertView = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(resource,
 					parent, false);
 			holder = new ViewHolder();
+			holder.main = (LinearLayout) convertView.findViewById(R.id.main);
 			holder.image = (ImageView) convertView.findViewById(R.id.image);
 			holder.star = (ImageView) convertView.findViewById(R.id.star);
 
@@ -63,11 +67,20 @@ public class SubjectAdapter extends ArrayAdapter<Home> {
 
 		}
 
+		holder.main.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				holder.main.startAnimation(AnimationUtils.loadAnimation(context, R.anim.abc_fade_in));
+			}
+		});
+
 		return convertView;
 	}
 
 	private class ViewHolder {
 		ImageView image, star;
+		LinearLayout main;
 	}
 
 }
