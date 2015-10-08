@@ -5,18 +5,22 @@ import java.util.ArrayList;
 import com.android.sjsofteducationapp.adapter.HorizontalListViewAdapter;
 import com.android.sjsofteducationapp.model.Home;
 import com.android.sjsofteducationapp.service.BackGroundMusicService;
+import com.android.sjsofteducationapp.utils.Media;
 import com.sileria.android.view.HorzListView;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity implements OnClickListener {
+public class MainActivity extends Activity implements OnClickListener, OnItemClickListener {
 
 	HorzListView listView;
 	HorizontalListViewAdapter adapter;
@@ -34,7 +38,15 @@ public class MainActivity extends Activity implements OnClickListener {
 		initData();
 		listView = (HorzListView) findViewById(R.id.listView);
 		adapter = new HorizontalListViewAdapter(getApplicationContext(), R.layout.item_home, data);
+
+		// adapter = new Hori(getApplicationContext(), data);
 		listView.setAdapter(adapter);
+		// listView.setHasFixedSize(true);
+		// listView.setLayoutManager(
+		// new LinearLayoutManager(getApplicationContext(),
+		// LinearLayoutManager.HORIZONTAL, false));
+		// listView.setItemAnimator(new DefaultItemAnimator());
+		listView.setOnItemClickListener(this);
 
 		image = (ImageView) findViewById(R.id.image);
 		leftArrow = (ImageView) findViewById(R.id.leftarrow);
@@ -43,8 +55,6 @@ public class MainActivity extends Activity implements OnClickListener {
 		leftArrow.setOnClickListener(this);
 		rightArrow.setOnClickListener(this);
 
-		// intent = new Intent(this, BackGroundMusicService.class);
-		// startService(intent);
 		service = BackGroundMusicService.getInstance(getApplicationContext());
 
 	}
@@ -59,21 +69,26 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		int x = listView.getScrollX();
+		int max = data.size();
 		switch (v.getId()) {
 		case R.id.image:
 			Toast.makeText(getApplicationContext(), "BackToSchool", Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.leftarrow:
-			if (position != 0 && x > 0) {
+			if (position > 0) {
 				position--;
+				Toast.makeText(getApplicationContext(), "left pos : " + position, Toast.LENGTH_SHORT).show();
 				listView.setSelection(position);
+			}
+			if (position == 0) {
+				listView.setAdapter(adapter);
 			}
 			break;
 		case R.id.rightarrow:
-			if (position < 1 && x > 0) {
+			if (position < max) {
 				position++;
 				listView.setSelection(position);
+				Toast.makeText(getApplicationContext(), "right pos : " + position, Toast.LENGTH_SHORT).show();
 			}
 			break;
 		default:
@@ -85,6 +100,35 @@ public class MainActivity extends Activity implements OnClickListener {
 	protected void onDestroy() {
 		super.onDestroy();
 		service.stop();
-		Log.d("ToanNM", "ondestroy");
 	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Media media = service.getMedia(getApplicationContext());
+		if (media.isPlaying()) {
+			media.pause();
+		}
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		service.getMedia(getApplicationContext()).setPlay();
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		String title = ((Home) arg0.getAdapter().getItem(arg2)).getTitle();
+		position = arg2;
+
+		arg1.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.abc_fade_in));
+		Toast.makeText(getApplicationContext(), title, Toast.LENGTH_SHORT).show();
+		if (title.equalsIgnoreCase("Animals")) {
+			Intent intent = new Intent(getApplicationContext(), SubjectActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(intent);
+		}
+	}
+
 }
