@@ -67,14 +67,6 @@ public class SubjectAdapter extends ArrayAdapter<Home> {
 
 		}
 
-		holder.main.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				holder.main.startAnimation(AnimationUtils.loadAnimation(context, R.anim.abc_fade_in));
-			}
-		});
-
 		return convertView;
 	}
 

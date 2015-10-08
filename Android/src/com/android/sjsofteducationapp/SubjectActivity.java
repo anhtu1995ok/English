@@ -2,16 +2,20 @@ package com.android.sjsofteducationapp;
 
 import java.util.ArrayList;
 
-import com.android.sjsofteducationapp.adapter.SubjectAdapter;
-import com.android.sjsofteducationapp.model.Home;
-import com.sileria.android.view.HorzListView;
-
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.android.sjsofteducationapp.adapter.SubjectAdapter;
+import com.android.sjsofteducationapp.model.Home;
+import com.sileria.android.view.HorzListView;
 
 public class SubjectActivity extends Activity implements OnClickListener {
 
@@ -39,6 +43,16 @@ public class SubjectActivity extends Activity implements OnClickListener {
 		leftArrow.setOnClickListener(this);
 		rightArrow.setOnClickListener(this);
 		home.setOnClickListener(this);
+		listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				arg1.startAnimation(AnimationUtils.loadAnimation(SubjectActivity.this, R.anim.abc_fade_in));
+				Intent intent = new Intent(SubjectActivity.this, StudyActivity.class);
+				startActivity(intent);
+			}
+		});
 	}
 
 	private void initData() {

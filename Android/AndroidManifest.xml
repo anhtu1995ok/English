@@ -35,6 +35,10 @@
             android:name=".SubjectActivity"
             android:screenOrientation="landscape" >
         </activity>
+        <activity
+            android:name=".StudyActivity"
+            android:screenOrientation="landscape" >
+        </activity>
     </application>
 
 </manifest>
