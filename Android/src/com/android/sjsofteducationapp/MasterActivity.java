@@ -1,7 +1,6 @@
 package com.android.sjsofteducationapp;
 
-import com.android.sjsofteducationapp.service.BackGroundMusicService;
-import com.android.sjsofteducationapp.utils.Media;
+import com.android.sjsofteducationapp.utils.MusicBackground;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,7 +9,7 @@ import android.view.WindowManager;
 
 public class MasterActivity extends Activity {
 
-	BackGroundMusicService service;
+	MusicBackground mb;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -19,27 +18,26 @@ public class MasterActivity extends Activity {
             WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		super.onCreate(savedInstanceState);
 
-		service = BackGroundMusicService.getInstance(getApplicationContext());
+		mb = new MusicBackground(getApplicationContext(), R.raw.thememusic, true);
+		mb.start();
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		Media media = service.getMedia(getApplicationContext());
-		if (media.isPlaying()) {
-			media.pause();
+		if (MusicBackground.getInstance(getApplicationContext(), R.raw.thememusic, true).isPlaying()) {
+			mb.pause();
 		}
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		service.getMedia(getApplicationContext()).setPlay();
+		
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		service.getMedia(getApplicationContext()).setPlay();
 	}
 }
