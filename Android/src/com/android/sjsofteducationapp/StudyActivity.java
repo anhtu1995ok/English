@@ -1,5 +1,7 @@
 package com.android.sjsofteducationapp;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -7,34 +9,45 @@ import java.util.Random;
 import android.content.ClipData;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.sjsofteducationapp.model.ImageDrag;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.meg7.widget.SvgImageView;
 
 public class StudyActivity extends MasterActivity implements OnClickListener {
 	private LinearLayout mainLayout, layoutContent;
+	private FrameLayout frameContent;
+	private ProgressBar progressLoadImage;
 	private SvgImageView image1, image2, image3, image4;
 	private SvgImageView imageDrag1, imageDrag2, imageDrag3, imageDrag4;
 	private ImageView imageContent;
-	private ImageView back;
+	private ImageView back, next;
 	private Bitmap bitmap1, bitmap2, bitmap3, bitmap4;
 	private ArrayList<SvgImageView> arrImage, arrImageDrag;
 	private ArrayList<ImageDrag> imageDrags;
 	private ArrayList<Integer> idRawSvgs;
-	private ArrayList<Integer> idRawSvgRandoms;
 	private long seed;
-
+	private File file;
+	private ArrayList<String> arrFileName;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,9 +55,17 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_study);
-
+		createFiles();
 		seed = System.nanoTime();
-		
+
+		arrFileName = new ArrayList<String>();
+		arrFileName.add("image.jpg");
+		arrFileName.add("image2.jpg");
+		arrFileName.add("image3.jpg");
+		Collections.shuffle(arrFileName, new Random(seed));
+		file = loadFile(arrFileName.get(0));
+		if (file == null)
+			finish();
 		createArraySvg();
 		initView();
 		createArrayImage();
@@ -53,9 +74,12 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 
 	private void initView() {
 		mainLayout = (LinearLayout) findViewById(R.id.main_layout);
+		frameContent = (FrameLayout) findViewById(R.id.frame_content);
+		progressLoadImage = (ProgressBar) findViewById(R.id.progress_load_image);
 		layoutContent = (LinearLayout) findViewById(R.id.layout_content);
 		imageContent = (ImageView) findViewById(R.id.image_content);
 		back = (ImageView) findViewById(R.id.back);
+		next = (ImageView) findViewById(R.id.next);
 		image1 = (SvgImageView) findViewById(R.id.image1);
 		image2 = (SvgImageView) findViewById(R.id.image2);
 		image3 = (SvgImageView) findViewById(R.id.image3);
@@ -65,73 +89,86 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 		imageDrag3 = (SvgImageView) findViewById(R.id.image_drag3);
 		imageDrag4 = (SvgImageView) findViewById(R.id.image_drag4);
 
-		layoutContent.getViewTreeObserver().addOnGlobalLayoutListener(
-				new OnGlobalLayoutListener() {
-
-					@Override
-					public void onGlobalLayout() {
-						int width = layoutContent.getWidth();
-						int height = layoutContent.getHeight() - 16;
-						int pading = layoutContent.getPaddingTop();
-
-						int marginTop = 30;
-						int marginLeft = 60;
-
-						int iWidth = height / 2 - (marginTop * 2);
-						int iHeight = height / 2 - (marginTop * 2);
-
-						bitmap1 = createImage(getBitmapFromView(imageContent),
-								(width / 2) - iWidth - marginLeft,
-								marginTop + 8, iWidth, iHeight);
-						bitmap2 = createImage(getBitmapFromView(imageContent),
-								(width / 2) + marginLeft, marginTop + 8,
-								iWidth, iHeight);
-						bitmap3 = createImage(getBitmapFromView(imageContent),
-								(width / 2) - iWidth - marginLeft, (height / 2)
-										+ marginTop + 8, iWidth, iHeight);
-						bitmap4 = createImage(getBitmapFromView(imageContent),
-								(width / 2) + marginLeft, (height / 2)
-										+ marginTop + 8, iWidth, iHeight);
-
-						LinearLayout.LayoutParams params5 = new LinearLayout.LayoutParams(
-								iWidth, iHeight);
-						params5.topMargin = marginTop;
-						params5.bottomMargin = marginTop;
-						image1.setLayoutParams(params5);
-						image2.setLayoutParams(params5);
-						image3.setLayoutParams(params5);
-						image4.setLayoutParams(params5);
-						// /////
-						LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-								iWidth, iHeight);
-						params.topMargin = marginTop + 8;
-						params.leftMargin = (width / 2) - iWidth - marginLeft;
-						imageDrag1.setLayoutParams(params);
-						// /////
-						LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams(
-								iWidth, iHeight);
-						params3.topMargin = marginTop;
-						params3.leftMargin = (width / 2) - iWidth - marginLeft;
-						imageDrag3.setLayoutParams(params3);
-						// /////
-						LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(
-								iWidth, iHeight);
-						params2.topMargin = marginTop + 8;
-						params2.leftMargin = marginLeft * 2;
-						imageDrag2.setLayoutParams(params2);
-						// /////
-						LinearLayout.LayoutParams params4 = new LinearLayout.LayoutParams(
-								iWidth, iHeight);
-						params4.topMargin = marginTop;
-						params4.leftMargin = marginLeft * 2;
-						imageDrag4.setLayoutParams(params4);
-
-						createView();
-						layoutContent.getViewTreeObserver()
-								.removeGlobalOnLayoutListener(this);
-					}
-				});
+		loadImage();
 		back.setOnClickListener(this);
+		next.setOnClickListener(this);
+	}
+	private void loadImage(){
+		frameContent.setVisibility(View.INVISIBLE);
+		progressLoadImage.setVisibility(View.VISIBLE);
+		Glide.with(StudyActivity.this).load(file)
+		.into(new GlideDrawableImageViewTarget(imageContent) {
+			@Override
+			public void onResourceReady(GlideDrawable drawable,
+					GlideAnimation anim) {
+				super.onResourceReady(drawable, anim);
+				frameContent.setVisibility(View.VISIBLE);
+				progressLoadImage.setVisibility(View.INVISIBLE);
+				layoutSize();
+			}
+
+			@Override
+			public void onLoadFailed(Exception e, Drawable errorDrawable) {
+				super.onLoadFailed(e, errorDrawable);
+			}
+		});
+	}
+
+	private void layoutSize() {
+		int width = layoutContent.getWidth();
+		int height = layoutContent.getHeight() - 16;
+		int pading = layoutContent.getPaddingTop();
+
+		int marginTop = 30;
+		int marginLeft = 60;
+
+		int iWidth = height / 2 - (marginTop * 2);
+		int iHeight = height / 2 - (marginTop * 2);
+
+		bitmap1 = createImage(getBitmapFromView(imageContent), (width / 2)
+				- iWidth - marginLeft, marginTop + 8, iWidth, iHeight);
+		bitmap2 = createImage(getBitmapFromView(imageContent), (width / 2)
+				+ marginLeft, marginTop + 8, iWidth, iHeight);
+		bitmap3 = createImage(getBitmapFromView(imageContent), (width / 2)
+				- iWidth - marginLeft, (height / 2) + marginTop + 8, iWidth,
+				iHeight);
+		bitmap4 = createImage(getBitmapFromView(imageContent), (width / 2)
+				+ marginLeft, (height / 2) + marginTop + 8, iWidth, iHeight);
+
+		LinearLayout.LayoutParams params5 = new LinearLayout.LayoutParams(
+				iWidth, iHeight);
+		params5.topMargin = marginTop;
+		params5.bottomMargin = marginTop;
+		image1.setLayoutParams(params5);
+		image2.setLayoutParams(params5);
+		image3.setLayoutParams(params5);
+		image4.setLayoutParams(params5);
+		// /////
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+				iWidth, iHeight);
+		params.topMargin = marginTop + 8;
+		params.leftMargin = (width / 2) - iWidth - marginLeft;
+		imageDrag1.setLayoutParams(params);
+		// /////
+		LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams(
+				iWidth, iHeight);
+		params3.topMargin = marginTop;
+		params3.leftMargin = (width / 2) - iWidth - marginLeft;
+		imageDrag3.setLayoutParams(params3);
+		// /////
+		LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(
+				iWidth, iHeight);
+		params2.topMargin = marginTop + 8;
+		params2.leftMargin = marginLeft * 2;
+		imageDrag2.setLayoutParams(params2);
+		// /////
+		LinearLayout.LayoutParams params4 = new LinearLayout.LayoutParams(
+				iWidth, iHeight);
+		params4.topMargin = marginTop;
+		params4.leftMargin = marginLeft * 2;
+		imageDrag4.setLayoutParams(params4);
+
+		createView();
 	}
 
 	// tao array svg
@@ -184,6 +221,8 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 					.setSvgRaw(imageDrags.get(p).getIdRawDrag());
 			imageDrag.getDragImageView().setSvgRaw(
 					imageDrags.get(p).getIdRawDrag());
+			imageDrag.getDragImageView().invalidate();
+			Log.d("TuNT", "id raw: "+imageDrags.get(p).getIdRawDrag());
 			imageDrag.getImageView().setOnTouchListener(
 					new View.OnTouchListener() {
 						@Override
@@ -215,6 +254,7 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 											View.INVISIBLE);
 									imageDrag.setDrag(true);
 									if (checkSuccess()) {
+										next();
 										Toast.makeText(StudyActivity.this,
 												"success", Toast.LENGTH_SHORT)
 												.show();
@@ -231,6 +271,31 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 					});
 		}
 	}
+	
+	private void next(){
+		Collections.shuffle(idRawSvgs, new Random(seed));
+		Collections.shuffle(arrImage, new Random(seed));
+		Collections.shuffle(arrImageDrag, new Random(seed));
+		
+		for(int i = 0; i<imageDrags.size(); i++){
+			ImageDrag imageDrag = imageDrags.get(i);
+//			imageDrag.getImageView().setImageBitmap(imageDrag.getBitmap());
+//			imageDrag.getImageView()
+//					.setSvgRaw(imageDrags.get(i).getIdRawDrag());
+//			imageDrag.getDragImageView().setSvgRaw(
+//					imageDrags.get(i).getIdRawDrag());
+			
+			imageDrag.getImageView().setVisibility(View.VISIBLE);
+			imageDrag.getDragImageView().setVisibility(View.VISIBLE);
+			imageDrag.setDrag(false);
+		}
+		
+		Collections.shuffle(arrFileName, new Random(seed));
+		file = loadFile(arrFileName.get(0));
+		if (file == null)
+			finish();
+		loadImage();
+	}
 
 	// kiem tra khi drag
 	private boolean checkSuccess() {
@@ -239,6 +304,13 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 				return false;
 		}
 		return true;
+	}
+
+	private File loadFile(String fileName) {
+		String root = Environment.getExternalStorageDirectory().toString();
+		File myDir = new File(root + "/english");
+		File file = new File(myDir, fileName);
+		return file;
 	}
 
 	private Bitmap createImage(Bitmap bitmap, int startX, int startY,
@@ -260,6 +332,56 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 		view.draw(canvas);
 		return returnedBitmap;
 	}
+	
+	private void createFiles() {
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/english");
+        myDir.mkdirs();
+        String fname = "image.jpg";
+        String fname2 = "image2.jpg";
+        String fname3 = "image3.jpg";
+        File file = new File(myDir, fname);
+        if (!file.exists()) {
+            try {
+                Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.image)).getBitmap();
+                FileOutputStream out = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+        File file2 = new File(myDir, fname2);
+        if (!file2.exists()) {
+            try {
+                Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.image2)).getBitmap();
+                FileOutputStream out = new FileOutputStream(file2);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+        File file3 = new File(myDir, fname3);
+        if (!file3.exists()) {
+            try {
+                Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.image3)).getBitmap();
+                FileOutputStream out = new FileOutputStream(file3);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 	@Override
 	public void onClick(View v) {
@@ -268,7 +390,9 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 		case R.id.back:
 			finish();
 			break;
-
+		case R.id.next:
+			next();
+			break;
 		default:
 			break;
 		}

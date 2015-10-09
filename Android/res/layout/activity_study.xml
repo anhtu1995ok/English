@@ -18,6 +18,12 @@
             android:layout_height="40dp"
             android:layout_margin="10dp"
             android:background="@drawable/selector_back" />
+        <ImageView
+            android:id="@+id/next"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/selector_back" />
     </LinearLayout>
 
     <FrameLayout
@@ -26,134 +32,146 @@
         android:layout_weight="2"
         android:orientation="horizontal" >
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:layout_marginLeft="30dp"
-            android:orientation="vertical" >
-
-            <com.meg7.widget.SvgImageView
-                android:id="@+id/image1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:src="@drawable/img1"
-                app:svg_raw_resource="@raw/shape_star" />
-
-            <com.meg7.widget.SvgImageView
-                android:id="@+id/image2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:src="@drawable/drag"
-                app:svg_raw_resource="@raw/shape_heart" />
-        </LinearLayout>
+        <ProgressBar
+            android:id="@+id/progress_load_image"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center" />
 
         <FrameLayout
+            android:id="@+id/frame_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center" >
-
-            <ImageView
-                android:id="@+id/image_content"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="8px"
-                android:src="@drawable/image" />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/bg_study_center" />
+            android:layout_height="match_parent" >
 
             <LinearLayout
-                android:id="@+id/layout_content"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:layout_marginLeft="30dp"
                 android:orientation="vertical" >
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                <com.meg7.widget.SvgImageView
+                    android:id="@+id/image1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="horizontal" >
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img1"
+                    app:svg_raw_resource="@raw/shape_star" />
 
-                    <com.meg7.widget.SvgImageView
-                        android:id="@+id/image_drag1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/drag"
-                        app:svg_raw_resource="@raw/shape_star" />
+                <com.meg7.widget.SvgImageView
+                    android:id="@+id/image2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/drag"
+                    app:svg_raw_resource="@raw/shape_heart" />
+            </LinearLayout>
 
-                    <com.meg7.widget.SvgImageView
-                        android:id="@+id/image_drag2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/drag"
-                        app:svg_raw_resource="@raw/shape_heart" />
-                </LinearLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center" >
+
+                <ImageView
+                    android:id="@+id/image_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8px"
+                    android:src="@drawable/image" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bg_study_center" />
 
                 <LinearLayout
+                    android:id="@+id/layout_content"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal" >
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
 
-                    <com.meg7.widget.SvgImageView
-                        android:id="@+id/image_drag3"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/drag"
-                        app:svg_raw_resource="@raw/shape_circle_2" />
+                        android:orientation="horizontal" >
 
-                    <com.meg7.widget.SvgImageView
-                        android:id="@+id/image_drag4"
+                        <com.meg7.widget.SvgImageView
+                            android:id="@+id/image_drag1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/drag"
+                            app:svg_raw_resource="@raw/shape_star" />
+
+                        <com.meg7.widget.SvgImageView
+                            android:id="@+id/image_drag2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/drag"
+                            app:svg_raw_resource="@raw/shape_heart" />
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="0dp"
                         android:layout_weight="1"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/drag"
-                        app:svg_raw_resource="@raw/shape_flower" />
+                        android:orientation="horizontal" >
+
+                        <com.meg7.widget.SvgImageView
+                            android:id="@+id/image_drag3"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/drag"
+                            app:svg_raw_resource="@raw/shape_circle_2" />
+
+                        <com.meg7.widget.SvgImageView
+                            android:id="@+id/image_drag4"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/drag"
+                            app:svg_raw_resource="@raw/shape_flower" />
+                    </LinearLayout>
                 </LinearLayout>
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:layout_marginRight="30dp"
+                android:orientation="vertical" >
+
+                <com.meg7.widget.SvgImageView
+                    android:id="@+id/image3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/drag"
+                    app:svg_raw_resource="@raw/shape_circle_2" />
+
+                <com.meg7.widget.SvgImageView
+                    android:id="@+id/image4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/drag"
+                    app:svg_raw_resource="@raw/shape_flower" />
             </LinearLayout>
         </FrameLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:layout_marginRight="30dp"
-            android:orientation="vertical" >
-
-            <com.meg7.widget.SvgImageView
-                android:id="@+id/image3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:src="@drawable/drag"
-                app:svg_raw_resource="@raw/shape_circle_2" />
-
-            <com.meg7.widget.SvgImageView
-                android:id="@+id/image4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:src="@drawable/drag"
-                app:svg_raw_resource="@raw/shape_flower" />
-        </LinearLayout>
     </FrameLayout>
 
     <LinearLayout
