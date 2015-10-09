@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -32,8 +34,9 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.meg7.widget.SvgImageView;
+import com.plattysoft.leonids.ParticleSystem;
 
-public class StudyActivity extends MasterActivity implements OnClickListener {
+public class StudyActivity extends Activity implements OnClickListener {
 	private LinearLayout mainLayout, layoutContent;
 	private FrameLayout frameContent;
 	private ProgressBar progressLoadImage;
@@ -48,6 +51,7 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 	private long seed;
 	private File file;
 	private ArrayList<String> arrFileName;
+	private MediaPlayer ring1, ring2, ring3;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,7 +59,12 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_study);
+		
 		createFiles();
+		
+		ring1 = MediaPlayer.create(StudyActivity.this, R.raw.ring1);
+		ring2 = MediaPlayer.create(StudyActivity.this, R.raw.ring2);
+		ring3 = MediaPlayer.create(StudyActivity.this, R.raw.ring3);
 		seed = System.nanoTime();
 
 		arrFileName = new ArrayList<String>();
@@ -253,13 +262,36 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 									imageDrag.getImageView().setVisibility(
 											View.INVISIBLE);
 									imageDrag.setDrag(true);
+
 									if (checkSuccess()) {
-										next();
+										new ParticleSystem(StudyActivity.this, 100, R.drawable.star_pink, 800)		
+										.setSpeedRange(0.1f, 0.25f)
+										.oneShot(imageContent, 100);
+										new ParticleSystem(StudyActivity.this, 100, R.drawable.star_pink, 800)		
+										.setSpeedRange(0.1f, 0.25f)
+										.oneShot(imageDrag1, 100);
+										new ParticleSystem(StudyActivity.this, 100, R.drawable.star_pink, 800)		
+										.setSpeedRange(0.1f, 0.25f)
+										.oneShot(imageDrag2, 100);
+										new ParticleSystem(StudyActivity.this, 100, R.drawable.star_pink, 800)		
+										.setSpeedRange(0.1f, 0.25f)
+										.oneShot(imageDrag3, 100);
+										new ParticleSystem(StudyActivity.this, 100, R.drawable.star_pink, 800)		
+										.setSpeedRange(0.1f, 0.25f)
+										.oneShot(imageDrag4, 100);
+//										next();
 										Toast.makeText(StudyActivity.this,
 												"success", Toast.LENGTH_SHORT)
 												.show();
+										ring3.start();
+									}else{
+										new ParticleSystem(StudyActivity.this, 100, R.drawable.star_pink, 800)		
+										.setSpeedRange(0.1f, 0.25f)
+										.oneShot(v, 50);
+										ring1.start();
 									}
 								} else {
+									ring2.start();
 									Toast.makeText(StudyActivity.this, "false",
 											Toast.LENGTH_SHORT).show();
 									// imageTouch.setVisibility(View.VISIBLE);
