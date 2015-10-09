@@ -51,6 +51,7 @@
     <color name="bg_white_5">#0DFFFFFF</color>
     <color name="bg_white_0">#00FFFFFF</color>
     <!-- Text -->
+    <color name="text_color_home">#FFF600</color>
     <color name="text_color">#3d3d3d</color>
     <color name="Color6d6d6d">#6d6d6d</color>
     <color name="text_color_disable">#9d9d9d</color>
