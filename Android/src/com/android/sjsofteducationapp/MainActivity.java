@@ -14,7 +14,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 public class MainActivity extends MasterActivity implements OnClickListener, OnItemClickListener {
 
@@ -63,15 +62,12 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 	@Override
 	public void onClick(View v) {
 		int max = data.size();
-		Toast.makeText(getApplicationContext(), "x : " + listView.getScrollX(), Toast.LENGTH_SHORT).show();
 		switch (v.getId()) {
 		case R.id.image:
-			Toast.makeText(getApplicationContext(), "BackToSchool", Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.leftarrow:
 			if (position > 0) {
 				position--;
-				Toast.makeText(getApplicationContext(), "left pos : " + position, Toast.LENGTH_SHORT).show();
 				listView.setSelection(position);
 			}
 			if (position == 0) {
@@ -79,10 +75,9 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 			}
 			break;
 		case R.id.rightarrow:
-			if (position < max - 2) {
+			if (position < max - 3) {
 				position++;
 				listView.setSelection(position);
-				Toast.makeText(getApplicationContext(), "right pos : " + position, Toast.LENGTH_SHORT).show();
 			}
 			break;
 		default:
@@ -93,10 +88,8 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		String title = ((Home) arg0.getAdapter().getItem(arg2)).getTitle();
-		position = arg2;
 
 		arg1.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.abc_fade_in));
-		Toast.makeText(getApplicationContext(), title, Toast.LENGTH_SHORT).show();
 		if (title.equalsIgnoreCase("Animals")) {
 			Intent intent = new Intent(getApplicationContext(), SubjectActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -107,7 +100,7 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		service.stop();
+		mb.stop();
 	}
 
 }

@@ -27,7 +27,13 @@ public class Media {
 		mContext = context;
 		mp = MediaPlayer.create(context, fileName);
 		mp.setLooping(true);
-		mp.start();
+		mp.setVolume(10, 10);
+		try {
+			mp.start();
+		} catch (Exception e) {
+			
+		}
+		
 	}
 
 	private static Media mInstance;

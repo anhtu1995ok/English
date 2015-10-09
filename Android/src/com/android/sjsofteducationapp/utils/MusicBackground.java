@@ -32,7 +32,7 @@ public class MusicBackground extends AsyncTask<String, String, String> {
 	public void start() {
 		try {
 			player.start();
-			
+
 		} catch (Exception eee) {
 		}
 
@@ -40,7 +40,9 @@ public class MusicBackground extends AsyncTask<String, String, String> {
 
 	public void pause() {
 		try {
-			player.pause();
+			if (isPlaying()) {
+				player.pause();
+			}
 		} catch (Exception eee) {
 		}
 
@@ -68,10 +70,10 @@ public class MusicBackground extends AsyncTask<String, String, String> {
 		this.raw = rawSound;
 		init();
 	}
-	
+
 	public static MusicBackground getInstance(Context context, int rawSound, boolean loopingMode) {
 		if (mInstance == null)
-			mInstance = new MusicBackground(context , rawSound, loopingMode);
+			mInstance = new MusicBackground(context, rawSound, loopingMode);
 		return mInstance;
 	}
 

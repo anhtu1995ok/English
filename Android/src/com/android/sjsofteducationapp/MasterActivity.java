@@ -18,14 +18,14 @@ public class MasterActivity extends Activity {
             WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		super.onCreate(savedInstanceState);
 
-		mb = new MusicBackground(getApplicationContext(), R.raw.thememusic, true);
+		mb = MusicBackground.getInstance(getApplicationContext(), R.raw.thememusic, true);
 		mb.start();
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		if (MusicBackground.getInstance(getApplicationContext(), R.raw.thememusic, true).isPlaying()) {
+		if (mb.isPlaying()) {
 			mb.pause();
 		}
 	}
@@ -33,7 +33,7 @@ public class MasterActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+		mb.start();
 	}
 
 	@Override
