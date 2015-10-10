@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Random;
 
-import android.app.Activity;
 import android.content.ClipData;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -15,7 +15,8 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,17 +27,19 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.android.sjsofteducationapp.model.ImageDrag;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.meg7.widget.SvgImageView;
 import com.plattysoft.leonids.ParticleSystem;
 
-public class StudyActivity extends Activity implements OnClickListener {
+public class StudyActivity extends MasterActivity implements OnClickListener {
 	private LinearLayout mainLayout, layoutContent;
 	private FrameLayout frameContent;
 	private ProgressBar progressLoadImage;
@@ -44,6 +47,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 	private SvgImageView imageDrag1, imageDrag2, imageDrag3, imageDrag4;
 	private ImageView imageContent;
 	private ImageView back, next;
+	private TextView tvTitle;
 	private Bitmap bitmap1, bitmap2, bitmap3, bitmap4;
 	private ArrayList<SvgImageView> arrImage, arrImageDrag;
 	private ArrayList<ImageDrag> imageDrags;
@@ -52,6 +56,9 @@ public class StudyActivity extends Activity implements OnClickListener {
 	private File file;
 	private ArrayList<String> arrFileName;
 	private MediaPlayer ring1, ring2, ring3;
+	private TextToSpeech textToSpeech;
+	private String textSpeech = "cat";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,9 +66,20 @@ public class StudyActivity extends Activity implements OnClickListener {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_study);
-		
+
 		createFiles();
-		
+
+		textToSpeech = new TextToSpeech(StudyActivity.this,
+				new OnInitListener() {
+
+					@Override
+					public void onInit(int status) {
+						if (status != TextToSpeech.ERROR) {
+							textToSpeech.setLanguage(Locale.ENGLISH);
+						}
+					}
+				});
+
 		ring1 = MediaPlayer.create(StudyActivity.this, R.raw.ring1);
 		ring2 = MediaPlayer.create(StudyActivity.this, R.raw.ring2);
 		ring3 = MediaPlayer.create(StudyActivity.this, R.raw.ring3);
@@ -89,6 +107,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 		imageContent = (ImageView) findViewById(R.id.image_content);
 		back = (ImageView) findViewById(R.id.back);
 		next = (ImageView) findViewById(R.id.next);
+		tvTitle = (TextView) findViewById(R.id.title);
 		image1 = (SvgImageView) findViewById(R.id.image1);
 		image2 = (SvgImageView) findViewById(R.id.image2);
 		image3 = (SvgImageView) findViewById(R.id.image3);
@@ -102,47 +121,50 @@ public class StudyActivity extends Activity implements OnClickListener {
 		back.setOnClickListener(this);
 		next.setOnClickListener(this);
 	}
-	private void loadImage(){
+
+	private void loadImage() {
 		frameContent.setVisibility(View.INVISIBLE);
 		progressLoadImage.setVisibility(View.VISIBLE);
 		Glide.with(StudyActivity.this).load(file)
-		.into(new GlideDrawableImageViewTarget(imageContent) {
-			@Override
-			public void onResourceReady(GlideDrawable drawable,
-					GlideAnimation anim) {
-				super.onResourceReady(drawable, anim);
-				frameContent.setVisibility(View.VISIBLE);
-				progressLoadImage.setVisibility(View.INVISIBLE);
-				layoutSize();
-			}
+				.into(new GlideDrawableImageViewTarget(imageContent) {
+					@Override
+					public void onResourceReady(GlideDrawable drawable,
+							GlideAnimation anim) {
+						super.onResourceReady(drawable, anim);
+						frameContent.setVisibility(View.VISIBLE);
+						progressLoadImage.setVisibility(View.INVISIBLE);
+						layoutSize();
+					}
 
-			@Override
-			public void onLoadFailed(Exception e, Drawable errorDrawable) {
-				super.onLoadFailed(e, errorDrawable);
-			}
-		});
+					@Override
+					public void onLoadFailed(Exception e, Drawable errorDrawable) {
+						super.onLoadFailed(e, errorDrawable);
+					}
+				});
 	}
 
 	private void layoutSize() {
 		int width = layoutContent.getWidth();
-		int height = layoutContent.getHeight() - 16;
-		int pading = layoutContent.getPaddingTop();
+		int height = layoutContent.getHeight();
+		int pading = 16;
 
-		int marginTop = 30;
-		int marginLeft = 60;
+		int marginTop = 20;
+		int marginLeft = 40;
 
 		int iWidth = height / 2 - (marginTop * 2);
 		int iHeight = height / 2 - (marginTop * 2);
 
 		bitmap1 = createImage(getBitmapFromView(imageContent), (width / 2)
-				- iWidth - marginLeft, marginTop + 8, iWidth, iHeight);
-		bitmap2 = createImage(getBitmapFromView(imageContent), (width / 2)
-				+ marginLeft, marginTop + 8, iWidth, iHeight);
-		bitmap3 = createImage(getBitmapFromView(imageContent), (width / 2)
-				- iWidth - marginLeft, (height / 2) + marginTop + 8, iWidth,
+				- iWidth - marginLeft, marginTop + (pading / 2), iWidth,
 				iHeight);
+		bitmap2 = createImage(getBitmapFromView(imageContent), (width / 2)
+				+ marginLeft, marginTop + (pading / 2), iWidth, iHeight);
+		bitmap3 = createImage(getBitmapFromView(imageContent), (width / 2)
+				- iWidth - marginLeft, (height / 2) + marginTop + (pading / 2),
+				iWidth, iHeight);
 		bitmap4 = createImage(getBitmapFromView(imageContent), (width / 2)
-				+ marginLeft, (height / 2) + marginTop + 8, iWidth, iHeight);
+				+ marginLeft, (height / 2) + marginTop + (pading / 2), iWidth,
+				iHeight);
 
 		LinearLayout.LayoutParams params5 = new LinearLayout.LayoutParams(
 				iWidth, iHeight);
@@ -155,7 +177,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 		// /////
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
 				iWidth, iHeight);
-		params.topMargin = marginTop + 8;
+		params.topMargin = marginTop + (pading / 2);
 		params.leftMargin = (width / 2) - iWidth - marginLeft;
 		imageDrag1.setLayoutParams(params);
 		// /////
@@ -167,7 +189,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 		// /////
 		LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(
 				iWidth, iHeight);
-		params2.topMargin = marginTop + 8;
+		params2.topMargin = marginTop + (pading / 2);
 		params2.leftMargin = marginLeft * 2;
 		imageDrag2.setLayoutParams(params2);
 		// /////
@@ -231,7 +253,6 @@ public class StudyActivity extends Activity implements OnClickListener {
 			imageDrag.getDragImageView().setSvgRaw(
 					imageDrags.get(p).getIdRawDrag());
 			imageDrag.getDragImageView().invalidate();
-			Log.d("TuNT", "id raw: "+imageDrags.get(p).getIdRawDrag());
 			imageDrag.getImageView().setOnTouchListener(
 					new View.OnTouchListener() {
 						@Override
@@ -264,37 +285,43 @@ public class StudyActivity extends Activity implements OnClickListener {
 									imageDrag.setDrag(true);
 
 									if (checkSuccess()) {
-										new ParticleSystem(StudyActivity.this, 100, R.drawable.star_pink, 800)		
-										.setSpeedRange(0.1f, 0.25f)
-										.oneShot(imageContent, 100);
-										new ParticleSystem(StudyActivity.this, 100, R.drawable.star_pink, 800)		
-										.setSpeedRange(0.1f, 0.25f)
-										.oneShot(imageDrag1, 100);
-										new ParticleSystem(StudyActivity.this, 100, R.drawable.star_pink, 800)		
-										.setSpeedRange(0.1f, 0.25f)
-										.oneShot(imageDrag2, 100);
-										new ParticleSystem(StudyActivity.this, 100, R.drawable.star_pink, 800)		
-										.setSpeedRange(0.1f, 0.25f)
-										.oneShot(imageDrag3, 100);
-										new ParticleSystem(StudyActivity.this, 100, R.drawable.star_pink, 800)		
-										.setSpeedRange(0.1f, 0.25f)
-										.oneShot(imageDrag4, 100);
-//										next();
-										Toast.makeText(StudyActivity.this,
-												"success", Toast.LENGTH_SHORT)
-												.show();
-										ring3.start();
-									}else{
-										new ParticleSystem(StudyActivity.this, 100, R.drawable.star_pink, 800)		
-										.setSpeedRange(0.1f, 0.25f)
-										.oneShot(v, 50);
+										new ParticleSystem(StudyActivity.this,
+												100, R.drawable.star, 800)
+												.setSpeedRange(0.1f, 0.25f)
+												.oneShot(imageContent, 100);
+										new ParticleSystem(StudyActivity.this,
+												100, R.drawable.star, 800)
+												.setSpeedRange(0.1f, 0.25f)
+												.oneShot(imageDrag1, 100);
+										new ParticleSystem(StudyActivity.this,
+												100, R.drawable.star, 800)
+												.setSpeedRange(0.1f, 0.25f)
+												.oneShot(imageDrag2, 100);
+										new ParticleSystem(StudyActivity.this,
+												100, R.drawable.star, 800)
+												.setSpeedRange(0.1f, 0.25f)
+												.oneShot(imageDrag3, 100);
+										new ParticleSystem(StudyActivity.this,
+												100, R.drawable.star, 800)
+												.setSpeedRange(0.1f, 0.25f)
+												.oneShot(imageDrag4, 100);
+
+										textToSpeech.speak(textSpeech,
+												TextToSpeech.QUEUE_FLUSH, null);
+										String title = "Cat - Con meo";
+										tvTitle.setText(title);
+										YoYo.with(Techniques.DropOut).playOn(
+												tvTitle);
+									} else {
+										new ParticleSystem(StudyActivity.this,
+												100, R.drawable.star, 800)
+												.setSpeedRange(0.1f, 0.25f)
+												.oneShot(v, 100);
 										ring1.start();
 									}
 								} else {
 									ring2.start();
-									Toast.makeText(StudyActivity.this, "false",
-											Toast.LENGTH_SHORT).show();
-									// imageTouch.setVisibility(View.VISIBLE);
+									YoYo.with(Techniques.Swing).playOn(v);
 								}
 								break;
 							}
@@ -303,25 +330,25 @@ public class StudyActivity extends Activity implements OnClickListener {
 					});
 		}
 	}
-	
-	private void next(){
+
+	private void next() {
 		Collections.shuffle(idRawSvgs, new Random(seed));
 		Collections.shuffle(arrImage, new Random(seed));
 		Collections.shuffle(arrImageDrag, new Random(seed));
-		
-		for(int i = 0; i<imageDrags.size(); i++){
+
+		for (int i = 0; i < imageDrags.size(); i++) {
 			ImageDrag imageDrag = imageDrags.get(i);
-//			imageDrag.getImageView().setImageBitmap(imageDrag.getBitmap());
-//			imageDrag.getImageView()
-//					.setSvgRaw(imageDrags.get(i).getIdRawDrag());
-//			imageDrag.getDragImageView().setSvgRaw(
-//					imageDrags.get(i).getIdRawDrag());
-			
+			// imageDrag.getImageView().setImageBitmap(imageDrag.getBitmap());
+			// imageDrag.getImageView()
+			// .setSvgRaw(imageDrags.get(i).getIdRawDrag());
+			// imageDrag.getDragImageView().setSvgRaw(
+			// imageDrags.get(i).getIdRawDrag());
+
 			imageDrag.getImageView().setVisibility(View.VISIBLE);
 			imageDrag.getDragImageView().setVisibility(View.VISIBLE);
 			imageDrag.setDrag(false);
 		}
-		
+
 		Collections.shuffle(arrFileName, new Random(seed));
 		file = loadFile(arrFileName.get(0));
 		if (file == null)
@@ -364,56 +391,59 @@ public class StudyActivity extends Activity implements OnClickListener {
 		view.draw(canvas);
 		return returnedBitmap;
 	}
-	
+
 	private void createFiles() {
-        String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/english");
-        myDir.mkdirs();
-        String fname = "image.jpg";
-        String fname2 = "image2.jpg";
-        String fname3 = "image3.jpg";
-        File file = new File(myDir, fname);
-        if (!file.exists()) {
-            try {
-                Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.image)).getBitmap();
-                FileOutputStream out = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                out.flush();
-                out.close();
+		String root = Environment.getExternalStorageDirectory().toString();
+		File myDir = new File(root + "/english");
+		myDir.mkdirs();
+		String fname = "image.jpg";
+		String fname2 = "image2.jpg";
+		String fname3 = "image3.jpg";
+		File file = new File(myDir, fname);
+		if (!file.exists()) {
+			try {
+				Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(
+						R.drawable.image)).getBitmap();
+				FileOutputStream out = new FileOutputStream(file);
+				bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+				out.flush();
+				out.close();
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        
-        File file2 = new File(myDir, fname2);
-        if (!file2.exists()) {
-            try {
-                Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.image2)).getBitmap();
-                FileOutputStream out = new FileOutputStream(file2);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                out.flush();
-                out.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        
-        File file3 = new File(myDir, fname3);
-        if (!file3.exists()) {
-            try {
-                Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.image3)).getBitmap();
-                FileOutputStream out = new FileOutputStream(file3);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                out.flush();
-                out.close();
+		File file2 = new File(myDir, fname2);
+		if (!file2.exists()) {
+			try {
+				Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(
+						R.drawable.image2)).getBitmap();
+				FileOutputStream out = new FileOutputStream(file2);
+				bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+				out.flush();
+				out.close();
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		File file3 = new File(myDir, fname3);
+		if (!file3.exists()) {
+			try {
+				Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(
+						R.drawable.image3)).getBitmap();
+				FileOutputStream out = new FileOutputStream(file3);
+				bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+				out.flush();
+				out.close();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -423,7 +453,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 			finish();
 			break;
 		case R.id.next:
-			next();
+//			next();
 			break;
 		default:
 			break;
