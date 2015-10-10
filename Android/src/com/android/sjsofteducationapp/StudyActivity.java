@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Random;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -39,7 +40,7 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.meg7.widget.SvgImageView;
 import com.plattysoft.leonids.ParticleSystem;
 
-public class StudyActivity extends MasterActivity implements OnClickListener {
+public class StudyActivity extends Activity implements OnClickListener {
 	private LinearLayout mainLayout, layoutContent;
 	private FrameLayout frameContent;
 	private ProgressBar progressLoadImage;
@@ -152,7 +153,7 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 		int marginLeft = 40;
 
 		int iWidth = height / 2 - (marginTop * 2);
-		int iHeight = height / 2 - (marginTop * 2);
+		int iHeight = height / 2 - ((marginTop * 2)+imageContent.getPaddingBottom());
 
 		bitmap1 = createImage(getBitmapFromView(imageContent), (width / 2)
 				- iWidth - marginLeft, marginTop + (pading / 2), iWidth,
@@ -286,36 +287,42 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 
 									if (checkSuccess()) {
 										new ParticleSystem(StudyActivity.this,
-												100, R.drawable.star, 800)
-												.setSpeedRange(0.1f, 0.25f)
+												100,
+												R.drawable.ic_star_dropdown,
+												800).setSpeedRange(0.1f, 0.25f)
 												.oneShot(imageContent, 100);
 										new ParticleSystem(StudyActivity.this,
-												100, R.drawable.star, 800)
-												.setSpeedRange(0.1f, 0.25f)
+												100,
+												R.drawable.ic_star_dropdown,
+												800).setSpeedRange(0.1f, 0.25f)
 												.oneShot(imageDrag1, 100);
 										new ParticleSystem(StudyActivity.this,
-												100, R.drawable.star, 800)
-												.setSpeedRange(0.1f, 0.25f)
+												100,
+												R.drawable.ic_star_dropdown,
+												800).setSpeedRange(0.1f, 0.25f)
 												.oneShot(imageDrag2, 100);
 										new ParticleSystem(StudyActivity.this,
-												100, R.drawable.star, 800)
-												.setSpeedRange(0.1f, 0.25f)
+												100,
+												R.drawable.ic_star_dropdown,
+												800).setSpeedRange(0.1f, 0.25f)
 												.oneShot(imageDrag3, 100);
 										new ParticleSystem(StudyActivity.this,
-												100, R.drawable.star, 800)
-												.setSpeedRange(0.1f, 0.25f)
+												100,
+												R.drawable.ic_star_dropdown,
+												800).setSpeedRange(0.1f, 0.25f)
 												.oneShot(imageDrag4, 100);
 
 										textToSpeech.speak(textSpeech,
 												TextToSpeech.QUEUE_FLUSH, null);
-										String title = "Cat - Con meo";
+										String title = "Cat";
 										tvTitle.setText(title);
 										YoYo.with(Techniques.DropOut).playOn(
 												tvTitle);
 									} else {
 										new ParticleSystem(StudyActivity.this,
-												100, R.drawable.star, 800)
-												.setSpeedRange(0.1f, 0.25f)
+												100,
+												R.drawable.ic_star_dropdown,
+												800).setSpeedRange(0.1f, 0.25f)
 												.oneShot(v, 100);
 										ring1.start();
 									}
@@ -453,7 +460,7 @@ public class StudyActivity extends MasterActivity implements OnClickListener {
 			finish();
 			break;
 		case R.id.next:
-//			next();
+			// next();
 			break;
 		default:
 			break;
