@@ -4,17 +4,19 @@ import java.util.ArrayList;
 
 import com.android.sjsofteducationapp.adapter.SubjectAdapter;
 import com.android.sjsofteducationapp.model.Home;
+import com.android.sjsofteducationapp.utils.GetDataFromDB;
 import com.sileria.android.view.HorzListView;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 public class SubjectActivity extends MasterActivity implements OnClickListener {
 
@@ -28,11 +30,11 @@ public class SubjectActivity extends MasterActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_subject);
+		
+		new initData().execute("");
+//		initData();
 
-		initData();
 		listView = (HorzListView) findViewById(R.id.listView);
-		adapter = new SubjectAdapter(getApplicationContext(), R.layout.item_subject, data);
-		listView.setAdapter(adapter);
 
 		image = (ImageView) findViewById(R.id.image);
 		leftArrow = (ImageView) findViewById(R.id.leftarrow);
@@ -47,18 +49,26 @@ public class SubjectActivity extends MasterActivity implements OnClickListener {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				arg1.startAnimation(AnimationUtils.loadAnimation(SubjectActivity.this, R.anim.abc_fade_in));
+				Home home = (Home) arg0.getAdapter().getItem(arg2);
 				Intent intent = new Intent(SubjectActivity.this, StudyActivity.class);
+				intent.putExtra("SUBJECT", home);
 				startActivity(intent);
 			}
 		});
 	}
+	
+	private class initData extends AsyncTask<String, String, String>{
 
-	private void initData() {
-		data = new ArrayList<Home>();
-		data.add(new Home(1, "Pig", R.drawable.ic_pig, true));
-		data.add(new Home(2, "Duck", R.drawable.ic_duck, true));
-		data.add(new Home(3, "Dog", R.drawable.ic_dog, true));
-		data.add(new Home(4, "Chicken", R.drawable.ic_chicken, false));
+		@Override
+		protected String doInBackground(String... params) {
+			GetDataFromDB gdfdb = new GetDataFromDB(getApplicationContext());
+			data = gdfdb.getDataFromDB();
+			adapter = new SubjectAdapter(getApplicationContext(), R.layout.item_subject, data);
+			listView.setAdapter(adapter);
+			Log.d("ToanNM", "sData: " + data.size());
+			return null;
+		}
+		
 	}
 
 	@Override
@@ -66,7 +76,6 @@ public class SubjectActivity extends MasterActivity implements OnClickListener {
 		int x = listView.getScrollX();
 		switch (v.getId()) {
 		case R.id.image:
-			Toast.makeText(getApplicationContext(), "Zoo", Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.leftarrow:
 			if (position != 0 && x > 0) {

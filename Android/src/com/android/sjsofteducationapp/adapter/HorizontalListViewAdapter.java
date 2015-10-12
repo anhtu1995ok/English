@@ -54,12 +54,12 @@ public class HorizontalListViewAdapter extends ArrayAdapter<Home> {
 			convertView.setTag(holder);
 		}
 
-		int imageUrl = home.getUrl_image();
+		int imageUrl = home.getUrl_img();
 		final String title = home.getTitle();
 		holder.image.setImageResource(imageUrl);
 
 		try {
-			Typeface type = Typeface.createFromAsset(context.getAssets(), "brlnsb.ttf");
+			Typeface type = Typeface.createFromAsset(context.getAssets(), "fonts/brlnsb.ttf");
 			holder.title.setTypeface(type);
 
 			holder.title.setText(title);
