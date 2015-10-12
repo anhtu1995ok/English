@@ -47,7 +47,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 	private SvgImageView image1, image2, image3, image4;
 	private SvgImageView imageDrag1, imageDrag2, imageDrag3, imageDrag4;
 	private ImageView imageContent;
-	private ImageView back, next;
+	private ImageView back, replay;
 	private TextView tvTitle;
 	private Bitmap bitmap1, bitmap2, bitmap3, bitmap4;
 	private ArrayList<SvgImageView> arrImage, arrImageDrag;
@@ -99,6 +99,12 @@ public class StudyActivity extends Activity implements OnClickListener {
 		createArrayImage();
 		createArrayImageDrag();
 	}
+	
+	@Override
+	protected void onPause() {
+		textToSpeech.stop();
+		super.onPause();
+	}
 
 	private void initView() {
 		mainLayout = (LinearLayout) findViewById(R.id.main_layout);
@@ -107,7 +113,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 		layoutContent = (LinearLayout) findViewById(R.id.layout_content);
 		imageContent = (ImageView) findViewById(R.id.image_content);
 		back = (ImageView) findViewById(R.id.back);
-		next = (ImageView) findViewById(R.id.next);
+		replay = (ImageView) findViewById(R.id.replay);
 		tvTitle = (TextView) findViewById(R.id.title);
 		image1 = (SvgImageView) findViewById(R.id.image1);
 		image2 = (SvgImageView) findViewById(R.id.image2);
@@ -118,9 +124,10 @@ public class StudyActivity extends Activity implements OnClickListener {
 		imageDrag3 = (SvgImageView) findViewById(R.id.image_drag3);
 		imageDrag4 = (SvgImageView) findViewById(R.id.image_drag4);
 
+		replay.setVisibility(View.INVISIBLE);
 		loadImage();
 		back.setOnClickListener(this);
-		next.setOnClickListener(this);
+		replay.setOnClickListener(this);
 	}
 
 	private void loadImage() {
@@ -153,7 +160,8 @@ public class StudyActivity extends Activity implements OnClickListener {
 		int marginLeft = 40;
 
 		int iWidth = height / 2 - (marginTop * 2);
-		int iHeight = height / 2 - ((marginTop * 2)+imageContent.getPaddingBottom());
+		int iHeight = height / 2
+				- ((marginTop * 2) + imageContent.getPaddingBottom());
 
 		bitmap1 = createImage(getBitmapFromView(imageContent), (width / 2)
 				- iWidth - marginLeft, marginTop + (pading / 2), iWidth,
@@ -290,27 +298,27 @@ public class StudyActivity extends Activity implements OnClickListener {
 												100,
 												R.drawable.ic_star_dropdown,
 												800).setSpeedRange(0.1f, 0.25f)
-												.oneShot(imageContent, 100);
+												.oneShot(imageContent, 50);
 										new ParticleSystem(StudyActivity.this,
 												100,
 												R.drawable.ic_star_dropdown,
 												800).setSpeedRange(0.1f, 0.25f)
-												.oneShot(imageDrag1, 100);
+												.oneShot(imageDrag1, 50);
 										new ParticleSystem(StudyActivity.this,
 												100,
 												R.drawable.ic_star_dropdown,
 												800).setSpeedRange(0.1f, 0.25f)
-												.oneShot(imageDrag2, 100);
+												.oneShot(imageDrag2, 50);
 										new ParticleSystem(StudyActivity.this,
 												100,
 												R.drawable.ic_star_dropdown,
 												800).setSpeedRange(0.1f, 0.25f)
-												.oneShot(imageDrag3, 100);
+												.oneShot(imageDrag3, 50);
 										new ParticleSystem(StudyActivity.this,
 												100,
 												R.drawable.ic_star_dropdown,
 												800).setSpeedRange(0.1f, 0.25f)
-												.oneShot(imageDrag4, 100);
+												.oneShot(imageDrag4, 50);
 
 										textToSpeech.speak(textSpeech,
 												TextToSpeech.QUEUE_FLUSH, null);
@@ -318,12 +326,13 @@ public class StudyActivity extends Activity implements OnClickListener {
 										tvTitle.setText(title);
 										YoYo.with(Techniques.DropOut).playOn(
 												tvTitle);
+										replay.setVisibility(View.VISIBLE);
 									} else {
 										new ParticleSystem(StudyActivity.this,
 												100,
 												R.drawable.ic_star_dropdown,
 												800).setSpeedRange(0.1f, 0.25f)
-												.oneShot(v, 100);
+												.oneShot(v, 50);
 										ring1.start();
 									}
 								} else {
@@ -361,6 +370,10 @@ public class StudyActivity extends Activity implements OnClickListener {
 		if (file == null)
 			finish();
 		loadImage();
+	}
+
+	private void replay() {
+		textToSpeech.speak(textSpeech, TextToSpeech.QUEUE_FLUSH, null);
 	}
 
 	// kiem tra khi drag
@@ -459,8 +472,8 @@ public class StudyActivity extends Activity implements OnClickListener {
 		case R.id.back:
 			finish();
 			break;
-		case R.id.next:
-			// next();
+		case R.id.replay:
+			replay();
 			break;
 		default:
 			break;
