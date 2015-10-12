@@ -9,6 +9,7 @@ import com.android.sjsofteducationapp.model.Home;
 import com.sileria.android.view.HorzListView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,7 +23,7 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 	HorzListView listView;
 	HorizontalListViewAdapter adapter;
 	ArrayList<Home> data;
-	ImageView image, leftArrow, rightArrow;
+	ImageView image, leftArrow, rightArrow, share, moreapp;
 	int position = 0;
 	Intent intent;
 
@@ -50,6 +51,11 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 		image.setOnClickListener(this);
 		leftArrow.setOnClickListener(this);
 		rightArrow.setOnClickListener(this);
+		
+		share = (ImageView) findViewById(R.id.share);
+		moreapp = (ImageView) findViewById(R.id.moreapp);
+		share.setOnClickListener(this);
+		moreapp.setOnClickListener(this);
 		
 		EducationDBControler dbController = EducationDBControler.getInstance(MainActivity.this);
 		try {
@@ -88,6 +94,22 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 				listView.setSelection(position);
 			}
 			break;
+			
+		case R.id.share:
+			Intent sendIntent = new Intent();
+			sendIntent.setAction(Intent.ACTION_SEND);
+			sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+			sendIntent.setType("text/plain");
+			startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.send_to)));
+			break;
+		case R.id.moreapp:
+			String url = "https://play.google.com/store/apps/developer?id=Vareco+Mobile";
+			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//			Intent intent = new Intent(Intent.ACTION_VIEW,
+//					Uri.parse("market://developer?id=" + appID));
+//			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(intent);
 		default:
 			break;
 		}

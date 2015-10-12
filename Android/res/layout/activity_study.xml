@@ -21,20 +21,20 @@
 
         <TextView
             android:id="@+id/title"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="#FFFFFF"
-            android:textSize="28sp"
-            android:textStyle="bold" />
+            android:gravity="center" />
 
         <ImageView
-            android:id="@+id/replay"
+            android:id="@+id/next"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="10dp"
-            android:background="@drawable/selector_back" />
+            android:background="@drawable/repeat_onclick" />
     </LinearLayout>
 
     <FrameLayout
@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="left"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="30dp"
                 android:orientation="vertical" >
 
                 <com.meg7.widget.SvgImageView
@@ -84,22 +84,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:layout_weight="1"
                 android:gravity="center" >
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/bg_study_center_1" />
 
                 <ImageView
                     android:id="@+id/image_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="3dp"
-                    android:paddingRight="6dp"
-                    android:paddingTop="3dp"
+                    android:padding="3dp"
                     android:src="@drawable/image" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bg_study_center" />
 
                 <LinearLayout
                     android:id="@+id/layout_content"
@@ -163,7 +161,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="30dp"
                 android:orientation="vertical" >
 
                 <com.meg7.widget.SvgImageView
@@ -193,11 +191,9 @@
         android:layout_marginTop="8dp"
         android:layout_weight="0.7"
         android:orientation="horizontal" >
-
-        <ImageView
-            android:layout_width="match_parent"
+        <ImageView android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/bg_study_bottom" />
+            android:src="@drawable/bg_study_bottom"/>
     </LinearLayout>
 
 </LinearLayout>
