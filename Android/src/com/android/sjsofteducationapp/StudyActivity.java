@@ -1,7 +1,10 @@
 package com.android.sjsofteducationapp;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
@@ -30,7 +33,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.sjsofteducationapp.async.UnzipAsync;
 import com.android.sjsofteducationapp.model.ImageDrag;
+import com.android.sjsofteducationapp.utils.ZipUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -56,7 +61,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 	private long seed;
 	private File file;
 	private ArrayList<String> arrFileName;
-	private MediaPlayer ring1, ring2, ring3;
+	private MediaPlayer ringSuccess, ringError, ringTouch;
 	private TextToSpeech textToSpeech;
 	private String textSpeech = "cat";
 
@@ -69,7 +74,6 @@ public class StudyActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_study);
 
 		createFiles();
-
 		textToSpeech = new TextToSpeech(StudyActivity.this,
 				new OnInitListener() {
 
@@ -81,9 +85,9 @@ public class StudyActivity extends Activity implements OnClickListener {
 					}
 				});
 
-		ring1 = MediaPlayer.create(StudyActivity.this, R.raw.ring1);
-		ring2 = MediaPlayer.create(StudyActivity.this, R.raw.ring2);
-		ring3 = MediaPlayer.create(StudyActivity.this, R.raw.ring3);
+		ringSuccess = MediaPlayer.create(StudyActivity.this, R.raw.cartoon_slide_whistle_ascend_version_2);
+		ringTouch = MediaPlayer.create(StudyActivity.this, R.raw.comedy_pop_finger_in_mouth_001);
+		ringError = MediaPlayer.create(StudyActivity.this, R.raw.ring3);
 		seed = System.nanoTime();
 
 		arrFileName = new ArrayList<String>();
@@ -99,7 +103,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 		createArrayImage();
 		createArrayImageDrag();
 	}
-	
+
 	@Override
 	protected void onPause() {
 		textToSpeech.stop();
@@ -267,6 +271,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 						@Override
 						public boolean onTouch(View v, MotionEvent event) {
 							if (event.getAction() == MotionEvent.ACTION_DOWN) {
+								ringTouch.start();
 								ClipData data = ClipData.newPlainText("", "");
 								View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
 										v);
@@ -333,10 +338,9 @@ public class StudyActivity extends Activity implements OnClickListener {
 												R.drawable.ic_star_dropdown,
 												800).setSpeedRange(0.1f, 0.25f)
 												.oneShot(v, 50);
-										ring1.start();
+										ringSuccess.start();
 									}
 								} else {
-									ring2.start();
 									YoYo.with(Techniques.Swing).playOn(v);
 								}
 								break;
