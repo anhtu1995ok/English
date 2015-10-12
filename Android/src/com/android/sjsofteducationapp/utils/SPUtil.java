@@ -9,6 +9,7 @@ public class SPUtil {
 	public static final String PREF_FILE_NAME = "SharedPref";
 	// Ten key
 	public static final String KEY_AGREE_RUN = "agree_start";
+	public static final String KEY_FIRST_RUN = "first_run";
 	private SharedPreferences pref;
 
 	private SPUtil(Context context) {
@@ -18,7 +19,7 @@ public class SPUtil {
 
 	private static SPUtil prefUtils;
 
-	public static SPUtil instance(Context context) {
+	public static SPUtil getInstance(Context context) {
 		if (prefUtils == null) {
 			prefUtils = new SPUtil(context);
 		}

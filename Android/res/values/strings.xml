@@ -7,5 +7,9 @@
     <string name="image_description">Image Description</string>
     <string name="share_text">I just played game at: \n https://play.google.com/store/apps/developer?id=Vareco+Mobile \n Come and play with me</string>
     <string name="send_to">Share to...</string>
+    <string name="url_check_update">http://tunt.grn.cc/Test/checkupdate.php</string>
+    <string name="update">Có dữ liệu mới bạn có muốn tải về ngay bây giờ không?</string>
+    <string name="yes">Có</string>
+    <string name="no">Không</string>
 
 </resources>
