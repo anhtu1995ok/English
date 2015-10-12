@@ -1,21 +1,28 @@
 package com.android.sjsofteducationapp;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Random;
+
+import com.android.sjsofteducationapp.database.EducationDBControler;
+import com.android.sjsofteducationapp.model.Home;
+import com.android.sjsofteducationapp.model.ImageDrag;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.meg7.widget.SvgImageView;
+import com.plattysoft.leonids.ParticleSystem;
 
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -33,19 +40,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.android.sjsofteducationapp.async.UnzipAsync;
-import com.android.sjsofteducationapp.model.Home;
-import com.android.sjsofteducationapp.model.ImageDrag;
-import com.android.sjsofteducationapp.utils.ZipUtil;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
-import com.meg7.widget.SvgImageView;
-import com.plattysoft.leonids.ParticleSystem;
 
 public class StudyActivity extends Activity implements OnClickListener {
 	private LinearLayout mainLayout, layoutContent;
@@ -65,7 +59,10 @@ public class StudyActivity extends Activity implements OnClickListener {
 	private MediaPlayer ringSuccess, ringError, ringTouch;
 	private TextToSpeech textToSpeech;
 	private String textSpeech;
-
+	
+	private EducationDBControler db;
+	Home home;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -75,7 +72,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_study);
 
 		Intent intent = getIntent();
-		Home home = (Home) intent.getSerializableExtra("SUBJECT");
+		home = (Home) intent.getSerializableExtra("SUBJECT");
 		if (home == null)
 			finish();
 		textSpeech = home.getTitle();
@@ -105,6 +102,8 @@ public class StudyActivity extends Activity implements OnClickListener {
 		initView();
 		createArrayImage();
 		createArrayImageDrag();
+		
+		db = EducationDBControler.getInstance(StudyActivity.this);
 	}
 
 	@Override
@@ -336,6 +335,8 @@ public class StudyActivity extends Activity implements OnClickListener {
 												tvTitle);
 										tvTitle.setVisibility(View.VISIBLE);
 										replay.setVisibility(View.VISIBLE);
+										
+										db.setSuccess(home.getId());
 									} else {
 										new ParticleSystem(StudyActivity.this,
 												100,

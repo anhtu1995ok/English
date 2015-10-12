@@ -2,7 +2,7 @@ package com.android.sjsofteducationapp.model;
 
 import java.io.Serializable;
 
-public class Home implements Serializable{
+public class Home implements Serializable {
 	/**
 	 * 
 	 */
@@ -11,10 +11,9 @@ public class Home implements Serializable{
 	 * 
 	 */
 	int id, url_img;
-	private String title, url_image, content_image, bg_image;
+	private String title, url_image, content_image, bg_image, success;
 
 	// subject
-	private boolean success;
 
 	public Home(int id, String title, int url_img) {
 		this.id = id;
@@ -22,19 +21,20 @@ public class Home implements Serializable{
 		this.url_img = url_img;
 	}
 
-	public Home(int id, String title, int url_img, boolean success) {
+	public Home(int id, String title, int url_img, String success) {
 		this.id = id;
 		this.title = title;
 		this.url_img = url_img;
 		this.success = success;
 	}
 
-	public Home(int id, String title, String url_image, String content_image, String bg_image) {
+	public Home(int id, String title, String url_image, String content_image, String bg_image, String success) {
 		this.id = id;
 		this.title = title;
 		this.url_image = url_image;
 		this.content_image = content_image;
 		this.bg_image = bg_image;
+		this.success = success;
 	}
 
 	public String getContent_image() {
@@ -85,11 +85,11 @@ public class Home implements Serializable{
 		this.bg_image = bg_image;
 	}
 
-	public boolean isSuccess() {
+	public String getSuccess() {
 		return success;
 	}
 
-	public void setSuccess(boolean success) {
+	public void setSuccess(String success) {
 		this.success = success;
 	}
 

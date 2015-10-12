@@ -62,7 +62,7 @@ public class SubjectAdapter extends ArrayAdapter<Home> {
 
 		try {
 			// 
-			String imageFile = Environment.getExternalStorageDirectory() + "/Sjsoft/url_image/" + home.getUrl_image();
+			String imageFile = Environment.getExternalStorageDirectory() + "/Sjsoft/UrlImage/" + home.getUrl_image();
 			Log.d("ToanNM", "SubJect image : " + imageFile);
 			File file = new File(imageFile);
 			if (file.exists()) {
@@ -71,9 +71,11 @@ public class SubjectAdapter extends ArrayAdapter<Home> {
 
 			}
 			//
-			boolean success = home.isSuccess();
-			if (success) {
+			String success = home.getSuccess();
+			if (success.toLowerCase().equals("done")) {
 				holder.star.setVisibility(View.VISIBLE);
+			} else {
+				holder.star.setVisibility(View.GONE);
 			}
 		} catch (Exception e) {
 

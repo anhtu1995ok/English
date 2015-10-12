@@ -5,7 +5,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import com.android.sjsofteducationapp.model.Home;
+
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -136,5 +140,21 @@ public class EducationDBControler extends SQLiteOpenHelper {
 
 		Cursor cursor = sqliteDataBase.rawQuery(stSql, data);
 		return cursor;
+	}
+	
+	public void setSuccess(long id){
+		ContentValues values = new ContentValues();
+		values.put("isSuccess", "done");
+		
+		String where = "id" + " = " + id;
+		update("subject", values, where, null);
+	}
+	
+	public int update(String table, ContentValues values, String whereClause, String[] whereArgs){
+		if( sqliteDataBase == null) openDataBase();
+		
+		int ret = sqliteDataBase.update(table, values, whereClause, whereArgs);
+		
+		return ret;
 	}
 }

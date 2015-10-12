@@ -11,9 +11,7 @@ import java.util.zip.ZipInputStream;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 public class UnzipAsync extends AsyncTask<Void, Integer, Void> {
 	private static int BUFFER_SIZE = 8192;

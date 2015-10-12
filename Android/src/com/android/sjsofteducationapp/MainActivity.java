@@ -98,7 +98,7 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 		case R.id.share:
 			Intent sendIntent = new Intent();
 			sendIntent.setAction(Intent.ACTION_SEND);
-			sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+			sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getText(R.string.share_text));
 			sendIntent.setType("text/plain");
 			startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.send_to)));
 			break;

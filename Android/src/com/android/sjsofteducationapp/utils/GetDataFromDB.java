@@ -33,10 +33,12 @@ public class GetDataFromDB {
 			String url_image = cursor.getString(cursor.getColumnIndex("url_image"));
 			String content_image = cursor.getString(cursor.getColumnIndex("content_image"));
 			String bg_image = cursor.getString(cursor.getColumnIndex("bg_image"));
+			String success = cursor.getString(cursor.getColumnIndex("isSuccess"));
 			
-			data.add(new Home(id, title, url_image, content_image, bg_image));
+			data.add(new Home(id, title, url_image, content_image, bg_image, success));
+			Log.d("ToanNM", "done get Data from DB : " + data.size() + "isSuccess: " + success);
 		} while (cursor.moveToNext());
-		Log.d("ToanNM", "done get Data from DB : " + data.size());
+		
 		return data;
 	}
 }

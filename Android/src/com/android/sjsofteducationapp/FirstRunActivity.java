@@ -31,7 +31,7 @@ public class FirstRunActivity extends Activity {
 			InputStream inputStream = getAssets().open("image/content.zip");
 			String root = Environment.getExternalStorageDirectory().toString();
 			unzipAsync = new UnzipAsync(FirstRunActivity.this, inputStream,
-					root + "/Sjsoft/ContentImage/");
+					root + "/Sjsoft/");
 			unzipAsync.execute();
 			unzipAsync.setOnUnzipListener(new OnUnzipListener() {
 

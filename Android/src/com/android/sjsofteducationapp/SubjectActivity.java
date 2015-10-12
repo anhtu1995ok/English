@@ -30,9 +30,9 @@ public class SubjectActivity extends MasterActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_subject);
-		
+
 		new initData().execute("");
-//		initData();
+		// initData();
 
 		listView = (HorzListView) findViewById(R.id.listView);
 
@@ -56,19 +56,29 @@ public class SubjectActivity extends MasterActivity implements OnClickListener {
 			}
 		});
 	}
-	
-	private class initData extends AsyncTask<String, String, String>{
+
+	private class initData extends AsyncTask<String, String, String> {
 
 		@Override
 		protected String doInBackground(String... params) {
 			GetDataFromDB gdfdb = new GetDataFromDB(getApplicationContext());
 			data = gdfdb.getDataFromDB();
-			adapter = new SubjectAdapter(getApplicationContext(), R.layout.item_subject, data);
-			listView.setAdapter(adapter);
 			Log.d("ToanNM", "sData: " + data.size());
 			return null;
 		}
-		
+
+		@Override
+		protected void onPostExecute(String result) {
+			adapter = new SubjectAdapter(getApplicationContext(), R.layout.item_subject, data);
+			listView.setAdapter(adapter);
+			super.onPostExecute(result);
+		}
+
+	}
+	@Override
+	protected void onResume() {
+		super.onResume();
+		new initData().execute("");
 	}
 
 	@Override
