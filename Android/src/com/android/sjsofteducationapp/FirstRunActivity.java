@@ -28,10 +28,10 @@ public class FirstRunActivity extends Activity {
 
 		progressBar = (ProgressBar) findViewById(R.id.progressBar);
 		try {
-			InputStream inputStream = getAssets().open("image/abc.zip");
+			InputStream inputStream = getAssets().open("image/content.zip");
 			String root = Environment.getExternalStorageDirectory().toString();
 			unzipAsync = new UnzipAsync(FirstRunActivity.this, inputStream,
-					root + "/english/");
+					root + "/Sjsoft/ContentImage/");
 			unzipAsync.execute();
 			unzipAsync.setOnUnzipListener(new OnUnzipListener() {
 

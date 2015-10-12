@@ -12,6 +12,7 @@ import java.util.Random;
 
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -34,6 +35,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.sjsofteducationapp.async.UnzipAsync;
+import com.android.sjsofteducationapp.model.Home;
 import com.android.sjsofteducationapp.model.ImageDrag;
 import com.android.sjsofteducationapp.utils.ZipUtil;
 import com.bumptech.glide.Glide;
@@ -60,10 +62,9 @@ public class StudyActivity extends Activity implements OnClickListener {
 	private ArrayList<Integer> idRawSvgs;
 	private long seed;
 	private File file;
-	private ArrayList<String> arrFileName;
 	private MediaPlayer ringSuccess, ringError, ringTouch;
 	private TextToSpeech textToSpeech;
-	private String textSpeech = "cat";
+	private String textSpeech;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +74,12 @@ public class StudyActivity extends Activity implements OnClickListener {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_study);
 
-		createFiles();
+		Intent intent = getIntent();
+		Home home = (Home) intent.getSerializableExtra("SUBJECT");
+		if (home == null)
+			finish();
+		textSpeech = home.getTitle();
+
 		textToSpeech = new TextToSpeech(StudyActivity.this,
 				new OnInitListener() {
 
@@ -85,17 +91,14 @@ public class StudyActivity extends Activity implements OnClickListener {
 					}
 				});
 
-		ringSuccess = MediaPlayer.create(StudyActivity.this, R.raw.cartoon_slide_whistle_ascend_version_2);
-		ringTouch = MediaPlayer.create(StudyActivity.this, R.raw.comedy_pop_finger_in_mouth_001);
+		ringSuccess = MediaPlayer.create(StudyActivity.this,
+				R.raw.cartoon_slide_whistle_ascend_version_2);
+		ringTouch = MediaPlayer.create(StudyActivity.this,
+				R.raw.comedy_pop_finger_in_mouth_001);
 		ringError = MediaPlayer.create(StudyActivity.this, R.raw.ring3);
 		seed = System.nanoTime();
 
-		arrFileName = new ArrayList<String>();
-		arrFileName.add("image.jpg");
-		arrFileName.add("image2.jpg");
-		arrFileName.add("image3.jpg");
-		Collections.shuffle(arrFileName, new Random(seed));
-		file = loadFile(arrFileName.get(0));
+		file = loadFile(home.getContent_image());
 		if (file == null)
 			finish();
 		createArraySvg();
@@ -128,6 +131,8 @@ public class StudyActivity extends Activity implements OnClickListener {
 		imageDrag3 = (SvgImageView) findViewById(R.id.image_drag3);
 		imageDrag4 = (SvgImageView) findViewById(R.id.image_drag4);
 
+		tvTitle.setText(textSpeech);
+		tvTitle.setVisibility(View.INVISIBLE);
 		replay.setVisibility(View.INVISIBLE);
 		loadImage();
 		back.setOnClickListener(this);
@@ -327,10 +332,9 @@ public class StudyActivity extends Activity implements OnClickListener {
 
 										textToSpeech.speak(textSpeech,
 												TextToSpeech.QUEUE_FLUSH, null);
-										String title = "Cat";
-										tvTitle.setText(title);
 										YoYo.with(Techniques.DropOut).playOn(
 												tvTitle);
+										tvTitle.setVisibility(View.VISIBLE);
 										replay.setVisibility(View.VISIBLE);
 									} else {
 										new ParticleSystem(StudyActivity.this,
@@ -351,31 +355,6 @@ public class StudyActivity extends Activity implements OnClickListener {
 		}
 	}
 
-	private void next() {
-		Collections.shuffle(idRawSvgs, new Random(seed));
-		Collections.shuffle(arrImage, new Random(seed));
-		Collections.shuffle(arrImageDrag, new Random(seed));
-
-		for (int i = 0; i < imageDrags.size(); i++) {
-			ImageDrag imageDrag = imageDrags.get(i);
-			// imageDrag.getImageView().setImageBitmap(imageDrag.getBitmap());
-			// imageDrag.getImageView()
-			// .setSvgRaw(imageDrags.get(i).getIdRawDrag());
-			// imageDrag.getDragImageView().setSvgRaw(
-			// imageDrags.get(i).getIdRawDrag());
-
-			imageDrag.getImageView().setVisibility(View.VISIBLE);
-			imageDrag.getDragImageView().setVisibility(View.VISIBLE);
-			imageDrag.setDrag(false);
-		}
-
-		Collections.shuffle(arrFileName, new Random(seed));
-		file = loadFile(arrFileName.get(0));
-		if (file == null)
-			finish();
-		loadImage();
-	}
-
 	private void replay() {
 		textToSpeech.speak(textSpeech, TextToSpeech.QUEUE_FLUSH, null);
 	}
@@ -391,7 +370,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 
 	private File loadFile(String fileName) {
 		String root = Environment.getExternalStorageDirectory().toString();
-		File myDir = new File(root + "/english");
+		File myDir = new File(root + "/Sjsoft/ContentImage/");
 		File file = new File(myDir, fileName);
 		return file;
 	}
@@ -407,66 +386,8 @@ public class StudyActivity extends Activity implements OnClickListener {
 		Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(),
 				view.getHeight(), Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(returnedBitmap);
-		// Drawable bgDrawable =view.getBackground();
-		// if (bgDrawable!=null)
-		// bgDrawable.draw(canvas);
-		// else
-		// canvas.drawColor(Color.WHITE);
 		view.draw(canvas);
 		return returnedBitmap;
-	}
-
-	private void createFiles() {
-		String root = Environment.getExternalStorageDirectory().toString();
-		File myDir = new File(root + "/english");
-		myDir.mkdirs();
-		String fname = "image.jpg";
-		String fname2 = "image2.jpg";
-		String fname3 = "image3.jpg";
-		File file = new File(myDir, fname);
-		if (!file.exists()) {
-			try {
-				Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(
-						R.drawable.image)).getBitmap();
-				FileOutputStream out = new FileOutputStream(file);
-				bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-				out.flush();
-				out.close();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		File file2 = new File(myDir, fname2);
-		if (!file2.exists()) {
-			try {
-				Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(
-						R.drawable.image2)).getBitmap();
-				FileOutputStream out = new FileOutputStream(file2);
-				bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-				out.flush();
-				out.close();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		File file3 = new File(myDir, fname3);
-		if (!file3.exists()) {
-			try {
-				Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(
-						R.drawable.image3)).getBitmap();
-				FileOutputStream out = new FileOutputStream(file3);
-				bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-				out.flush();
-				out.close();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	@Override
