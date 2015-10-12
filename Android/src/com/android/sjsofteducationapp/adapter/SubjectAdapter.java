@@ -1,19 +1,21 @@
 package com.android.sjsofteducationapp.adapter;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import com.android.sjsofteducationapp.R;
 import com.android.sjsofteducationapp.model.Home;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 public class SubjectAdapter extends ArrayAdapter<Home> {
 	private Context context;
@@ -49,16 +51,26 @@ public class SubjectAdapter extends ArrayAdapter<Home> {
 			convertView = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(resource,
 					parent, false);
 			holder = new ViewHolder();
-			holder.main = (LinearLayout) convertView.findViewById(R.id.main);
 			holder.image = (ImageView) convertView.findViewById(R.id.image);
 			holder.star = (ImageView) convertView.findViewById(R.id.star);
 
 			convertView.setTag(holder);
 		}
 
-		int imageUrl = home.getUrl_image();
-		holder.image.setImageResource(imageUrl);
+//		int imageUrl = home.getUrl_img();
+//		holder.image.setImageResource(imageUrl);
+
 		try {
+			// 
+			String imageFile = Environment.getExternalStorageDirectory() + "/Sjsoft/url_image/" + home.getUrl_image();
+			Log.d("ToanNM", "SubJect image : " + imageFile);
+			File file = new File(imageFile);
+			if (file.exists()) {
+				Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+				holder.image.setImageBitmap(myBitmap);
+
+			}
+			//
 			boolean success = home.isSuccess();
 			if (success) {
 				holder.star.setVisibility(View.VISIBLE);
@@ -72,7 +84,6 @@ public class SubjectAdapter extends ArrayAdapter<Home> {
 
 	private class ViewHolder {
 		ImageView image, star;
-		LinearLayout main;
 	}
 
 }
