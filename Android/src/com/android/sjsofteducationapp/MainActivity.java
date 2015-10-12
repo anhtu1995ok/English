@@ -1,8 +1,10 @@
 package com.android.sjsofteducationapp;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.android.sjsofteducationapp.adapter.HorizontalListViewAdapter;
+import com.android.sjsofteducationapp.database.EducationDBControler;
 import com.android.sjsofteducationapp.model.Home;
 import com.sileria.android.view.HorzListView;
 
@@ -48,6 +50,12 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 		image.setOnClickListener(this);
 		leftArrow.setOnClickListener(this);
 		rightArrow.setOnClickListener(this);
+		
+		EducationDBControler dbController = EducationDBControler.getInstance(MainActivity.this);
+		try {
+			dbController.createDataBase();
+		} catch (IOException e) {
+		}
 
 	}
 
