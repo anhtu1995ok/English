@@ -15,12 +15,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 
-public class MainActivity extends MasterActivity implements OnClickListener, OnItemClickListener {
+public class MainActivity extends MasterActivity implements OnClickListener,
+		OnItemClickListener {
 
 	HorzListView listView;
 	HorizontalListViewAdapter adapter;
@@ -28,6 +32,9 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 	ImageView image, leftArrow, rightArrow, share, moreapp;
 	int position = 0;
 	Intent intent;
+
+	private Animation aFlicker;
+	private boolean flicker = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +63,12 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 
 		share = (ImageView) findViewById(R.id.share);
 		moreapp = (ImageView) findViewById(R.id.moreapp);
+		startMoreappFlicker();
 		share.setOnClickListener(this);
 		moreapp.setOnClickListener(this);
 
-		EducationDBControler dbController = EducationDBControler.getInstance(MainActivity.this);
+		EducationDBControler dbController = EducationDBControler
+				.getInstance(MainActivity.this);
 		try {
 			dbController.createDataBase();
 		} catch (IOException e) {
@@ -85,7 +94,8 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 
 		@Override
 		protected void onPostExecute(String result) {
-			adapter = new HorizontalListViewAdapter(getApplicationContext(), R.layout.item_home, data);
+			adapter = new HorizontalListViewAdapter(getApplicationContext(),
+					R.layout.item_home, data);
 			listView.setAdapter(adapter);
 			super.onPostExecute(result);
 		}
@@ -118,9 +128,11 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 		case R.id.share:
 			Intent sendIntent = new Intent();
 			sendIntent.setAction(Intent.ACTION_SEND);
-			sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getText(R.string.share_text));
+			sendIntent.putExtra(Intent.EXTRA_TEXT,
+					getResources().getText(R.string.share_text));
 			sendIntent.setType("text/plain");
-			startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.send_to)));
+			startActivity(Intent.createChooser(sendIntent, getResources()
+					.getText(R.string.send_to)));
 			break;
 		case R.id.moreapp:
 			String url = "https://play.google.com/store/apps/developer?id=Vareco+Mobile";
@@ -138,11 +150,14 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		String title = ((Home) arg0.getAdapter().getItem(arg2)).getTitle();
-		String bg_image = ((Home) arg0.getAdapter().getItem(arg2)).getBg_image();
+		String bg_image = ((Home) arg0.getAdapter().getItem(arg2))
+				.getBg_image();
 
-		arg1.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.abc_fade_in));
+		arg1.startAnimation(AnimationUtils.loadAnimation(
+				getApplicationContext(), R.anim.abc_fade_in));
 		// if (title.equalsIgnoreCase("Animals")) {
-		Intent intent = new Intent(getApplicationContext(), SubjectActivity.class);
+		Intent intent = new Intent(getApplicationContext(),
+				SubjectActivity.class);
 		intent.putExtra("HOME_TITLE", title.toLowerCase());
 		intent.putExtra("HOME_BG", bg_image);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -156,4 +171,31 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 		mb.stop();
 	}
 
+	private void startMoreappFlicker() {
+		aFlicker = new TranslateAnimation(0, 0, 0, 0);
+		aFlicker.setDuration(200);
+		aFlicker.setAnimationListener(new AnimationListener() {
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				if (flicker) {
+					flicker = false;
+					moreapp.setImageResource(R.drawable.ic_moreapp2);
+				} else {
+					flicker = true;
+					moreapp.setImageResource(R.drawable.ic_moreapp1);
+				}
+				moreapp.startAnimation(animation);
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void onAnimationStart(Animation animation) {
+			}
+		});
+		moreapp.startAnimation(aFlicker);
+	}
 }
