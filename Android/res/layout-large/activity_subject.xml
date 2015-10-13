@@ -38,8 +38,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:contentDescription="@string/image_description"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_subject_zoo" />
+            android:scaleType="centerInside" />
 
         <ImageView
             android:id="@+id/rightarrow"

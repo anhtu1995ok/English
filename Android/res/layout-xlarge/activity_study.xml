@@ -76,7 +76,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/img1"
                     app:svg_raw_resource="@raw/shape_star" />
 
                 <com.meg7.widget.SvgImageView
@@ -85,6 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:scaleType="centerCrop"
+                    
                     android:src="@drawable/drag"
                     app:svg_raw_resource="@raw/shape_heart" />
             </LinearLayout>
@@ -107,8 +107,7 @@
                     android:paddingBottom="18dp"
                     android:paddingLeft="8dp"
                     android:paddingRight="16dp"
-                    android:paddingTop="8dp"
-                    android:src="@drawable/image" />
+                    android:paddingTop="8dp" />
 
                 <LinearLayout
                     android:id="@+id/layout_content"

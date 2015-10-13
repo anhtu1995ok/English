@@ -1,5 +1,6 @@
 package com.android.sjsofteducationapp;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import com.android.sjsofteducationapp.adapter.SubjectAdapter;
@@ -8,8 +9,11 @@ import com.android.sjsofteducationapp.utils.GetDataFromDB;
 import com.sileria.android.view.HorzListView;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,7 +30,7 @@ public class SubjectActivity extends MasterActivity implements OnClickListener {
 	private ImageView image, leftArrow, rightArrow, home;
 	private int position = 0;
 	
-	private String title;
+	private String title, bg_image;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,8 @@ public class SubjectActivity extends MasterActivity implements OnClickListener {
 		
 		Intent intent = getIntent();
 		title = intent.getStringExtra("HOME_TITLE");
+		bg_image = intent.getStringExtra("HOME_BG");
+		
 		if(title == null){
 			finish();
 		}
@@ -45,6 +51,13 @@ public class SubjectActivity extends MasterActivity implements OnClickListener {
 		listView = (HorzListView) findViewById(R.id.listView);
 
 		image = (ImageView) findViewById(R.id.image);
+		String fileImage = Environment.getExternalStorageDirectory() + "/Sjsoft/Home/Content/" + bg_image;
+		File file = new File(fileImage);
+		if (file.exists()) {
+			Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+			image.setImageBitmap(myBitmap);
+		}
+		
 		leftArrow = (ImageView) findViewById(R.id.leftarrow);
 		rightArrow = (ImageView) findViewById(R.id.rightarrow);
 		home = (ImageView) findViewById(R.id.home);
@@ -91,19 +104,23 @@ public class SubjectActivity extends MasterActivity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		int x = listView.getScrollX();
+		int max = data.size();
 		switch (v.getId()) {
 		case R.id.image:
 			break;
 		case R.id.leftarrow:
-			if (position != 0 && x > 0) {
+			if (position > 0) {
 				position--;
 				listView.setSelection(position);
 			}
+			if (position == 0) {
+				listView.setAdapter(adapter);
+			}
 			break;
 		case R.id.rightarrow:
-			if (position < 1 && x > 0) {
+			if (position < max - 3) {
 				position++;
+				listView.setSelection(0);
 				listView.setSelection(position);
 			}
 			break;

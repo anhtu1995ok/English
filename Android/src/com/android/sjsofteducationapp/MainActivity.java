@@ -110,6 +110,7 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 		case R.id.rightarrow:
 			if (position < max - 3) {
 				position++;
+				listView.setSelection(0);
 				listView.setSelection(position);
 			}
 			break;
@@ -136,12 +137,14 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		 String title = ((Home) arg0.getAdapter().getItem(arg2)).getTitle();
+		String title = ((Home) arg0.getAdapter().getItem(arg2)).getTitle();
+		String bg_image = ((Home) arg0.getAdapter().getItem(arg2)).getBg_image();
 
 		arg1.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.abc_fade_in));
 		// if (title.equalsIgnoreCase("Animals")) {
 		Intent intent = new Intent(getApplicationContext(), SubjectActivity.class);
 		intent.putExtra("HOME_TITLE", title.toLowerCase());
+		intent.putExtra("HOME_BG", bg_image);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
 		// }

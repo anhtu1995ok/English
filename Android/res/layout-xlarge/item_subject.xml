@@ -14,8 +14,7 @@
         android:layout_height="200dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:contentDescription="@string/image_description"
-        android:src="@drawable/ic_pig" />
+        android:contentDescription="@string/image_description" />
 
     <ImageView
         android:id="@+id/star"
