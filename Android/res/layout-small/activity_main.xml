@@ -47,7 +47,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/ic_leftarrow" />
+            android:background="@drawable/leftarrow_onclick"  />
 
         <ImageView
             android:id="@+id/image"
@@ -63,7 +63,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginRight="10dp"
-            android:src="@drawable/ic_rightarrow" />
+            android:background="@drawable/rightarrow_onclick"  />
     </LinearLayout>
 
 </LinearLayout>

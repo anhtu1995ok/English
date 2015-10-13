@@ -173,7 +173,10 @@ public class FirstRunActivity extends Activity {
 				startMainActivity();
 			}
 		});
+		
 		alertDialog = builder.create();
+		alertDialog.setCancelable(false);
+		alertDialog.setCanceledOnTouchOutside(false);
 		alertDialog.show();
 	}
 

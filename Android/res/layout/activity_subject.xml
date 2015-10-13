@@ -28,10 +28,11 @@
 
         <ImageView
             android:id="@+id/leftarrow"
-            android:layout_width="80dp"
+            android:layout_width="60dp"
             android:layout_height="60dp"
-            android:contentDescription="@string/image_description"
-            android:src="@drawable/ic_leftarrow" />
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/leftarrow_onclick"
+            android:contentDescription="@string/image_description" />
 
         <ImageView
             android:id="@+id/image"
@@ -39,14 +40,15 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:contentDescription="@string/image_description"
-            android:scaleType="centerInside"/>
+            android:scaleType="centerInside" />
 
         <ImageView
             android:id="@+id/rightarrow"
-            android:layout_width="80dp"
+            android:layout_width="60dp"
             android:layout_height="60dp"
-            android:contentDescription="@string/image_description"
-            android:src="@drawable/ic_rightarrow" />
+            android:layout_marginRight="10dp"
+            android:background="@drawable/rightarrow_onclick"
+            android:contentDescription="@string/image_description" />
     </LinearLayout>
 
 </LinearLayout>
