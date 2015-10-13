@@ -2,8 +2,8 @@
 <resources>
 
     <declare-styleable name="StrokeTextAttrs">
-        <attr name="textStrokeColor" format="color"/>    
-        <attr name="textStrokeWidth" format="float"/>
-    </declare-styleable>                
+        <attr name="textStrokeColor" format="color" />
+        <attr name="textStrokeWidth" format="float" />
+    </declare-styleable>
 
 </resources>

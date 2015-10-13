@@ -7,7 +7,6 @@ import com.android.sjsofteducationapp.adapter.HorizontalListViewAdapter;
 import com.android.sjsofteducationapp.database.EducationDBControler;
 import com.android.sjsofteducationapp.model.Home;
 import com.android.sjsofteducationapp.utils.GetDataFromDB;
-import com.sileria.android.view.HorzListView;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -19,13 +18,13 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
+import it.sephiroth.android.library.widget.HListView;
 
-public class MainActivity extends MasterActivity implements OnClickListener, OnItemClickListener {
+public class MainActivity extends MasterActivity
+		implements OnClickListener, it.sephiroth.android.library.widget.AdapterView.OnItemClickListener {
 
-	HorzListView listView;
+	HListView listView;
 	HorizontalListViewAdapter adapter;
 	ArrayList<Home> data;
 	ImageView image, leftArrow, rightArrow, share, moreapp;
@@ -47,7 +46,7 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 			new initData().execute("");
 		} catch (IOException e) {
 		}
-		listView = (HorzListView) findViewById(R.id.listView);
+		listView = (HListView) findViewById(R.id.listView);
 
 		// adapter = new Hori(getApplicationContext(), data);
 
@@ -105,22 +104,11 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 		case R.id.image:
 			break;
 		case R.id.leftarrow:
-			if (position > 0) {
-				position--;
-				listView.setSelection(position);
-			}
-			if (position == 0) {
-				listView.setAdapter(adapter);
-			}
+			listView.smoothScrollToPosition(0);
 			break;
 		case R.id.rightarrow:
-			if (position < max - 3) {
-				position++;
-				listView.setSelection(0);
-				listView.setSelection(position);
-			}
+			listView.smoothScrollToPosition(max);
 			break;
-
 		case R.id.share:
 			Intent sendIntent = new Intent();
 			sendIntent.setAction(Intent.ACTION_SEND);
@@ -139,21 +127,6 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 		default:
 			break;
 		}
-	}
-
-	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		String title = ((Home) arg0.getAdapter().getItem(arg2)).getTitle();
-		String bg_image = ((Home) arg0.getAdapter().getItem(arg2)).getBg_image();
-
-		arg1.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.abc_fade_in));
-		// if (title.equalsIgnoreCase("Animals")) {
-		Intent intent = new Intent(getApplicationContext(), SubjectActivity.class);
-		intent.putExtra("HOME_TITLE", title.toLowerCase());
-		intent.putExtra("HOME_BG", bg_image);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(intent);
-		// }
 	}
 
 	@Override
@@ -188,5 +161,20 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 			}
 		});
 		moreapp.startAnimation(aFlicker);
+	}
+
+	@Override
+	public void onItemClick(it.sephiroth.android.library.widget.AdapterView<?> parent, View view, int position,
+			long id) {
+		String title = ((Home) parent.getAdapter().getItem(position)).getTitle();
+		String bg_image = ((Home) parent.getAdapter().getItem(position)).getBg_image();
+
+		view.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.abc_fade_in));
+		// if (title.equalsIgnoreCase("Animals")) {
+		Intent intent = new Intent(getApplicationContext(), SubjectActivity.class);
+		intent.putExtra("HOME_TITLE", title.toLowerCase());
+		intent.putExtra("HOME_BG", bg_image);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
 	}
 }

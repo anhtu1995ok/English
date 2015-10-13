@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import com.android.sjsofteducationapp.adapter.SubjectAdapter;
 import com.android.sjsofteducationapp.model.Home;
 import com.android.sjsofteducationapp.utils.GetDataFromDB;
-import com.sileria.android.view.HorzListView;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,37 +17,37 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
+import it.sephiroth.android.library.widget.HListView;
 
-public class SubjectActivity extends MasterActivity implements OnClickListener {
+public class SubjectActivity extends MasterActivity
+		implements OnClickListener, it.sephiroth.android.library.widget.AdapterView.OnItemClickListener {
 
-	private HorzListView listView;
+	private HListView listView;
 	private SubjectAdapter adapter;
 	private ArrayList<Home> data;
 	private ImageView image, leftArrow, rightArrow, home;
 	private int position = 0;
-	
+
 	private String title, bg_image;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_subject);
-		
+
 		Intent intent = getIntent();
 		title = intent.getStringExtra("HOME_TITLE");
 		bg_image = intent.getStringExtra("HOME_BG");
-		
-		if(title == null){
+
+		if (title == null) {
 			finish();
 		}
-		
+
 		new initData().execute("");
 		// initData();
 
-		listView = (HorzListView) findViewById(R.id.listView);
+		listView = (HListView) findViewById(R.id.listView);
 
 		image = (ImageView) findViewById(R.id.image);
 		String fileImage = Environment.getExternalStorageDirectory() + "/Sjsoft/Home/Content/" + bg_image;
@@ -57,7 +56,7 @@ public class SubjectActivity extends MasterActivity implements OnClickListener {
 			Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
 			image.setImageBitmap(myBitmap);
 		}
-		
+
 		leftArrow = (ImageView) findViewById(R.id.leftarrow);
 		rightArrow = (ImageView) findViewById(R.id.rightarrow);
 		home = (ImageView) findViewById(R.id.home);
@@ -65,18 +64,7 @@ public class SubjectActivity extends MasterActivity implements OnClickListener {
 		leftArrow.setOnClickListener(this);
 		rightArrow.setOnClickListener(this);
 		home.setOnClickListener(this);
-		listView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				arg1.startAnimation(AnimationUtils.loadAnimation(SubjectActivity.this, R.anim.abc_fade_in));
-				Home home = (Home) arg0.getAdapter().getItem(arg2);
-				Intent intent = new Intent(SubjectActivity.this, StudyActivity.class);
-				intent.putExtra("SUBJECT", home);
-				intent.putExtra("HOME_BG", bg_image);
-				startActivity(intent);
-			}
-		});
+		listView.setOnItemClickListener(this);
 	}
 
 	private class initData extends AsyncTask<String, String, String> {
@@ -97,6 +85,7 @@ public class SubjectActivity extends MasterActivity implements OnClickListener {
 		}
 
 	}
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -110,20 +99,10 @@ public class SubjectActivity extends MasterActivity implements OnClickListener {
 		case R.id.image:
 			break;
 		case R.id.leftarrow:
-			if (position > 0) {
-				position--;
-				listView.setSelection(position);
-			}
-			if (position == 0) {
-				listView.setAdapter(adapter);
-			}
+			listView.smoothScrollToPosition(0);
 			break;
 		case R.id.rightarrow:
-			if (position < max - 3) {
-				position++;
-				listView.setSelection(0);
-				listView.setSelection(position);
-			}
+			listView.smoothScrollToPosition(max);
 			break;
 		case R.id.home:
 			finish();
@@ -131,6 +110,17 @@ public class SubjectActivity extends MasterActivity implements OnClickListener {
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public void onItemClick(it.sephiroth.android.library.widget.AdapterView<?> parent, View view, int position,
+			long id) {
+		view.startAnimation(AnimationUtils.loadAnimation(SubjectActivity.this, R.anim.abc_fade_in));
+		Home home = (Home) parent.getAdapter().getItem(position);
+		Intent intent = new Intent(SubjectActivity.this, StudyActivity.class);
+		intent.putExtra("SUBJECT", home);
+		intent.putExtra("HOME_BG", bg_image);
+		startActivity(intent);
 	}
 
 }

@@ -28,7 +28,7 @@
             android:contentDescription="@string/image_description" />
     </LinearLayout>
 
-    <com.sileria.android.view.HorzListView
+    <it.sephiroth.android.library.widget.HListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
