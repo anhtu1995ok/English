@@ -1,6 +1,7 @@
 package com.android.sjsofteducationapp.database;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,11 +16,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class EducationDBControler extends SQLiteOpenHelper {
+public class CopyDBControler extends SQLiteOpenHelper {
 	// The Android's default system path of your application database.
 	private static String DB_PATH;
 	// Data Base Name.
-	private static final String DATABASE_NAME = "sjsoft_education.sqlite";
+	private static final String DATABASE_NAME = "sjsoft_education_update.sqlite";
 	// Data Base Version.
 	private static final int DATABASE_VERSION = 1;
 	// Table Names of Data Base.
@@ -28,18 +29,18 @@ public class EducationDBControler extends SQLiteOpenHelper {
 	public Context context;
 	static SQLiteDatabase sqliteDataBase;
 
-	private static EducationDBControler controler;
+	private static CopyDBControler controler;
 
 	@SuppressLint("SdCardPath")
-	private EducationDBControler(Context context) {
+	private CopyDBControler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		this.context = context;
 		DB_PATH = "/data/data/" + context.getPackageName() + "/databases/";
 	}
 
-	public static EducationDBControler getInstance(Context context) {
+	public static CopyDBControler getInstance(Context context) {
 		if (controler == null) {
-			controler = new EducationDBControler(context);
+			controler = new CopyDBControler(context);
 		}
 		return controler;
 	}
@@ -50,7 +51,6 @@ public class EducationDBControler extends SQLiteOpenHelper {
 
 		if (!databaseExist) {
 			this.getWritableDatabase();
-			copyDataBase();
 		}
 	}
 
@@ -64,14 +64,14 @@ public class EducationDBControler extends SQLiteOpenHelper {
 	 * empty database in the system folder, from where it can be accessed and
 	 * handled. This is done by transferring byte stream.
 	 * */
-	private void copyDataBase() throws IOException {
+	public void copyDataBase(File file) throws IOException {
 		byte[] buffer = new byte[1024];
 		OutputStream myOutput = null;
 		int length;
 		// Open your local db as the input stream
 		InputStream myInput = null;
 		try {
-			myInput = context.getAssets().open("database/" + DATABASE_NAME);
+			myInput = new FileInputStream(file);
 			myOutput = new FileOutputStream(DB_PATH + DATABASE_NAME);
 			while ((length = myInput.read(buffer)) > 0) {
 				myOutput.write(buffer, 0, length);
@@ -155,19 +155,5 @@ public class EducationDBControler extends SQLiteOpenHelper {
 		int ret = sqliteDataBase.update(table, values, whereClause, whereArgs);
 
 		return ret;
-	}
-
-	public long insert(String table, String nullColumnHack, ContentValues values) {
-		if (sqliteDataBase == null)
-			try {
-				openDataBase();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		long insert = sqliteDataBase.insert(table, nullColumnHack, values);
-		if (insert == -1) {
-			Log.d("TuNT", "Insert error!");
-		}
-		return insert;
 	}
 }

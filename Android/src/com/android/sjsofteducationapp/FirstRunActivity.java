@@ -3,10 +3,8 @@ package com.android.sjsofteducationapp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import org.apache.http.Header;
 import org.json.JSONException;
@@ -23,7 +21,10 @@ import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.android.sjsofteducationapp.async.CopyDBAsync;
+import com.android.sjsofteducationapp.async.CopyDBAsync.OnCopyDBListener;
 import com.android.sjsofteducationapp.async.UnzipAsync;
 import com.android.sjsofteducationapp.async.UnzipAsync.OnUnzipListener;
 import com.android.sjsofteducationapp.utils.SPUtil;
@@ -33,8 +34,8 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class FirstRunActivity extends Activity {
 	private ProgressBar progressBar;
+	private TextView msg;
 	private UnzipAsync unzipAsync;
-	private boolean newVersion = false;
 	private String root;
 	private AlertDialog alertDialog;
 
@@ -52,6 +53,7 @@ public class FirstRunActivity extends Activity {
 		root = Environment.getExternalStorageDirectory().toString();
 
 		progressBar = (ProgressBar) findViewById(R.id.progressBar);
+		msg = (TextView) findViewById(R.id.msg);
 		boolean firstRun = SPUtil.getInstance(FirstRunActivity.this).get(
 				SPUtil.KEY_FIRST_RUN, true);
 		if (firstRun) {
@@ -69,6 +71,7 @@ public class FirstRunActivity extends Activity {
 	}
 
 	private void unzipData() {
+		msg.setText(getResources().getString(R.string.unzip));
 		try {
 			InputStream inputStream = getAssets().open("image/content.zip");
 			unzipAsync = new UnzipAsync(FirstRunActivity.this, inputStream,
@@ -102,6 +105,7 @@ public class FirstRunActivity extends Activity {
 	}
 
 	private void checkUpdate() {
+		msg.setText(getResources().getString(R.string.check_update));
 		AsyncHttpClient client = new AsyncHttpClient();
 		client.get(getResources().getString(R.string.url_check_update),
 				new JsonHttpResponseHandler() {
@@ -173,11 +177,13 @@ public class FirstRunActivity extends Activity {
 	}
 
 	private void startDownload(String url) {
+		msg.setText(getResources().getString(R.string.downloading));
 		AsyncHttpClient client = new AsyncHttpClient();
-		client.get(url, new FileAsyncHttpResponseHandler(/* Context */this) {
+		client.get(url, new FileAsyncHttpResponseHandler(this) {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers,
 					File response) {
+				msg.setText(getResources().getString(R.string.unzip));
 				try {
 					UnzipAsync unzipAsync = new UnzipAsync(FirstRunActivity.this, new FileInputStream(response), root + "/Sjsoft/");
 					unzipAsync.setOnUnzipListener(new OnUnzipListener() {
@@ -189,7 +195,8 @@ public class FirstRunActivity extends Activity {
 						
 						@Override
 						public void onSuccess() {
-							startMainActivity();
+							File file = new File(root+"/Sjsoft/"+dbFileUpdateName);
+							startCopyDB(file);
 						}
 						
 						@Override
@@ -221,17 +228,16 @@ public class FirstRunActivity extends Activity {
 			}
 		});
 	}
-
-//	public void copyFile(File src, File dst) throws IOException {
-//		InputStream in = new FileInputStream(src);
-//		OutputStream out = new FileOutputStream(dst);
-//
-//		byte[] buf = new byte[1024];
-//		int len;
-//		while ((len = in.read(buf)) > 0) {
-//			out.write(buf, 0, len);
-//		}
-//		in.close();
-//		out.close();
-//	}
+	
+	private void startCopyDB(File file){
+		CopyDBAsync copyDBAsync = new CopyDBAsync(FirstRunActivity.this, file);
+		copyDBAsync.setOnCopyDBListener(new OnCopyDBListener() {
+			
+			@Override
+			public void onFinished() {
+				startMainActivity();
+			}
+		});
+		copyDBAsync.execute();
+	}
 }

@@ -11,5 +11,8 @@
     <string name="update">Có dữ liệu mới bạn có muốn tải về ngay bây giờ không?</string>
     <string name="yes">Có</string>
     <string name="no">Không</string>
+    <string name="check_update">Đang kiểm tra phiên bản...</string>
+    <string name="unzip">Đang giải nén dữ liệu, không mất lưu lượng...</string>
+    <string name="downloading">Đang tải dữ liệu...</string>
 
 </resources>
