@@ -186,7 +186,7 @@ public class FirstRunActivity extends Activity {
 				msg.setText(getResources().getString(R.string.unzip));
 				try {
 					UnzipAsync unzipAsync = new UnzipAsync(FirstRunActivity.this, new FileInputStream(response),
-							root + "/Sjsoft/");
+							root + "/");
 					unzipAsync.setOnUnzipListener(new OnUnzipListener() {
 
 						@Override

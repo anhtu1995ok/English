@@ -41,19 +41,41 @@ public class CopyDBAsync extends AsyncTask<Void, Integer, Void> {
 		if (cursor.moveToFirst())
 			do {
 				String title = cursor.getString(cursor.getColumnIndex("title"));
-				String urlImage = cursor.getString(cursor
-						.getColumnIndex("url_image"));
+				String icon = cursor.getString(cursor.getColumnIndex("icon"));
 				String contentImage = cursor.getString(cursor
 						.getColumnIndex("content_image"));
+				String bgImage = cursor.getString(cursor
+						.getColumnIndex("bg_image"));
+				String chuDe = cursor.getString(cursor.getColumnIndex("chude"));
 
 				ContentValues values = new ContentValues();
 				values.put("title", title);
-				values.put("url_image", urlImage);
+				values.put("icon", icon);
 				values.put("content_image", contentImage);
-				values.put("bg_image", "");
-				values.put("isSuccess", "");
+				values.put("bg_image", bgImage);
+				values.put("chude", chuDe);
+				values.put("success", "");
 				educationDBControler.insert("subject", null, values);
 			} while (cursor.moveToNext());
+
+		String sql2 = "SELECT * FROM home";
+		Cursor cursor2 = copyDBControler.rawQuery(sql2, null);
+		if (cursor2.moveToFirst()) {
+			do {
+				String title = cursor2.getString(cursor2
+						.getColumnIndex("title"));
+				String icon = cursor2.getString(cursor2.getColumnIndex("icon"));
+				String bgImage = cursor2.getString(cursor2
+						.getColumnIndex("bg_image"));
+
+				ContentValues values = new ContentValues();
+				values.put("title", title);
+				values.put("icon", icon);
+				values.put("bg_image", bgImage);
+				educationDBControler.insert("home", null, values);
+			} while (cursor2.moveToNext());
+		}
+
 		return null;
 	}
 
