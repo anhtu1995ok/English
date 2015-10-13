@@ -1,12 +1,16 @@
 package com.android.sjsofteducationapp.adapter;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import com.android.sjsofteducationapp.R;
 import com.android.sjsofteducationapp.model.Home;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,10 +58,13 @@ public class HorizontalListViewAdapter extends ArrayAdapter<Home> {
 			convertView.setTag(holder);
 		}
 
-		int imageUrl = home.getUrl_img();
+		String imageFile = Environment.getExternalStorageDirectory() + "/Sjsoft/Home/Icon/" + home.getIcon();
 		final String title = home.getTitle();
-		holder.image.setImageResource(imageUrl);
-
+		File file = new File(imageFile);
+		if (file.exists()) {
+			Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+			holder.image.setImageBitmap(myBitmap);
+		}
 		try {
 			Typeface type = Typeface.createFromAsset(context.getAssets(), "fonts/brlnsb.ttf");
 			holder.title.setTypeface(type);

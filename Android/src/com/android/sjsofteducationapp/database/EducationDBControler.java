@@ -168,7 +168,7 @@ public class EducationDBControler extends SQLiteOpenHelper {
 
 	public void setSuccess(long id) {
 		ContentValues values = new ContentValues();
-		values.put("isSuccess", "done");
+		values.put("success", "done");
 
 		String where = "id" + " = " + id;
 		update("subject", values, where, null);

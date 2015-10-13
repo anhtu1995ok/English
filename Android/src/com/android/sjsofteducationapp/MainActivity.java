@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import com.android.sjsofteducationapp.adapter.HorizontalListViewAdapter;
 import com.android.sjsofteducationapp.database.EducationDBControler;
 import com.android.sjsofteducationapp.model.Home;
+import com.android.sjsofteducationapp.utils.GetDataFromDB;
 import com.sileria.android.view.HorzListView;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,12 +34,12 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		initData();
+		// initData();
+		new initData().execute("");
 		listView = (HorzListView) findViewById(R.id.listView);
-		adapter = new HorizontalListViewAdapter(getApplicationContext(), R.layout.item_home, data);
 
 		// adapter = new Hori(getApplicationContext(), data);
-		listView.setAdapter(adapter);
+
 		// listView.setHasFixedSize(true);
 		// listView.setLayoutManager(
 		// new LinearLayoutManager(getApplicationContext(),
@@ -51,12 +53,12 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 		image.setOnClickListener(this);
 		leftArrow.setOnClickListener(this);
 		rightArrow.setOnClickListener(this);
-		
+
 		share = (ImageView) findViewById(R.id.share);
 		moreapp = (ImageView) findViewById(R.id.moreapp);
 		share.setOnClickListener(this);
 		moreapp.setOnClickListener(this);
-		
+
 		EducationDBControler dbController = EducationDBControler.getInstance(MainActivity.this);
 		try {
 			dbController.createDataBase();
@@ -65,12 +67,29 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 
 	}
 
-	private void initData() {
-		data = new ArrayList<Home>();
-		data.add(new Home(1, "ABC", R.drawable.ic_home_text));
-		data.add(new Home(2, "School", R.drawable.ic_home_school));
-		data.add(new Home(3, "Animals", R.drawable.ic_home_animal));
-		data.add(new Home(4, "Number", R.drawable.ic_home_number));
+	// private void initData() {
+	// data = new ArrayList<Home>();
+	// data.add(new Home(1, "ABC", R.drawable.ic_home_text));
+	// data.add(new Home(2, "School", R.drawable.ic_home_school));
+	// data.add(new Home(3, "Animals", R.drawable.ic_home_animal));
+	// data.add(new Home(4, "Number", R.drawable.ic_home_number));
+	// }
+	private class initData extends AsyncTask<String, String, String> {
+
+		@Override
+		protected String doInBackground(String... params) {
+			GetDataFromDB gdfb = new GetDataFromDB(getApplicationContext());
+			data = gdfb.getHomeDataFromDB();
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			adapter = new HorizontalListViewAdapter(getApplicationContext(), R.layout.item_home, data);
+			listView.setAdapter(adapter);
+			super.onPostExecute(result);
+		}
+
 	}
 
 	@Override
@@ -94,7 +113,7 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 				listView.setSelection(position);
 			}
 			break;
-			
+
 		case R.id.share:
 			Intent sendIntent = new Intent();
 			sendIntent.setAction(Intent.ACTION_SEND);
@@ -106,9 +125,9 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 			String url = "https://play.google.com/store/apps/developer?id=Vareco+Mobile";
 			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//			Intent intent = new Intent(Intent.ACTION_VIEW,
-//					Uri.parse("market://developer?id=" + appID));
-//			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			// Intent intent = new Intent(Intent.ACTION_VIEW,
+			// Uri.parse("market://developer?id=" + appID));
+			// intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(intent);
 		default:
 			break;
@@ -117,14 +136,15 @@ public class MainActivity extends MasterActivity implements OnClickListener, OnI
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		String title = ((Home) arg0.getAdapter().getItem(arg2)).getTitle();
+		 String title = ((Home) arg0.getAdapter().getItem(arg2)).getTitle();
 
 		arg1.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.abc_fade_in));
-		if (title.equalsIgnoreCase("Animals")) {
-			Intent intent = new Intent(getApplicationContext(), SubjectActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(intent);
-		}
+		// if (title.equalsIgnoreCase("Animals")) {
+		Intent intent = new Intent(getApplicationContext(), SubjectActivity.class);
+		intent.putExtra("HOME_TITLE", title.toLowerCase());
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
+		// }
 	}
 
 	@Override

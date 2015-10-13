@@ -371,7 +371,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 
 	private File loadFile(String fileName) {
 		String root = Environment.getExternalStorageDirectory().toString();
-		File myDir = new File(root + "/Sjsoft/ContentImage/");
+		File myDir = new File(root + "/Sjsoft/Subject/Content/");
 		File file = new File(myDir, fileName);
 		return file;
 	}

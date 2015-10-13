@@ -20,17 +20,25 @@ import android.widget.ImageView;
 
 public class SubjectActivity extends MasterActivity implements OnClickListener {
 
-	HorzListView listView;
-	SubjectAdapter adapter;
-	ArrayList<Home> data;
-	ImageView image, leftArrow, rightArrow, home;
-	int position = 0;
+	private HorzListView listView;
+	private SubjectAdapter adapter;
+	private ArrayList<Home> data;
+	private ImageView image, leftArrow, rightArrow, home;
+	private int position = 0;
+	
+	private String title;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_subject);
-
+		
+		Intent intent = getIntent();
+		title = intent.getStringExtra("HOME_TITLE");
+		if(title == null){
+			finish();
+		}
+		
 		new initData().execute("");
 		// initData();
 
@@ -62,7 +70,7 @@ public class SubjectActivity extends MasterActivity implements OnClickListener {
 		@Override
 		protected String doInBackground(String... params) {
 			GetDataFromDB gdfdb = new GetDataFromDB(getApplicationContext());
-			data = gdfdb.getDataFromDB();
+			data = gdfdb.getDataFromDB(title);
 			Log.d("ToanNM", "sData: " + data.size());
 			return null;
 		}

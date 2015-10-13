@@ -10,39 +10,25 @@ public class Home implements Serializable {
 	/**
 	 * 
 	 */
-	int id, url_img;
-	private String title, url_image, content_image, bg_image, success;
+	int id;
+	private String title, icon, content_image, bg_image, success;
 
 	// subject
 
-	public Home(int id, String title, int url_img) {
+	public Home(int id, String title, String icon, String bg_image) {
 		this.id = id;
 		this.title = title;
-		this.url_img = url_img;
+		this.icon = icon;
+		this.bg_image = bg_image;
 	}
 
-	public Home(int id, String title, int url_img, String success) {
+	public Home(int id, String title, String icon, String content_image, String bg_image, String success) {
 		this.id = id;
 		this.title = title;
-		this.url_img = url_img;
-		this.success = success;
-	}
-
-	public Home(int id, String title, String url_image, String content_image, String bg_image, String success) {
-		this.id = id;
-		this.title = title;
-		this.url_image = url_image;
+		this.icon = icon;
 		this.content_image = content_image;
 		this.bg_image = bg_image;
 		this.success = success;
-	}
-
-	public String getContent_image() {
-		return content_image;
-	}
-
-	public void setContent_image(String content_image) {
-		this.content_image = content_image;
 	}
 
 	public int getId() {
@@ -53,14 +39,6 @@ public class Home implements Serializable {
 		this.id = id;
 	}
 
-	public int getUrl_img() {
-		return url_img;
-	}
-
-	public void setUrl_img(int url_img) {
-		this.url_img = url_img;
-	}
-
 	public String getTitle() {
 		return title;
 	}
@@ -69,12 +47,20 @@ public class Home implements Serializable {
 		this.title = title;
 	}
 
-	public String getUrl_image() {
-		return url_image;
+	public String getIcon() {
+		return icon;
 	}
 
-	public void setUrl_image(String url_image) {
-		this.url_image = url_image;
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+
+	public String getContent_image() {
+		return content_image;
+	}
+
+	public void setContent_image(String content_image) {
+		this.content_image = content_image;
 	}
 
 	public String getBg_image() {

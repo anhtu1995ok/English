@@ -76,7 +76,7 @@ public class FirstRunActivity extends Activity {
 		msg.setText(getResources().getString(R.string.unzip));
 		try {
 			InputStream inputStream = getAssets().open("image/content.zip");
-			unzipAsync = new UnzipAsync(FirstRunActivity.this, inputStream, root + "/Sjsoft/");
+			unzipAsync = new UnzipAsync(FirstRunActivity.this, inputStream, root + "/");
 			unzipAsync.execute();
 			unzipAsync.setOnUnzipListener(new OnUnzipListener() {
 

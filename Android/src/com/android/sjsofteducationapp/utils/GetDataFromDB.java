@@ -22,23 +22,39 @@ public class GetDataFromDB {
 		return data;
 	}
 
-	public ArrayList<Home> getDataFromDB() {
+	public ArrayList<Home> getDataFromDB(String name) {
 		data = new ArrayList<Home>();
-		Cursor cursor = dbController.query("subject", null, null, null, null,
-				null, null);
-		cursor.moveToFirst();
-		do {
-			int id = cursor.getInt(cursor.getColumnIndex("id"));
-			String title = cursor.getString(cursor.getColumnIndex("title"));
-			String url_image = cursor.getString(cursor.getColumnIndex("url_image"));
-			String content_image = cursor.getString(cursor.getColumnIndex("content_image"));
-			String bg_image = cursor.getString(cursor.getColumnIndex("bg_image"));
-			String success = cursor.getString(cursor.getColumnIndex("isSuccess"));
-			
-			data.add(new Home(id, title, url_image, content_image, bg_image, success));
-			Log.d("ToanNM", "done get Data from DB : " + data.size() + "isSuccess: " + success);
-		} while (cursor.moveToNext());
-		
+		String sql = "Select * from subject where chude = '" + name + "';";
+		Cursor cursor = dbController.rawQuery(sql, null);
+		if (cursor.moveToFirst()) {
+			do {
+				int id = cursor.getInt(cursor.getColumnIndex("id"));
+				String title = cursor.getString(cursor.getColumnIndex("title"));
+				String icon = cursor.getString(cursor.getColumnIndex("icon"));
+				String content_image = cursor.getString(cursor.getColumnIndex("content_image"));
+				String bg_image = cursor.getString(cursor.getColumnIndex("bg_image"));
+				String success = cursor.getString(cursor.getColumnIndex("success"));
+
+				data.add(new Home(id, title, icon, content_image, bg_image, success));
+				Log.d("ToanNM", "done get Data from DB : " + data.size() + "isSuccess: " + success);
+			} while (cursor.moveToNext());
+		}
+		return data;
+	}
+
+	public ArrayList<Home> getHomeDataFromDB() {
+		data = new ArrayList<Home>();
+		Cursor cursor = dbController.query("home", null, null, null, null, null, null);
+		if (cursor.moveToFirst()) {
+			do {
+				int id = cursor.getInt(cursor.getColumnIndex("id"));
+				String title = cursor.getString(cursor.getColumnIndex("title"));
+				String icon = cursor.getString(cursor.getColumnIndex("icon"));
+				String bg_image = cursor.getString(cursor.getColumnIndex("bg_image"));
+
+				data.add(new Home(id, title, icon, bg_image));
+			} while (cursor.moveToNext());
+		}
 		return data;
 	}
 }
