@@ -11,12 +11,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal" 
+        android:layout_margin="10dp">
 
         <ImageView
             android:id="@+id/back"
-            android:layout_width="36dp"
-            android:layout_height="40dp"
+            android:layout_width="45dp"
+            android:layout_height="50dp"
             android:layout_margin="10dp"
             android:background="@drawable/selector_back" />
 
@@ -31,10 +32,10 @@
             android:shadowDy="-4"
             android:shadowRadius="3"
             android:textColor="#267a00"
-            android:textSize="28sp"
+            android:textSize="40sp"
             android:textStyle="bold"
             strokeAttrs:textStrokeColor="#FFFFFF"
-            strokeAttrs:textStrokeWidth="1" />
+            strokeAttrs:textStrokeWidth="2" />
 
         <ImageView
             android:id="@+id/replay"
@@ -48,6 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
+        android:padding="10dp"
         android:orientation="horizontal" >
 
         <ProgressBar
@@ -102,10 +104,10 @@
                     android:id="@+id/image_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="3dp"
-                    android:paddingRight="6dp"
-                    android:paddingTop="3dp"
+                    android:paddingBottom="18dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="8dp"
                     android:src="@drawable/image" />
 
                 <LinearLayout
@@ -197,7 +199,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:layout_weight="0.7"
         android:orientation="horizontal" >
 
