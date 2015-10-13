@@ -23,19 +23,20 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
-        android:layout_weight="1">
+        android:layout_weight="1" >
 
         <ImageView
             android:id="@+id/leftarrow"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:contentDescription="@string/image_description"
-            android:background="@drawable/leftarrow_onclick"  />
+            android:background="@drawable/leftarrow_onclick"
+            android:contentDescription="@string/image_description" />
 
         <ImageView
             android:id="@+id/image"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:layout_weight="1"
             android:contentDescription="@string/image_description"
             android:scaleType="centerInside" />
@@ -44,8 +45,8 @@
             android:id="@+id/rightarrow"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:contentDescription="@string/image_description"
-            android:background="@drawable/rightarrow_onclick"  />
+            android:background="@drawable/rightarrow_onclick"
+            android:contentDescription="@string/image_description" />
     </LinearLayout>
 
 </LinearLayout>
