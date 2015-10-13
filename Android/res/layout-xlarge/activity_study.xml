@@ -203,9 +203,9 @@
         android:orientation="horizontal" >
 
         <ImageView
+            android:id="@+id/bottom_image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/bg_study_bottom" />
+            android:layout_height="match_parent" />
     </LinearLayout>
 
 </LinearLayout>
