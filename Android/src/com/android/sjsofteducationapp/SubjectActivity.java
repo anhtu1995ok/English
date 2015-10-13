@@ -73,6 +73,7 @@ public class SubjectActivity extends MasterActivity implements OnClickListener {
 				Home home = (Home) arg0.getAdapter().getItem(arg2);
 				Intent intent = new Intent(SubjectActivity.this, StudyActivity.class);
 				intent.putExtra("SUBJECT", home);
+				intent.putExtra("HOME_BG", bg_image);
 				startActivity(intent);
 			}
 		});

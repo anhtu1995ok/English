@@ -1,6 +1,7 @@
 package com.android.sjsofteducationapp.utils;
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 
@@ -23,6 +24,13 @@ public class MusicBackground extends AsyncTask<String, String, String> {
 		try {
 			player = MediaPlayer.create(context, raw);
 			player.setLooping(isLooping); // Set looping
+			// AudioManager audioManager = (AudioManager)
+			// context.getSystemService(Context.AUDIO_SERVICE);
+			// audioManager.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+			// audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+			// AudioManager.ADJUST_RAISE,
+			// AudioManager.FLAG_SHOW_UI);
+			player.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			player.setVolume(10, 10);
 		} catch (Exception eee) {
 		}

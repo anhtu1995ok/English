@@ -16,15 +16,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
-import android.view.animation.Animation.AnimationListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 
-public class MainActivity extends MasterActivity implements OnClickListener,
-		OnItemClickListener {
+public class MainActivity extends MasterActivity implements OnClickListener, OnItemClickListener {
 
 	HorzListView listView;
 	HorizontalListViewAdapter adapter;
@@ -42,7 +41,12 @@ public class MainActivity extends MasterActivity implements OnClickListener,
 		setContentView(R.layout.activity_main);
 
 		// initData();
-		new initData().execute("");
+		EducationDBControler dbController = EducationDBControler.getInstance(MainActivity.this);
+		try {
+			dbController.createDataBase();
+			new initData().execute("");
+		} catch (IOException e) {
+		}
 		listView = (HorzListView) findViewById(R.id.listView);
 
 		// adapter = new Hori(getApplicationContext(), data);
@@ -67,13 +71,6 @@ public class MainActivity extends MasterActivity implements OnClickListener,
 		share.setOnClickListener(this);
 		moreapp.setOnClickListener(this);
 
-		EducationDBControler dbController = EducationDBControler
-				.getInstance(MainActivity.this);
-		try {
-			dbController.createDataBase();
-		} catch (IOException e) {
-		}
-
 	}
 
 	// private void initData() {
@@ -94,8 +91,7 @@ public class MainActivity extends MasterActivity implements OnClickListener,
 
 		@Override
 		protected void onPostExecute(String result) {
-			adapter = new HorizontalListViewAdapter(getApplicationContext(),
-					R.layout.item_home, data);
+			adapter = new HorizontalListViewAdapter(getApplicationContext(), R.layout.item_home, data);
 			listView.setAdapter(adapter);
 			super.onPostExecute(result);
 		}
@@ -128,11 +124,9 @@ public class MainActivity extends MasterActivity implements OnClickListener,
 		case R.id.share:
 			Intent sendIntent = new Intent();
 			sendIntent.setAction(Intent.ACTION_SEND);
-			sendIntent.putExtra(Intent.EXTRA_TEXT,
-					getResources().getText(R.string.share_text));
+			sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getText(R.string.share_text));
 			sendIntent.setType("text/plain");
-			startActivity(Intent.createChooser(sendIntent, getResources()
-					.getText(R.string.send_to)));
+			startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.send_to)));
 			break;
 		case R.id.moreapp:
 			String url = "https://play.google.com/store/apps/developer?id=Vareco+Mobile";
@@ -150,14 +144,11 @@ public class MainActivity extends MasterActivity implements OnClickListener,
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		String title = ((Home) arg0.getAdapter().getItem(arg2)).getTitle();
-		String bg_image = ((Home) arg0.getAdapter().getItem(arg2))
-				.getBg_image();
+		String bg_image = ((Home) arg0.getAdapter().getItem(arg2)).getBg_image();
 
-		arg1.startAnimation(AnimationUtils.loadAnimation(
-				getApplicationContext(), R.anim.abc_fade_in));
+		arg1.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.abc_fade_in));
 		// if (title.equalsIgnoreCase("Animals")) {
-		Intent intent = new Intent(getApplicationContext(),
-				SubjectActivity.class);
+		Intent intent = new Intent(getApplicationContext(), SubjectActivity.class);
 		intent.putExtra("HOME_TITLE", title.toLowerCase());
 		intent.putExtra("HOME_BG", bg_image);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

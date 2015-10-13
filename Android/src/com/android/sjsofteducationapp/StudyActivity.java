@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -30,6 +31,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,7 +51,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 	private SvgImageView image1, image2, image3, image4;
 	private SvgImageView imageDrag1, imageDrag2, imageDrag3, imageDrag4;
 	private ImageView imageContent;
-	private ImageView back, replay;
+	private ImageView back, replay, bottom_image;
 	private TextView tvTitle;
 	private Bitmap bitmap1, bitmap2, bitmap3, bitmap4;
 	private ArrayList<SvgImageView> arrImage, arrImageDrag;
@@ -59,7 +61,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 	private File file;
 	private MediaPlayer ringSuccess, ringError, ringTouch;
 	private TextToSpeech textToSpeech;
-	private String textSpeech;
+	private String textSpeech, bg_image;
 
 	private EducationDBControler db;
 	Home home;
@@ -73,6 +75,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 
 		Intent intent = getIntent();
 		home = (Home) intent.getSerializableExtra("SUBJECT");
+		bg_image = intent.getStringExtra("HOME_BG");
 		if (home == null)
 			finish();
 		textSpeech = home.getTitle();
@@ -139,6 +142,16 @@ public class StudyActivity extends Activity implements OnClickListener {
 		loadImage();
 		back.setOnClickListener(this);
 		replay.setOnClickListener(this);
+		
+		bottom_image = (ImageView) findViewById(R.id.bottom_image);
+
+		String fileImage = Environment.getExternalStorageDirectory() + "/Sjsoft/Home/Content/" + bg_image;
+		File file = new File(fileImage);
+		if (file.exists()) {
+			Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+			bottom_image.setImageBitmap(myBitmap);
+			Log.d("ToanNM", "bg_image : " + bg_image);
+		}
 	}
 
 	private void loadImage() {
