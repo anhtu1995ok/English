@@ -27,7 +27,6 @@ public class SubjectActivity extends MasterActivity
 	private SubjectAdapter adapter;
 	private ArrayList<Home> data;
 	private ImageView image, leftArrow, rightArrow, home;
-	private int position = 0;
 
 	private String title, bg_image;
 

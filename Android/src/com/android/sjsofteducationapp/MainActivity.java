@@ -28,7 +28,6 @@ public class MainActivity extends MasterActivity
 	HorizontalListViewAdapter adapter;
 	ArrayList<Home> data;
 	ImageView image, leftArrow, rightArrow, share, moreapp;
-	int position = 0;
 	Intent intent;
 
 	private Animation aFlicker;
