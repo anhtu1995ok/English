@@ -37,9 +37,39 @@ public class EducationDBControler extends SQLiteOpenHelper {
 		DB_PATH = "/data/data/" + context.getPackageName() + "/databases/";
 	}
 
+	@SuppressLint("SdCardPath")
+	private EducationDBControler(Context context, int version) {
+		super(context, DATABASE_NAME, null, version);
+		this.context = context;
+		DB_PATH = "/data/data/" + context.getPackageName() + "/databases/";
+	}
+
+	public int getVersion() {
+		int version = 1;
+		String sql = "Select version from version";
+		Cursor cursor = rawQuery(sql, null);
+		if (cursor.moveToFirst()) {
+			version = cursor.getInt(cursor.getColumnIndex("version"));
+		}
+		return version;
+	}
+
+	public void setVersion(int version) {
+		ContentValues values = new ContentValues();
+		values.put("version", version);
+		sqliteDataBase.update("version", values, null, null);
+	}
+
 	public static EducationDBControler getInstance(Context context) {
 		if (controler == null) {
 			controler = new EducationDBControler(context);
+		}
+		return controler;
+	}
+
+	public static EducationDBControler getInstance(Context context, int version) {
+		if (controler == null) {
+			controler = new EducationDBControler(context, version);
 		}
 		return controler;
 	}
@@ -63,7 +93,7 @@ public class EducationDBControler extends SQLiteOpenHelper {
 	 * Copies your database from your local assets-folder to the just created
 	 * empty database in the system folder, from where it can be accessed and
 	 * handled. This is done by transferring byte stream.
-	 * */
+	 */
 	private void copyDataBase() throws IOException {
 		byte[] buffer = new byte[1024];
 		OutputStream myOutput = null;
@@ -92,8 +122,7 @@ public class EducationDBControler extends SQLiteOpenHelper {
 	public void openDataBase() throws SQLException {
 		// Open the database
 		String myPath = DB_PATH + DATABASE_NAME;
-		sqliteDataBase = SQLiteDatabase.openDatabase(myPath, null,
-				SQLiteDatabase.OPEN_READWRITE);
+		sqliteDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
 	}
 
 	/**
@@ -121,13 +150,11 @@ public class EducationDBControler extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 	}
 
-	public Cursor query(String table, String[] columns, String selection,
-			String[] selectionArgs, String groupBy, String having,
-			String orderBy) {
+	public Cursor query(String table, String[] columns, String selection, String[] selectionArgs, String groupBy,
+			String having, String orderBy) {
 		if (sqliteDataBase == null)
 			openDataBase();
-		Cursor cursor = sqliteDataBase.query(table, columns, selection,
-				selectionArgs, groupBy, having, orderBy);
+		Cursor cursor = sqliteDataBase.query(table, columns, selection, selectionArgs, groupBy, having, orderBy);
 		return cursor;
 	}
 
@@ -147,8 +174,7 @@ public class EducationDBControler extends SQLiteOpenHelper {
 		update("subject", values, where, null);
 	}
 
-	public int update(String table, ContentValues values, String whereClause,
-			String[] whereArgs) {
+	public int update(String table, ContentValues values, String whereClause, String[] whereArgs) {
 		if (sqliteDataBase == null)
 			openDataBase();
 
