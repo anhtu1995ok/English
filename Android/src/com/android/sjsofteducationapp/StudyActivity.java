@@ -84,14 +84,11 @@ public class StudyActivity extends Activity implements OnClickListener {
 		// home = (Home) intent.getSerializableExtra("SUBJECT");
 		title = intent.getStringExtra("TITLE");
 		GetDataFromDB gdfdb = new GetDataFromDB(getApplicationContext());
-		data = gdfdb.getDataFromDB(title);
+		data = gdfdb.getDataFromDB(title.toLowerCase());
 		position = intent.getIntExtra("POSITION", 0);
 		bg_image = intent.getStringExtra("HOME_BG");
 
 		home = data.get(position);
-		Log.d("ToanNM", "data: " + data.size() + " , title: " + title
-				+ ", position : " + position + ", home :" + home
-				+ ", content_image : " + home.getContent_image());
 
 		if (home == null) {
 			finish();
@@ -173,7 +170,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 		bottom_image = (ImageView) findViewById(R.id.bottom_image);
 
 		String fileImage = Environment.getExternalStorageDirectory()
-				+ "/Sjsoft/Home/Content/" + title + "/" + bg_image;
+				+ "/Sjsoft/Home/Content/" + bg_image;
 		File file = new File(fileImage);
 		if (file.exists()) {
 			Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());

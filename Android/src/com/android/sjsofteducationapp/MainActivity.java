@@ -178,7 +178,7 @@ public class MainActivity extends MasterActivity
 		view.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.abc_fade_in));
 		// if (title.equalsIgnoreCase("Animals")) {
 		Intent intent = new Intent(getApplicationContext(), SubjectActivity.class);
-		intent.putExtra("HOME_TITLE", title.toLowerCase());
+		intent.putExtra("HOME_TITLE", title);
 		intent.putExtra("HOME_BG", bg_image);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);

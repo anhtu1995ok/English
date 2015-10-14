@@ -52,7 +52,7 @@ public class SubjectActivity extends MasterActivity
 		listView = (HListView) findViewById(R.id.listView);
 
 		image = (ImageView) findViewById(R.id.image);
-		String fileImage = Environment.getExternalStorageDirectory() + "/Sjsoft/Home/Content/" + title + "/" + bg_image;
+		String fileImage = Environment.getExternalStorageDirectory() + "/Sjsoft/Home/Content/" + bg_image;
 		File file = new File(fileImage);
 		if (file.exists()) {
 			Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
@@ -74,14 +74,14 @@ public class SubjectActivity extends MasterActivity
 		@Override
 		protected String doInBackground(String... params) {
 			GetDataFromDB gdfdb = new GetDataFromDB(getApplicationContext());
-			data = gdfdb.getDataFromDB(title);
+			data = gdfdb.getDataFromDB(title.toLowerCase());
 			Log.d("ToanNM", "sData: " + data.size());
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(String result) {
-			adapter = new SubjectAdapter(getApplicationContext(), R.layout.item_subject, data);
+			adapter = new SubjectAdapter(getApplicationContext(), R.layout.item_subject, data, title);
 			listView.setAdapter(adapter);
 			listView.setSelector(R.drawable.listview_onclick);
 			super.onPostExecute(result);

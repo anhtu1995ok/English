@@ -21,12 +21,14 @@ public class SubjectAdapter extends ArrayAdapter<Home> {
 	private Context context;
 	int resource;
 	ArrayList<Home> arrayList;
+	private String title;
 
-	public SubjectAdapter(Context context, int resource, ArrayList<Home> arrayList) {
+	public SubjectAdapter(Context context, int resource, ArrayList<Home> arrayList, String title) {
 		super(context, resource, arrayList);
 		this.context = context;
 		this.resource = resource;
 		this.arrayList = arrayList;
+		this.title = title;
 	}
 
 	@Override
@@ -62,8 +64,8 @@ public class SubjectAdapter extends ArrayAdapter<Home> {
 
 		try {
 			// 
-			String imageFile = Environment.getExternalStorageDirectory() + "/Sjsoft/Subject/Icon/" + home.getTitle() + "/" + home.getIcon();
-			Log.d("ToanNM", "SubJect image : " + imageFile);
+			String imageFile = Environment.getExternalStorageDirectory() + "/Sjsoft/Subject/Icon/" + title + "/" + home.getIcon();
+			Log.d("TuNT", "SubJect image : " + imageFile);
 			File file = new File(imageFile);
 			if (file.exists()) {
 				Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
