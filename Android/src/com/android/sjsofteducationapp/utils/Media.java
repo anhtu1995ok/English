@@ -26,7 +26,7 @@ public class Media {
 	private Media(Context context, int fileName) {
 		mContext = context;
 		mp = MediaPlayer.create(context, fileName);
-		mp.setLooping(true);
+//		mp.setLooping(true);
 		mp.setVolume(10, 10);
 		try {
 			mp.start();

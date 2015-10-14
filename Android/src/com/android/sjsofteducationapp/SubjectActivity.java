@@ -102,14 +102,19 @@ public class SubjectActivity extends MasterActivity
 		case R.id.image:
 			break;
 		case R.id.leftarrow:
+			buttonMedia.start();;
 			listView.smoothScrollToPosition(0);
 			YoYo.with(Techniques.BounceInLeft).playOn(leftArrow);
+			mb.start();
 			break;
 		case R.id.rightarrow:
+			buttonMedia.start();
 			listView.smoothScrollToPosition(max);
 			YoYo.with(Techniques.BounceInRight).playOn(rightArrow);
+			mb.start();
 			break;
 		case R.id.home:
+			buttonMedia.start();		
 			finish();
 			break;
 		default:
@@ -120,10 +125,11 @@ public class SubjectActivity extends MasterActivity
 	@Override
 	public void onItemClick(it.sephiroth.android.library.widget.AdapterView<?> parent, View view, int position,
 			long id) {
+		itemMedia.start();
 		view.startAnimation(AnimationUtils.loadAnimation(SubjectActivity.this, R.anim.abc_fade_in));
-//		Home home = (Home) parent.getAdapter().getItem(position);
+		// Home home = (Home) parent.getAdapter().getItem(position);
 		Intent intent = new Intent(SubjectActivity.this, StudyActivity.class);
-//		intent.putExtra("SUBJECT", home);
+		// intent.putExtra("SUBJECT", home);
 		intent.putExtra("HOME_BG", bg_image);
 		intent.putExtra("TITLE", title);
 		intent.putExtra("POSITION", position);

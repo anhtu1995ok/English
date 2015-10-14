@@ -11,6 +11,7 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,6 +35,8 @@ public class MainActivity extends MasterActivity
 
 	private Animation aFlicker;
 	private boolean flicker = false;
+	
+	MediaPlayer itemMedia, buttonMedia;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +73,12 @@ public class MainActivity extends MasterActivity
 		startMoreappFlicker();
 		share.setOnClickListener(this);
 		moreapp.setOnClickListener(this);
+		
+		itemMedia = MediaPlayer.create(getApplicationContext(),
+				R.raw.sonic);
+		
+		buttonMedia = MediaPlayer.create(getApplicationContext(),
+				R.raw.pop);
 
 	}
 
@@ -106,10 +115,13 @@ public class MainActivity extends MasterActivity
 		case R.id.image:
 			break;
 		case R.id.leftarrow:
+			buttonMedia.start();
 			listView.smoothScrollToPosition(0);
 			YoYo.with(Techniques.BounceInLeft).playOn(leftArrow);
+			mb.start();
 			break;
 		case R.id.rightarrow:
+			buttonMedia.start();
 			listView.smoothScrollToPosition(max);
 			YoYo.with(Techniques.BounceInRight).playOn(rightArrow);
 			break;
@@ -138,7 +150,7 @@ public class MainActivity extends MasterActivity
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		mb.stop();
+		mb.pause();
 	}
 
 	private void startMoreappFlicker() {
@@ -172,6 +184,7 @@ public class MainActivity extends MasterActivity
 	@Override
 	public void onItemClick(it.sephiroth.android.library.widget.AdapterView<?> parent, View view, int position,
 			long id) {
+		itemMedia.start();
 		String title = ((Home) parent.getAdapter().getItem(position)).getTitle();
 		String bg_image = ((Home) parent.getAdapter().getItem(position)).getBg_image();
 
