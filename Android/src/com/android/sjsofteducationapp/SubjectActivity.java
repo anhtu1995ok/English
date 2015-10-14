@@ -110,7 +110,6 @@ public class SubjectActivity extends MasterActivity
 			YoYo.with(Techniques.BounceInRight).playOn(rightArrow);
 			break;
 		case R.id.home:
-			YoYo.with(Techniques.Bounce).playOn(home);
 			finish();
 			break;
 		default:
