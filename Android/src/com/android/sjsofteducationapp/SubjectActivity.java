@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -116,10 +117,12 @@ public class SubjectActivity extends MasterActivity
 	public void onItemClick(it.sephiroth.android.library.widget.AdapterView<?> parent, View view, int position,
 			long id) {
 		view.startAnimation(AnimationUtils.loadAnimation(SubjectActivity.this, R.anim.abc_fade_in));
-		Home home = (Home) parent.getAdapter().getItem(position);
+//		Home home = (Home) parent.getAdapter().getItem(position);
 		Intent intent = new Intent(SubjectActivity.this, StudyActivity.class);
-		intent.putExtra("SUBJECT", home);
+//		intent.putExtra("SUBJECT", home);
 		intent.putExtra("HOME_BG", bg_image);
+		intent.putExtra("TITLE", title);
+		intent.putExtra("POSITION", position);
 		startActivity(intent);
 	}
 

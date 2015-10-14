@@ -38,8 +38,8 @@
 
         <ImageView
             android:id="@+id/replay"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="27dp"
+            android:layout_height="30dp"
             android:layout_margin="10dp"
             android:background="@drawable/repeat_onclick" />
     </LinearLayout>
@@ -66,6 +66,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="left"
                 android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
                 android:orientation="vertical" >
 
                 <com.meg7.widget.SvgImageView
@@ -169,6 +170,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:layout_marginRight="20dp"
+                android:gravity="center_vertical"
                 android:orientation="vertical" >
 
                 <com.meg7.widget.SvgImageView
@@ -188,6 +190,14 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/drag"
                     app:svg_raw_resource="@raw/shape_flower" />
+                
+                <ImageView
+                    android:id="@+id/rightarrow"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/rightarrow_onclick"
+                    android:visibility="gone" />
             </LinearLayout>
         </FrameLayout>
     </FrameLayout>

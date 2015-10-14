@@ -9,6 +9,7 @@ import java.util.Random;
 import com.android.sjsofteducationapp.database.EducationDBControler;
 import com.android.sjsofteducationapp.model.Home;
 import com.android.sjsofteducationapp.model.ImageDrag;
+import com.android.sjsofteducationapp.utils.GetDataFromDB;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -27,6 +28,7 @@ import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.speech.tts.TextToSpeech;
@@ -51,7 +53,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 	private SvgImageView image1, image2, image3, image4;
 	private SvgImageView imageDrag1, imageDrag2, imageDrag3, imageDrag4;
 	private ImageView imageContent;
-	private ImageView back, replay, bottom_image;
+	private ImageView back, replay, bottom_image, next;
 	private TextView tvTitle;
 	private Bitmap bitmap1, bitmap2, bitmap3, bitmap4;
 	private ArrayList<SvgImageView> arrImage, arrImageDrag;
@@ -62,9 +64,12 @@ public class StudyActivity extends Activity implements OnClickListener {
 	private MediaPlayer ringSuccess, ringError, ringTouch;
 	private TextToSpeech textToSpeech;
 	private String textSpeech, bg_image;
-
+	//
 	private EducationDBControler db;
 	Home home;
+	private ArrayList<Home> data;
+	String title;
+	int position = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +79,20 @@ public class StudyActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_study);
 
 		Intent intent = getIntent();
-		home = (Home) intent.getSerializableExtra("SUBJECT");
+		// home = (Home) intent.getSerializableExtra("SUBJECT");
+		title = intent.getStringExtra("TITLE");
+		GetDataFromDB gdfdb = new GetDataFromDB(getApplicationContext());
+		data = gdfdb.getDataFromDB(title);
+		position = intent.getIntExtra("POSITION", 0);
 		bg_image = intent.getStringExtra("HOME_BG");
-		if (home == null)
+
+		home = data.get(position);
+		Log.d("ToanNM", "data: " + data.size() + " , title: " + title + ", position : " + position + ", home :" + home
+				+ ", content_image : " + home.getContent_image());
+
+		if (home == null) {
 			finish();
+		}
 		textSpeech = home.getTitle();
 
 		textToSpeech = new TextToSpeech(StudyActivity.this, new OnInitListener() {
@@ -89,15 +104,16 @@ public class StudyActivity extends Activity implements OnClickListener {
 				}
 			}
 		});
+		file = loadFile(home.getContent_image());
+		if (file == null) {
+			finish();
+		}
 
 		ringSuccess = MediaPlayer.create(StudyActivity.this, R.raw.cartoon_slide_whistle_ascend_version_2);
 		ringTouch = MediaPlayer.create(StudyActivity.this, R.raw.comedy_pop_finger_in_mouth_001);
 		ringError = MediaPlayer.create(StudyActivity.this, R.raw.ring3);
 		seed = System.nanoTime();
 
-		file = loadFile(home.getContent_image());
-		if (file == null)
-			finish();
 		createArraySvg();
 		initView();
 		createArrayImage();
@@ -130,6 +146,9 @@ public class StudyActivity extends Activity implements OnClickListener {
 		imageDrag3 = (SvgImageView) findViewById(R.id.image_drag3);
 		imageDrag4 = (SvgImageView) findViewById(R.id.image_drag4);
 
+		next = (ImageView) findViewById(R.id.rightarrow);
+		next.setOnClickListener(this);
+
 		try {
 			Typeface type = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/brlnsb.ttf");
 			tvTitle.setTypeface(type);
@@ -142,7 +161,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 		loadImage();
 		back.setOnClickListener(this);
 		replay.setOnClickListener(this);
-		
+
 		bottom_image = (ImageView) findViewById(R.id.bottom_image);
 
 		String fileImage = Environment.getExternalStorageDirectory() + "/Sjsoft/Home/Content/" + bg_image;
@@ -348,6 +367,15 @@ public class StudyActivity extends Activity implements OnClickListener {
 								tvTitle.setVisibility(View.VISIBLE);
 								replay.setVisibility(View.VISIBLE);
 
+								image1.setVisibility(View.GONE);
+								image2.setVisibility(View.GONE);
+								image3.setVisibility(View.GONE);
+								image4.setVisibility(View.GONE);
+
+								if (position < data.size() - 1) {
+									next.setVisibility(View.VISIBLE);
+								}
+
 								db.setSuccess(home.getId());
 							} else {
 								new ParticleSystem(StudyActivity.this, 100, R.drawable.ic_star_dropdown, 800)
@@ -406,6 +434,15 @@ public class StudyActivity extends Activity implements OnClickListener {
 			break;
 		case R.id.replay:
 			replay();
+			break;
+
+		case R.id.rightarrow:
+			Intent intent = new Intent(this, StudyActivity.class);
+			intent.putExtra("HOME_BG", bg_image);
+			intent.putExtra("TITLE", title);
+			intent.putExtra("POSITION", position + 1);
+			finish();
+			startActivity(intent);
 			break;
 		default:
 			break;

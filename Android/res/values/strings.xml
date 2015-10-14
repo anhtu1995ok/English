@@ -8,11 +8,11 @@
     <string name="share_text">I just played game at: \n https://play.google.com/store/apps/developer?id=Vareco+Mobile \n Come and play with me</string>
     <string name="send_to">Share to...</string>
     <string name="url_check_update">http://tunt.grn.cc/Test/checkupdate.php</string>
-    <string name="update">Có dữ liệu mới bạn có muốn tải về ngay bây giờ không?</string>
+    <string name="update">New updates are avalable. Do you want to download now?</string>
     <string name="yes">Có</string>
     <string name="no">Không</string>
-    <string name="check_update">Đang kiểm tra phiên bản...</string>
-    <string name="unzip">Đang giải nén dữ liệu, không mất lưu lượng...</string>
-    <string name="downloading">Đang tải dữ liệu...</string>
+    <string name="check_update">Checking version...</string>
+    <string name="unzip">Extracting data...</string>
+    <string name="downloading">Downloading...</string>
 
 </resources>
