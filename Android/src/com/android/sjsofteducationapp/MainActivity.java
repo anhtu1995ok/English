@@ -91,6 +91,7 @@ public class MainActivity extends MasterActivity
 		protected void onPostExecute(String result) {
 			adapter = new HorizontalListViewAdapter(getApplicationContext(), R.layout.item_home, data);
 			listView.setAdapter(adapter);
+			listView.setSelector(R.drawable.listview_onclick);
 			super.onPostExecute(result);
 		}
 

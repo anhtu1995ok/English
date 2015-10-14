@@ -80,6 +80,7 @@ public class SubjectActivity extends MasterActivity
 		protected void onPostExecute(String result) {
 			adapter = new SubjectAdapter(getApplicationContext(), R.layout.item_subject, data);
 			listView.setAdapter(adapter);
+			listView.setSelector(R.drawable.listview_onclick);
 			super.onPostExecute(result);
 		}
 
