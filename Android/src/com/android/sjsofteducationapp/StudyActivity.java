@@ -16,9 +16,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.daimajia.androidanimations.library.YoYo.AnimatorCallback;
 import com.meg7.widget.SvgImageView;
-import com.nineoldandroids.animation.Animator;
 import com.plattysoft.leonids.ParticleSystem;
 
 import android.app.Activity;
@@ -42,9 +40,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -178,7 +173,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 		bottom_image = (ImageView) findViewById(R.id.bottom_image);
 
 		String fileImage = Environment.getExternalStorageDirectory()
-				+ "/Sjsoft/Home/Content/" + bg_image;
+				+ "/Sjsoft/Home/Content/" + title + "/" + bg_image;
 		File file = new File(fileImage);
 		if (file.exists()) {
 			Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
@@ -404,7 +399,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 
 	private File loadFile(String fileName) {
 		String root = Environment.getExternalStorageDirectory().toString();
-		File myDir = new File(root + "/Sjsoft/Subject/Content/");
+		File myDir = new File(root + "/Sjsoft/Subject/Content/" + title + "/");
 		File file = new File(myDir, fileName);
 		return file;
 	}

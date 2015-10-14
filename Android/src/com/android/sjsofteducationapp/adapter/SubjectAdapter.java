@@ -62,7 +62,7 @@ public class SubjectAdapter extends ArrayAdapter<Home> {
 
 		try {
 			// 
-			String imageFile = Environment.getExternalStorageDirectory() + "/Sjsoft/Subject/Icon/" + home.getIcon();
+			String imageFile = Environment.getExternalStorageDirectory() + "/Sjsoft/Subject/Icon/" + home.getTitle() + "/" + home.getIcon();
 			Log.d("ToanNM", "SubJect image : " + imageFile);
 			File file = new File(imageFile);
 			if (file.exists()) {
