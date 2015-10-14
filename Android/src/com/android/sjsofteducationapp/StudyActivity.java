@@ -16,7 +16,9 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.daimajia.androidanimations.library.YoYo.AnimatorCallback;
 import com.meg7.widget.SvgImageView;
+import com.nineoldandroids.animation.Animator;
 import com.plattysoft.leonids.ParticleSystem;
 
 import android.app.Activity;
@@ -28,7 +30,6 @@ import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.speech.tts.TextToSpeech;
@@ -40,6 +41,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -373,6 +377,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 								image4.setVisibility(View.GONE);
 
 								if (position < data.size() - 1) {
+									YoYo.with(Techniques.BounceIn).playOn(next);
 									next.setVisibility(View.VISIBLE);
 								}
 
@@ -437,6 +442,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 			break;
 
 		case R.id.rightarrow:
+			YoYo.with(Techniques.Bounce).playOn(next);
 			Intent intent = new Intent(this, StudyActivity.class);
 			intent.putExtra("HOME_BG", bg_image);
 			intent.putExtra("TITLE", title);

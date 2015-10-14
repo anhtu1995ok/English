@@ -7,6 +7,8 @@ import com.android.sjsofteducationapp.adapter.HorizontalListViewAdapter;
 import com.android.sjsofteducationapp.database.EducationDBControler;
 import com.android.sjsofteducationapp.model.Home;
 import com.android.sjsofteducationapp.utils.GetDataFromDB;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -105,11 +107,14 @@ public class MainActivity extends MasterActivity
 			break;
 		case R.id.leftarrow:
 			listView.smoothScrollToPosition(0);
+			YoYo.with(Techniques.BounceInLeft).playOn(leftArrow);
 			break;
 		case R.id.rightarrow:
 			listView.smoothScrollToPosition(max);
+			YoYo.with(Techniques.BounceInRight).playOn(rightArrow);
 			break;
 		case R.id.share:
+			YoYo.with(Techniques.Bounce).playOn(share);
 			Intent sendIntent = new Intent();
 			sendIntent.setAction(Intent.ACTION_SEND);
 			sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getText(R.string.share_text));
@@ -117,6 +122,7 @@ public class MainActivity extends MasterActivity
 			startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.send_to)));
 			break;
 		case R.id.moreapp:
+			YoYo.with(Techniques.Bounce).playOn(moreapp);
 			String url = "https://play.google.com/store/apps/developer?id=Vareco+Mobile";
 			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

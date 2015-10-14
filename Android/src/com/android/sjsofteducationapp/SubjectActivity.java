@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import com.android.sjsofteducationapp.adapter.SubjectAdapter;
 import com.android.sjsofteducationapp.model.Home;
 import com.android.sjsofteducationapp.utils.GetDataFromDB;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -101,11 +103,14 @@ public class SubjectActivity extends MasterActivity
 			break;
 		case R.id.leftarrow:
 			listView.smoothScrollToPosition(0);
+			YoYo.with(Techniques.BounceInLeft).playOn(leftArrow);
 			break;
 		case R.id.rightarrow:
 			listView.smoothScrollToPosition(max);
+			YoYo.with(Techniques.BounceInRight).playOn(rightArrow);
 			break;
 		case R.id.home:
+			YoYo.with(Techniques.Bounce).playOn(home);
 			finish();
 			break;
 		default:
