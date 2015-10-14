@@ -61,7 +61,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 	private ArrayList<Integer> idRawSvgs;
 	private long seed;
 	private File file;
-	private MediaPlayer ringSuccess, ringError, ringTouch;
+	private MediaPlayer ringSuccess, ringError, ringTouch, mpOnClick;
 	private TextToSpeech textToSpeech;
 	private String textSpeech, bg_image;
 	private int width, height, padding, marginTop, marginLeft, iWidth, iHeight;
@@ -289,7 +289,8 @@ public class StudyActivity extends Activity implements OnClickListener {
 						@Override
 						public boolean onTouch(View v, MotionEvent event) {
 							if (event.getAction() == MotionEvent.ACTION_DOWN) {
-								ringTouch.start();
+								startMussicOnclick(R.raw.comedy_pop_finger_in_mouth_001);
+								// ringTouch.start();
 								ClipData data = ClipData.newPlainText("", "");
 								View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
 										v);
@@ -342,7 +343,9 @@ public class StudyActivity extends Activity implements OnClickListener {
 												R.drawable.ic_star_dropdown,
 												800).setSpeedRange(0.1f, 0.25f)
 												.oneShot(imageDrag4, 50);
-
+										if (mpOnClick != null)
+											if (mpOnClick.isPlaying())
+												mpOnClick.stop();
 										textToSpeech.speak(textSpeech,
 												TextToSpeech.QUEUE_FLUSH, null);
 										YoYo.with(Techniques.DropOut).playOn(
@@ -368,7 +371,8 @@ public class StudyActivity extends Activity implements OnClickListener {
 												R.drawable.ic_star_dropdown,
 												800).setSpeedRange(0.1f, 0.25f)
 												.oneShot(v, 50);
-										ringSuccess.start();
+										// ringSuccess.start();
+										startMussicOnclick(R.raw.cartoon_slide_whistle_ascend_version_2);
 									}
 								} else {
 									YoYo.with(Techniques.Swing).playOn(v);
@@ -517,5 +521,23 @@ public class StudyActivity extends Activity implements OnClickListener {
 			createView();
 			super.onPostExecute(result);
 		}
+	}
+
+	private void startMussicOnclick(int raw) {
+		final int r = raw;
+		Thread thread;
+		if (mpOnClick != null)
+			if (mpOnClick.isPlaying())
+				mpOnClick.stop();
+		Runnable runnable = new Runnable() {
+
+			@Override
+			public void run() {
+				mpOnClick = MediaPlayer.create(StudyActivity.this, r);
+				mpOnClick.start();
+			}
+		};
+		thread = new Thread(runnable);
+		thread.start();
 	}
 }
