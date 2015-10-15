@@ -7,6 +7,7 @@ import com.android.sjsofteducationapp.adapter.HorizontalListViewAdapter;
 import com.android.sjsofteducationapp.database.EducationDBControler;
 import com.android.sjsofteducationapp.model.Home;
 import com.android.sjsofteducationapp.utils.GetDataFromDB;
+import com.android.sjsofteducationapp.utils.Sound;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
@@ -35,7 +36,7 @@ public class MainActivity extends MasterActivity
 
 	private Animation aFlicker;
 	private boolean flicker = false;
-	
+
 	MediaPlayer itemMedia, buttonMedia;
 
 	@Override
@@ -73,12 +74,10 @@ public class MainActivity extends MasterActivity
 		startMoreappFlicker();
 		share.setOnClickListener(this);
 		moreapp.setOnClickListener(this);
-		
-		itemMedia = MediaPlayer.create(getApplicationContext(),
-				R.raw.sonic);
-		
-		buttonMedia = MediaPlayer.create(getApplicationContext(),
-				R.raw.pop);
+
+		itemMedia = MediaPlayer.create(getApplicationContext(), R.raw.sonic);
+
+		buttonMedia = MediaPlayer.create(getApplicationContext(), R.raw.pop);
 
 	}
 
@@ -115,15 +114,14 @@ public class MainActivity extends MasterActivity
 		case R.id.image:
 			break;
 		case R.id.leftarrow:
-			buttonMedia.start();
-			listView.smoothScrollToPosition(0);
+			Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);
 			YoYo.with(Techniques.BounceInLeft).playOn(leftArrow);
-			mb.start();
+			listView.smoothScrollToPosition(0);
 			break;
 		case R.id.rightarrow:
-			buttonMedia.start();
-			listView.smoothScrollToPosition(max);
+			Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);
 			YoYo.with(Techniques.BounceInRight).playOn(rightArrow);
+			listView.smoothScrollToPosition(max);
 			break;
 		case R.id.share:
 			YoYo.with(Techniques.Bounce).playOn(share);
@@ -184,7 +182,7 @@ public class MainActivity extends MasterActivity
 	@Override
 	public void onItemClick(it.sephiroth.android.library.widget.AdapterView<?> parent, View view, int position,
 			long id) {
-		itemMedia.start();
+		Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);
 		String title = ((Home) parent.getAdapter().getItem(position)).getTitle();
 		String bg_image = ((Home) parent.getAdapter().getItem(position)).getBg_image();
 

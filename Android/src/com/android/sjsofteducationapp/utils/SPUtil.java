@@ -12,7 +12,7 @@ public class SPUtil {
 	public static final String KEY_FIRST_RUN = "first_run";
 	private SharedPreferences pref;
 
-	private SPUtil(Context context) {
+	public SPUtil(Context context) {
 		this.pref = context.getSharedPreferences(PREF_FILE_NAME,
 				Context.MODE_PRIVATE);
 	}

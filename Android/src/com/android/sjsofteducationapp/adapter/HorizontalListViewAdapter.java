@@ -42,43 +42,45 @@ public class HorizontalListViewAdapter extends ArrayAdapter<Home> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		final ViewHolder holder;
+//		ViewHolder holder = null;
 
 		Home home = arrayList.get(position);
 
-		if (convertView != null) {
-			holder = (ViewHolder) convertView.getTag();
-		} else {
+//		if (convertView == null) {
 			convertView = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(resource,
-					parent, false);
-			holder = new ViewHolder();
-			holder.image = (ImageView) convertView.findViewById(R.id.image);
-			holder.title = (TextView) convertView.findViewById(R.id.title);
-
-			convertView.setTag(holder);
-		}
+					null);
+//			holder = new ViewHolder();
+//			holder.image = (ImageView) convertView.findViewById(R.id.image);
+//			holder.title = (TextView) convertView.findViewById(R.id.title);
+//
+//			convertView.setTag(holder);
+//		} else {
+//			holder = (ViewHolder) convertView.getTag();
+//		}
+		ImageView image = (ImageView) convertView.findViewById(R.id.image);
+		TextView title = (TextView) convertView.findViewById(R.id.title);
 
 		String imageFile = Environment.getExternalStorageDirectory() + "/Sjsoft/Home/Icon/" + home.getIcon();
-		final String title = home.getTitle();
+		final String name = home.getTitle();
 		File file = new File(imageFile);
 		if (file.exists()) {
 			Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-			holder.image.setImageBitmap(myBitmap);
+			image.setImageBitmap(myBitmap);
 		}
 		try {
 			Typeface type = Typeface.createFromAsset(context.getAssets(), "fonts/brlnsb.ttf");
-			holder.title.setTypeface(type);
+			title.setTypeface(type);
 
-			holder.title.setText(title);
+			title.setText(name);
 		} catch (Exception e) {
 		}
 
 		return convertView;
 	}
 
-	private class ViewHolder {
-		ImageView image;
-		TextView title;
-	}
+//	private static class ViewHolder {
+//		ImageView image;
+//		TextView title;
+//	}
 
 }

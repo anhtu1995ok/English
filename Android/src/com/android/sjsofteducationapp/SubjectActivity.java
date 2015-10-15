@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import com.android.sjsofteducationapp.adapter.SubjectAdapter;
 import com.android.sjsofteducationapp.model.Home;
 import com.android.sjsofteducationapp.utils.GetDataFromDB;
+import com.android.sjsofteducationapp.utils.SPUtil;
+import com.android.sjsofteducationapp.utils.Sound;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
@@ -15,8 +17,6 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AnimationUtils;
@@ -32,6 +32,7 @@ public class SubjectActivity extends MasterActivity
 	private ImageView image, leftArrow, rightArrow, home;
 
 	private String title, bg_image;
+	SPUtil sp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +76,6 @@ public class SubjectActivity extends MasterActivity
 		protected String doInBackground(String... params) {
 			GetDataFromDB gdfdb = new GetDataFromDB(getApplicationContext());
 			data = gdfdb.getDataFromDB(title.toLowerCase());
-			Log.d("ToanNM", "sData: " + data.size());
 			return null;
 		}
 
@@ -92,7 +92,14 @@ public class SubjectActivity extends MasterActivity
 	@Override
 	protected void onResume() {
 		super.onResume();
-		new initData().execute("");
+		sp = new SPUtil(SubjectActivity.this);
+
+		boolean success = sp.get("SUCCESS", false);
+		if (success) {
+			int pos = sp.get("POS", 0);
+			listView.smoothScrollToPosition(pos);
+			sp.set("SUCCESS", false);
+		}
 	}
 
 	@Override
@@ -102,19 +109,17 @@ public class SubjectActivity extends MasterActivity
 		case R.id.image:
 			break;
 		case R.id.leftarrow:
-			buttonMedia.start();;
-			listView.smoothScrollToPosition(0);
+			Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);
 			YoYo.with(Techniques.BounceInLeft).playOn(leftArrow);
-			mb.start();
+			listView.smoothScrollToPosition(0);
 			break;
 		case R.id.rightarrow:
-			buttonMedia.start();
-			listView.smoothScrollToPosition(max);
+			Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);
 			YoYo.with(Techniques.BounceInRight).playOn(rightArrow);
-			mb.start();
+			listView.smoothScrollToPosition(max);
 			break;
 		case R.id.home:
-			buttonMedia.start();		
+			Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);
 			finish();
 			break;
 		default:
@@ -125,7 +130,7 @@ public class SubjectActivity extends MasterActivity
 	@Override
 	public void onItemClick(it.sephiroth.android.library.widget.AdapterView<?> parent, View view, int position,
 			long id) {
-		itemMedia.start();
+		Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);
 		view.startAnimation(AnimationUtils.loadAnimation(SubjectActivity.this, R.anim.abc_fade_in));
 		// Home home = (Home) parent.getAdapter().getItem(position);
 		Intent intent = new Intent(SubjectActivity.this, StudyActivity.class);

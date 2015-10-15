@@ -43,41 +43,44 @@ public class SubjectAdapter extends ArrayAdapter<Home> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		final ViewHolder holder;
+//		ViewHolder holder = null;
 
 		Home home = arrayList.get(position);
 
-		if (convertView != null) {
-			holder = (ViewHolder) convertView.getTag();
-		} else {
+//		if (convertView == null) {
 			convertView = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(resource,
-					parent, false);
-			holder = new ViewHolder();
-			holder.image = (ImageView) convertView.findViewById(R.id.image);
-			holder.star = (ImageView) convertView.findViewById(R.id.star);
+					null);
+//			holder = new ViewHolder();
+//			holder.image = (ImageView) convertView.findViewById(R.id.image);
+//			holder.star = (ImageView) convertView.findViewById(R.id.star);
 
-			convertView.setTag(holder);
-		}
+//			convertView.setTag(holder);
+//		} else {
+//			holder = (ViewHolder) convertView.getTag();
+//		}
 
-//		int imageUrl = home.getUrl_img();
-//		holder.image.setImageResource(imageUrl);
-
+		// int imageUrl = home.getUrl_img();
+		// holder.image.setImageResource(imageUrl);
+			ImageView image = (ImageView) convertView.findViewById(R.id.image);
+			ImageView star = (ImageView) convertView.findViewById(R.id.star);
 		try {
-			// 
-			String imageFile = Environment.getExternalStorageDirectory() + "/Sjsoft/Subject/Icon/" + title + "/" + home.getIcon();
+			//
+			String imageFile = Environment.getExternalStorageDirectory() + "/Sjsoft/Subject/Icon/" + title + "/"
+					+ home.getIcon();
 			Log.d("TuNT", "SubJect image : " + imageFile);
 			File file = new File(imageFile);
 			if (file.exists()) {
 				Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-				holder.image.setImageBitmap(myBitmap);
+				image.setImageBitmap(myBitmap);
 
 			}
 			//
 			String success = home.getSuccess();
 			if (success.toLowerCase().equals("done")) {
-				holder.star.setVisibility(View.VISIBLE);
+				star.setVisibility(View.VISIBLE);
 			} else {
-				holder.star.setVisibility(View.GONE);
+				star.setVisibility(View.GONE);
+//				convertView.getDisplay().getDisplayId();
 			}
 		} catch (Exception e) {
 
@@ -86,8 +89,8 @@ public class SubjectAdapter extends ArrayAdapter<Home> {
 		return convertView;
 	}
 
-	private class ViewHolder {
-		ImageView image, star;
-	}
+//	private static class ViewHolder {
+//		ImageView image, star;
+//	}
 
 }
