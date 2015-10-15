@@ -12,10 +12,12 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
 import android.content.Intent;
+import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
@@ -23,6 +25,8 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import it.sephiroth.android.library.widget.AbsHListView;
+import it.sephiroth.android.library.widget.AbsHListView.OnScrollListener;
 import it.sephiroth.android.library.widget.HListView;
 
 public class MainActivity extends MasterActivity
@@ -38,6 +42,7 @@ public class MainActivity extends MasterActivity
 	private boolean flicker = false;
 
 	MediaPlayer itemMedia, buttonMedia;
+	int visibleItem, totalItem;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +66,20 @@ public class MainActivity extends MasterActivity
 		// LinearLayoutManager.HORIZONTAL, false));
 		// listView.setItemAnimator(new DefaultItemAnimator());
 		listView.setOnItemClickListener(this);
+		listView.setOnScrollListener(new OnScrollListener() {
+
+			@Override
+			public void onScrollStateChanged(AbsHListView view, int scrollState) {
+
+			}
+
+			@Override
+			public void onScroll(AbsHListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				visibleItem = visibleItemCount;
+				totalItem = totalItemCount;
+
+			}
+		});
 
 		image = (ImageView) findViewById(R.id.image);
 		leftArrow = (ImageView) findViewById(R.id.leftarrow);
@@ -109,19 +128,23 @@ public class MainActivity extends MasterActivity
 
 	@Override
 	public void onClick(View v) {
-		int max = data.size();
+		Display display = getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int width = size.x;
+
 		switch (v.getId()) {
 		case R.id.image:
 			break;
 		case R.id.leftarrow:
 			Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);
 			YoYo.with(Techniques.BounceInLeft).playOn(leftArrow);
-			listView.smoothScrollToPosition(0);
+			listView.smoothScrollBy(-width, 1000);
 			break;
 		case R.id.rightarrow:
 			Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);
 			YoYo.with(Techniques.BounceInRight).playOn(rightArrow);
-			listView.smoothScrollToPosition(max);
+			listView.smoothScrollBy(width, 1000);
 			break;
 		case R.id.share:
 			YoYo.with(Techniques.Bounce).playOn(share);

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import com.android.sjsofteducationapp.adapter.SubjectAdapter;
 import com.android.sjsofteducationapp.model.Home;
 import com.android.sjsofteducationapp.utils.GetDataFromDB;
-import com.android.sjsofteducationapp.utils.SPUtil;
 import com.android.sjsofteducationapp.utils.Sound;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -14,17 +13,20 @@ import com.daimajia.androidanimations.library.YoYo;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import it.sephiroth.android.library.widget.HListView;
 
-public class SubjectActivity extends MasterActivity implements OnClickListener,
-		it.sephiroth.android.library.widget.AdapterView.OnItemClickListener {
+public class SubjectActivity extends MasterActivity
+		implements OnClickListener, it.sephiroth.android.library.widget.AdapterView.OnItemClickListener {
 
 	private HListView listView;
 	private SubjectAdapter adapter;
@@ -53,8 +55,7 @@ public class SubjectActivity extends MasterActivity implements OnClickListener,
 		listView = (HListView) findViewById(R.id.listView);
 
 		image = (ImageView) findViewById(R.id.image);
-		String fileImage = Environment.getExternalStorageDirectory()
-				+ "/Sjsoft/Home/Content/" + bg_image;
+		String fileImage = Environment.getExternalStorageDirectory() + "/Sjsoft/Home/Content/" + bg_image;
 		File file = new File(fileImage);
 		if (file.exists()) {
 			Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
@@ -82,8 +83,7 @@ public class SubjectActivity extends MasterActivity implements OnClickListener,
 
 		@Override
 		protected void onPostExecute(String result) {
-			adapter = new SubjectAdapter(getApplicationContext(),
-					R.layout.item_subject, data, title);
+			adapter = new SubjectAdapter(getApplicationContext(), R.layout.item_subject, data, title);
 			listView.setAdapter(adapter);
 			listView.setSelector(R.drawable.listview_onclick);
 			super.onPostExecute(result);
@@ -103,19 +103,23 @@ public class SubjectActivity extends MasterActivity implements OnClickListener,
 
 	@Override
 	public void onClick(View v) {
-		int max = data.size();
+		Display display = getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int width = size.x;
+
 		switch (v.getId()) {
 		case R.id.image:
 			break;
 		case R.id.leftarrow:
 			Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);
 			YoYo.with(Techniques.BounceInLeft).playOn(leftArrow);
-			listView.smoothScrollToPosition(0);
+			listView.smoothScrollBy(-width, 1000);
 			break;
 		case R.id.rightarrow:
 			Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);
 			YoYo.with(Techniques.BounceInRight).playOn(rightArrow);
-			listView.smoothScrollToPosition(max);
+			listView.smoothScrollBy(width, 1000);
 			break;
 		case R.id.home:
 			Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);
@@ -127,12 +131,10 @@ public class SubjectActivity extends MasterActivity implements OnClickListener,
 	}
 
 	@Override
-	public void onItemClick(
-			it.sephiroth.android.library.widget.AdapterView<?> parent,
-			View view, int position, long id) {
+	public void onItemClick(it.sephiroth.android.library.widget.AdapterView<?> parent, View view, int position,
+			long id) {
 		Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);
-		view.startAnimation(AnimationUtils.loadAnimation(SubjectActivity.this,
-				R.anim.abc_fade_in));
+		view.startAnimation(AnimationUtils.loadAnimation(SubjectActivity.this, R.anim.abc_fade_in));
 		// Home home = (Home) parent.getAdapter().getItem(position);
 		Intent intent = new Intent(SubjectActivity.this, StudyActivity.class);
 		// intent.putExtra("SUBJECT", home);

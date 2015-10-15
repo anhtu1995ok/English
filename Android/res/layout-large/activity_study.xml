@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/back"
-            android:layout_width="45dp"
-            android:layout_height="54dp"
+            android:layout_width="36dp"
+            android:layout_height="40dp"
             android:layout_margin="10dp"
             android:background="@drawable/selector_back" />
 
@@ -38,8 +38,8 @@
 
         <ImageView
             android:id="@+id/replay"
-            android:layout_width="45dp"
-            android:layout_height="54dp"
+            android:layout_width="36dp"
+            android:layout_height="40dp"
             android:layout_margin="10dp"
             android:background="@drawable/repeat_onclick" />
     </LinearLayout>
@@ -76,20 +76,20 @@
                     android:id="@+id/image_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingBottom="18dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="8dp" />
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="6dp"
+                    android:paddingTop="3dp" />
 
                 <LinearLayout
                     android:id="@+id/layout_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:paddingBottom="18dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="8dp" >
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="6dp"
+                    android:paddingTop="3dp" >
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -229,8 +229,8 @@
 
                 <ImageView
                     android:id="@+id/rightarrow"
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_marginRight="20dp"
                     android:background="@drawable/rightarrow_onclick"
                     android:visibility="gone" />

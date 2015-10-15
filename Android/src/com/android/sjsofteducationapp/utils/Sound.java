@@ -16,7 +16,7 @@ public class Sound {
 
 	private static SoundPool soundPool;
 	private static MusicBackground mService;
-	private static int[] soundRes = new int[] { R.raw.pop, R.raw.sonic, R.raw.cartoon_slide_whistle_ascend_version_2,
+	private static int[] soundRes = new int[] { R.raw.sonic, R.raw.pop, R.raw.cartoon_slide_whistle_ascend_version_2,
 			R.raw.comedy_pop_finger_in_mouth_001, R.raw.ring3 };
 	public static int SOUND_ITEM_ONCLICK;
 	public static int SOUND_BUTTON_ONCLICK;
