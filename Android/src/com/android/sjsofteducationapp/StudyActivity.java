@@ -6,23 +6,10 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Random;
 
-import com.android.sjsofteducationapp.database.EducationDBControler;
-import com.android.sjsofteducationapp.model.Home;
-import com.android.sjsofteducationapp.model.ImageDrag;
-import com.android.sjsofteducationapp.utils.GetDataFromDB;
-import com.android.sjsofteducationapp.utils.SPUtil;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
-import com.meg7.widget.SvgImageView;
-import com.plattysoft.leonids.ParticleSystem;
-
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
@@ -34,6 +21,8 @@ import android.os.Environment;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,8 +35,21 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.sjsofteducationapp.database.EducationDBControler;
+import com.android.sjsofteducationapp.model.Home;
+import com.android.sjsofteducationapp.model.ImageDrag;
+import com.android.sjsofteducationapp.utils.GetDataFromDB;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.meg7.widget.SvgImageView;
+import com.plattysoft.leonids.ParticleSystem;
+
 public class StudyActivity extends Activity implements OnClickListener {
-	private LinearLayout mainLayout, layoutContent;
+	private LinearLayout layoutContent;
 	private FrameLayout frameContent;
 	private ProgressBar progressLoadImage;
 	private SvgImageView image1, image2, image3, image4;
@@ -64,20 +66,19 @@ public class StudyActivity extends Activity implements OnClickListener {
 	private MediaPlayer mpOnClick;
 	private TextToSpeech textToSpeech;
 	private String textSpeech, bg_image;
-	private int width, height, padding, marginTop, marginLeft, iWidth, iHeight;
 	//
 	private EducationDBControler db;
 	Home home;
 	private ArrayList<Home> data;
 	String title;
 	int position = 0;
-	SPUtil sp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_study);
 
 		Handler handler = new Handler();
@@ -90,10 +91,6 @@ public class StudyActivity extends Activity implements OnClickListener {
 				GetDataFromDB gdfdb = new GetDataFromDB(getApplicationContext());
 				data = gdfdb.getDataFromDB(title.toLowerCase());
 				position = intent.getIntExtra("POSITION", 0);
-				
-				sp = new SPUtil(StudyActivity.this);
-				sp.set("POS", position);
-				
 				bg_image = intent.getStringExtra("HOME_BG");
 				home = data.get(position);
 				if (home == null) {
@@ -101,15 +98,16 @@ public class StudyActivity extends Activity implements OnClickListener {
 				}
 
 				textSpeech = home.getTitle();
-				textToSpeech = new TextToSpeech(StudyActivity.this, new OnInitListener() {
+				textToSpeech = new TextToSpeech(StudyActivity.this,
+						new OnInitListener() {
 
-					@Override
-					public void onInit(int status) {
-						if (status != TextToSpeech.ERROR) {
-							textToSpeech.setLanguage(Locale.ENGLISH);
-						}
-					}
-				});
+							@Override
+							public void onInit(int status) {
+								if (status != TextToSpeech.ERROR) {
+									textToSpeech.setLanguage(Locale.ENGLISH);
+								}
+							}
+						});
 				file = loadFile(home.getContent_image());
 				if (file == null) {
 					finish();
@@ -119,19 +117,18 @@ public class StudyActivity extends Activity implements OnClickListener {
 				initView();
 				loadImage();
 				db = EducationDBControler.getInstance(StudyActivity.this);
-
 			}
 		});
+
 	}
 
 	@Override
 	protected void onPause() {
-//		textToSpeech.stop();
+		textToSpeech.stop();
 		super.onPause();
 	}
 
 	private void initView() {
-		mainLayout = (LinearLayout) findViewById(R.id.main_layout);
 		frameContent = (FrameLayout) findViewById(R.id.frame_content);
 		progressLoadImage = (ProgressBar) findViewById(R.id.progress_load_image);
 		layoutContent = (LinearLayout) findViewById(R.id.layout_content);
@@ -153,7 +150,8 @@ public class StudyActivity extends Activity implements OnClickListener {
 		next.setOnClickListener(this);
 
 		try {
-			Typeface type = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/brlnsb.ttf");
+			Typeface type = Typeface.createFromAsset(getApplicationContext()
+					.getAssets(), "fonts/brlnsb.ttf");
 			tvTitle.setTypeface(type);
 			tvTitle.setText(textSpeech);
 		} catch (Exception e) {
@@ -170,30 +168,25 @@ public class StudyActivity extends Activity implements OnClickListener {
 	}
 
 	private void loadImage() {
-		Glide.with(StudyActivity.this).load(file).into(new GlideDrawableImageViewTarget(imageContent) {
-			@Override
-			public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
-				super.onResourceReady(drawable, anim);
-				new LoadContent();
-			}
+		Glide.with(StudyActivity.this).load(file)
+				.into(new GlideDrawableImageViewTarget(imageContent) {
+					@Override
+					public void onResourceReady(GlideDrawable drawable,
+							GlideAnimation anim) {
+						super.onResourceReady(drawable, anim);
+						new LoadContent();
+					}
 
-			@Override
-			public void onLoadFailed(Exception e, Drawable errorDrawable) {
-				super.onLoadFailed(e, errorDrawable);
-			}
-		});
+					@Override
+					public void onLoadFailed(Exception e, Drawable errorDrawable) {
+						super.onLoadFailed(e, errorDrawable);
+					}
+				});
 	}
 
 	// tao array svg
 	private void createArraySvg() {
 		idRawSvgs = new ArrayList<Integer>();
-		idRawSvgs.add(R.raw.shape_5);
-		idRawSvgs.add(R.raw.shape_circle_2);
-		idRawSvgs.add(R.raw.shape_flower);
-		idRawSvgs.add(R.raw.shape_heart);
-		idRawSvgs.add(R.raw.shape_star);
-		idRawSvgs.add(R.raw.shape_star_2);
-		idRawSvgs.add(R.raw.shape_star_3);
 		idRawSvgs.add(R.raw.shape1);
 		idRawSvgs.add(R.raw.shape2);
 		idRawSvgs.add(R.raw.shape3);
@@ -204,33 +197,13 @@ public class StudyActivity extends Activity implements OnClickListener {
 		idRawSvgs.add(R.raw.shape8);
 		idRawSvgs.add(R.raw.shape9);
 		idRawSvgs.add(R.raw.shape10);
+		idRawSvgs.add(R.raw.shape11);
+		idRawSvgs.add(R.raw.shape12);
 		idRawSvgs.add(R.raw.shape13);
+		idRawSvgs.add(R.raw.shape14);
+		idRawSvgs.add(R.raw.shape15);
 		idRawSvgs.add(R.raw.shape17);
 		idRawSvgs.add(R.raw.shape18);
-		idRawSvgs.add(R.raw.shape19);
-		idRawSvgs.add(R.raw.shape22);
-		idRawSvgs.add(R.raw.bich);
-		idRawSvgs.add(R.raw.bong);
-		idRawSvgs.add(R.raw.ca);
-		idRawSvgs.add(R.raw.chai);
-		idRawSvgs.add(R.raw.co);
-		idRawSvgs.add(R.raw.dau);
-		idRawSvgs.add(R.raw.gau);
-		idRawSvgs.add(R.raw.elip);
-		idRawSvgs.add(R.raw.go);
-		idRawSvgs.add(R.raw.kinh);
-		idRawSvgs.add(R.raw.la);
-		idRawSvgs.add(R.raw.loa);
-		idRawSvgs.add(R.raw.ly);
-		idRawSvgs.add(R.raw.qua);
-		idRawSvgs.add(R.raw.ro);
-		idRawSvgs.add(R.raw.sao);
-		idRawSvgs.add(R.raw.sen);
-		idRawSvgs.add(R.raw.tep);
-		idRawSvgs.add(R.raw.thong);
-		idRawSvgs.add(R.raw.tivi);
-		idRawSvgs.add(R.raw.tru);
-		idRawSvgs.add(R.raw.xo);
 		Collections.shuffle(idRawSvgs, new Random(seed));
 	}
 
@@ -255,88 +228,121 @@ public class StudyActivity extends Activity implements OnClickListener {
 	// khoi tao view
 	private void createView() {
 		imageDrags = new ArrayList<ImageDrag>();
-		imageDrags.add(new ImageDrag(arrImage.get(0), imageDrag1, bitmap1, idRawSvgs.get(0), 0));
-		imageDrags.add(new ImageDrag(arrImage.get(1), imageDrag2, bitmap2, idRawSvgs.get(1), 1));
-		imageDrags.add(new ImageDrag(arrImage.get(2), imageDrag3, bitmap3, idRawSvgs.get(2), 2));
-		imageDrags.add(new ImageDrag(arrImage.get(3), imageDrag4, bitmap4, idRawSvgs.get(3), 3));
+		imageDrags.add(new ImageDrag(arrImage.get(0), imageDrag1, bitmap1,
+				idRawSvgs.get(0), 0));
+		imageDrags.add(new ImageDrag(arrImage.get(1), imageDrag2, bitmap2,
+				idRawSvgs.get(1), 1));
+		imageDrags.add(new ImageDrag(arrImage.get(2), imageDrag3, bitmap3,
+				idRawSvgs.get(2), 2));
+		imageDrags.add(new ImageDrag(arrImage.get(3), imageDrag4, bitmap4,
+				idRawSvgs.get(3), 3));
 		for (int i = 0; i < imageDrags.size(); i++) {
 			final int p = i;
 			final ImageDrag imageDrag = imageDrags.get(p);
 			imageDrag.getImageView().setImageBitmap(imageDrag.getBitmap());
-			imageDrag.getImageView().setSvgRaw(imageDrags.get(p).getIdRawDrag());
-			imageDrag.getDragImageView().setSvgRaw(imageDrags.get(p).getIdRawDrag());
+			imageDrag.getImageView()
+					.setSvgRaw(imageDrags.get(p).getIdRawDrag());
+			imageDrag.getDragImageView().setSvgRaw(
+					imageDrags.get(p).getIdRawDrag());
 			imageDrag.getDragImageView().invalidate();
-			imageDrag.getImageView().setOnTouchListener(new View.OnTouchListener() {
-				@Override
-				public boolean onTouch(View v, MotionEvent event) {
-					if (event.getAction() == MotionEvent.ACTION_DOWN) {
-						startMussicOnclick(R.raw.comedy_pop_finger_in_mouth_001);
-						// ringTouch.start();
-						ClipData data = ClipData.newPlainText("", "");
-						View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
-						v.startDrag(data, shadowBuilder, imageDrags.get(p).getPosition(), 0);
-						return true;
-					} else {
-						return false;
-					}
-				}
-			});
-
-			imageDrag.getDragImageView().setOnDragListener(new View.OnDragListener() {
-				@Override
-				public boolean onDrag(View v, DragEvent event) {
-					switch (event.getAction()) {
-					case DragEvent.ACTION_DROP:
-						if (((Integer) event.getLocalState()) == imageDrag.getPosition()) {
-							imageDrag.getDragImageView().setVisibility(View.INVISIBLE);
-							imageDrag.getImageView().setVisibility(View.INVISIBLE);
-							imageDrag.setDrag(true);
-
-							if (checkSuccess()) {
-								sp.set("SUCCESS", true);
-								new ParticleSystem(StudyActivity.this, 100, R.drawable.ic_star_dropdown, 800)
-										.setSpeedRange(0.1f, 0.25f).oneShot(imageContent, 50);
-								new ParticleSystem(StudyActivity.this, 100, R.drawable.ic_star_dropdown, 800)
-										.setSpeedRange(0.1f, 0.25f).oneShot(imageDrag1, 50);
-								new ParticleSystem(StudyActivity.this, 100, R.drawable.ic_star_dropdown, 800)
-										.setSpeedRange(0.1f, 0.25f).oneShot(imageDrag2, 50);
-								new ParticleSystem(StudyActivity.this, 100, R.drawable.ic_star_dropdown, 800)
-										.setSpeedRange(0.1f, 0.25f).oneShot(imageDrag3, 50);
-								new ParticleSystem(StudyActivity.this, 100, R.drawable.ic_star_dropdown, 800)
-										.setSpeedRange(0.1f, 0.25f).oneShot(imageDrag4, 50);
-								if (mpOnClick != null)
-									if (mpOnClick.isPlaying())
-										mpOnClick.stop();
-								textToSpeech.speak(textSpeech, TextToSpeech.QUEUE_FLUSH, null);
-								YoYo.with(Techniques.DropOut).playOn(tvTitle);
-								tvTitle.setVisibility(View.VISIBLE);
-								replay.setVisibility(View.VISIBLE);
-
-								image1.setVisibility(View.GONE);
-								image2.setVisibility(View.GONE);
-								image3.setVisibility(View.GONE);
-								image4.setVisibility(View.GONE);
-
-								if (position < data.size() - 1) {
-									YoYo.with(Techniques.BounceIn).playOn(next);
-									next.setVisibility(View.VISIBLE);
-								}
-
-								db.setSuccess(home.getId());
+			imageDrag.getImageView().setOnTouchListener(
+					new View.OnTouchListener() {
+						@Override
+						public boolean onTouch(View v, MotionEvent event) {
+							if (event.getAction() == MotionEvent.ACTION_DOWN) {
+								startMussicOnclick(R.raw.comedy_pop_finger_in_mouth_001);
+								// ringTouch.start();
+								ClipData data = ClipData.newPlainText("", "");
+								View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
+										v);
+								v.startDrag(data, shadowBuilder, imageDrags
+										.get(p).getPosition(), 0);
+								return true;
 							} else {
-								new ParticleSystem(StudyActivity.this, 100, R.drawable.ic_star_dropdown, 800)
-										.setSpeedRange(0.1f, 0.25f).oneShot(v, 50);
-								// ringSuccess.start();
-								startMussicOnclick(R.raw.cartoon_slide_whistle_ascend_version_2);
+								return false;
 							}
-						} else {
-							YoYo.with(Techniques.Swing).playOn(v);
 						}
-						break;
-					}
-					return true;
-				}
-			});
+					});
+
+			imageDrag.getDragImageView().setOnDragListener(
+					new View.OnDragListener() {
+						@Override
+						public boolean onDrag(View v, DragEvent event) {
+							switch (event.getAction()) {
+							case DragEvent.ACTION_DROP:
+								if (((Integer) event.getLocalState()) == imageDrag
+										.getPosition()) {
+									imageDrag.getDragImageView().setVisibility(
+											View.INVISIBLE);
+									imageDrag.getImageView().setVisibility(
+											View.INVISIBLE);
+									imageDrag.setDrag(true);
+
+									if (checkSuccess()) {
+										new ParticleSystem(StudyActivity.this,
+												100,
+												R.drawable.ic_star_dropdown,
+												800).setSpeedRange(0.1f, 0.25f)
+												.oneShot(imageContent, 50);
+										new ParticleSystem(StudyActivity.this,
+												100,
+												R.drawable.ic_star_dropdown,
+												800).setSpeedRange(0.1f, 0.25f)
+												.oneShot(imageDrag1, 50);
+										new ParticleSystem(StudyActivity.this,
+												100,
+												R.drawable.ic_star_dropdown,
+												800).setSpeedRange(0.1f, 0.25f)
+												.oneShot(imageDrag2, 50);
+										new ParticleSystem(StudyActivity.this,
+												100,
+												R.drawable.ic_star_dropdown,
+												800).setSpeedRange(0.1f, 0.25f)
+												.oneShot(imageDrag3, 50);
+										new ParticleSystem(StudyActivity.this,
+												100,
+												R.drawable.ic_star_dropdown,
+												800).setSpeedRange(0.1f, 0.25f)
+												.oneShot(imageDrag4, 50);
+										if (mpOnClick != null)
+											if (mpOnClick.isPlaying())
+												mpOnClick.stop();
+										textToSpeech.speak(textSpeech,
+												TextToSpeech.QUEUE_FLUSH, null);
+										YoYo.with(Techniques.DropOut).playOn(
+												tvTitle);
+										tvTitle.setVisibility(View.VISIBLE);
+										replay.setVisibility(View.VISIBLE);
+
+										image1.setVisibility(View.GONE);
+										image2.setVisibility(View.GONE);
+										image3.setVisibility(View.GONE);
+										image4.setVisibility(View.GONE);
+
+										if (position < data.size() - 1) {
+											YoYo.with(Techniques.BounceIn)
+													.playOn(next);
+											next.setVisibility(View.VISIBLE);
+										}
+
+										db.setSuccess(home.getId());
+									} else {
+										new ParticleSystem(StudyActivity.this,
+												100,
+												R.drawable.ic_star_dropdown,
+												800).setSpeedRange(0.1f, 0.25f)
+												.oneShot(v, 50);
+										// ringSuccess.start();
+										startMussicOnclick(R.raw.cartoon_slide_whistle_ascend_version_2);
+									}
+								} else {
+									YoYo.with(Techniques.Swing).playOn(v);
+								}
+								break;
+							}
+							return true;
+						}
+					});
 		}
 	}
 
@@ -360,13 +366,16 @@ public class StudyActivity extends Activity implements OnClickListener {
 		return file;
 	}
 
-	private Bitmap createImage(Bitmap bitmap, int startX, int startY, int width, int height) {
-		Bitmap newBitmap = Bitmap.createBitmap(bitmap, startX, startY, width, height);
+	private Bitmap createImage(Bitmap bitmap, int startX, int startY,
+			int width, int height) {
+		Bitmap newBitmap = Bitmap.createBitmap(bitmap, startX, startY, width,
+				height);
 		return newBitmap;
 	}
 
 	public static Bitmap getBitmapFromView(View view) {
-		Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+		Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(),
+				view.getHeight(), Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(returnedBitmap);
 		view.draw(canvas);
 		return returnedBitmap;
@@ -399,7 +408,6 @@ public class StudyActivity extends Activity implements OnClickListener {
 	}
 
 	private class LoadContent extends AsyncTask<Void, Void, Void> {
-		LinearLayout.LayoutParams params1, params2, params3, params4, params5;
 		File file;
 
 		public LoadContent() {
@@ -408,67 +416,39 @@ public class StudyActivity extends Activity implements OnClickListener {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			String fileImage = Environment.getExternalStorageDirectory() + "/Sjsoft/Home/Content/" + bg_image;
+			String fileImage = Environment.getExternalStorageDirectory()
+					+ "/Sjsoft/Home/Content/" + bg_image;
 			file = new File(fileImage);
 
 			createArraySvg();
 			createArrayImage();
 			createArrayImageDrag();
 
-			width = layoutContent.getWidth();
-			height = layoutContent.getHeight();
-			padding = 16;
-
-			marginTop = 20;
-			marginLeft = 40;
-
-			iWidth = height / 2 - (marginTop * 2);
-			iHeight = height / 2 - ((marginTop * 2) + imageContent.getPaddingBottom());
-
-			bitmap1 = createImage(getBitmapFromView(imageContent), (width / 2) - iWidth - marginLeft,
-					marginTop + (padding / 2), iWidth, iHeight);
-			bitmap2 = createImage(getBitmapFromView(imageContent), (width / 2) + marginLeft, marginTop + (padding / 2),
-					iWidth, iHeight);
-			bitmap3 = createImage(getBitmapFromView(imageContent), (width / 2) - iWidth - marginLeft,
-					(height / 2) + marginTop + (padding / 2), iWidth, iHeight);
-			bitmap4 = createImage(getBitmapFromView(imageContent), (width / 2) + marginLeft,
-					(height / 2) + marginTop + (padding / 2), iWidth, iHeight);
-
-			params5 = new LinearLayout.LayoutParams(iWidth, iHeight);
-			params5.topMargin = marginTop;
-			params5.bottomMargin = marginTop;
-
-			params1 = new LinearLayout.LayoutParams(iWidth, iHeight);
-			params1.topMargin = marginTop + (padding / 2);
-			params1.leftMargin = (width / 2) - iWidth - marginLeft;
-
-			params3 = new LinearLayout.LayoutParams(iWidth, iHeight);
-			params3.topMargin = marginTop;
-			params3.leftMargin = (width / 2) - iWidth - marginLeft;
-
-			params2 = new LinearLayout.LayoutParams(iWidth, iHeight);
-			params2.topMargin = marginTop + (padding / 2);
-			params2.leftMargin = marginLeft * 2;
-
-			params4 = new LinearLayout.LayoutParams(iWidth, iHeight);
-			params4.topMargin = marginTop;
-			params4.leftMargin = marginLeft * 2;
+			Bitmap bitmap = getBitmapFromView(imageContent);
+			FrameLayout.LayoutParams layoutParams1 = (FrameLayout.LayoutParams) imageDrag1
+					.getLayoutParams();
+			int x1 = (int) imageDrag1.getX() + imageContent.getPaddingLeft();
+			int y1 = layoutContent.getPaddingTop();
+			bitmap1 = createImage(bitmap, x1, y1, imageDrag1.getWidth(),
+					imageDrag1.getHeight());
+			int x2 = (int) (x1 + imageDrag1.getWidth()
+					+ layoutParams1.rightMargin + imageDrag2.getX());
+			bitmap2 = createImage(bitmap, x2, layoutContent.getPaddingTop(),
+					imageDrag2.getWidth(), imageDrag2.getHeight());
+			FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) imageDrag3
+					.getLayoutParams();
+			int y3 = y1 + imageDrag1.getHeight() + layoutParams1.bottomMargin
+					+ layoutParams3.topMargin;
+			bitmap3 = createImage(bitmap, x1, y3, imageDrag3.getWidth(),
+					imageDrag3.getHeight());
+			bitmap4 = createImage(bitmap, x2, y3, imageDrag4.getWidth(),
+					imageDrag4.getHeight());
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			Glide.with(StudyActivity.this).load(file).into(bottom_image);
-			image1.setLayoutParams(params5);
-			image2.setLayoutParams(params5);
-			image3.setLayoutParams(params5);
-			image4.setLayoutParams(params5);
-			// //////////
-			imageDrag1.setLayoutParams(params1);
-			imageDrag3.setLayoutParams(params3);
-			imageDrag2.setLayoutParams(params2);
-			imageDrag4.setLayoutParams(params4);
-
 			frameContent.setVisibility(View.VISIBLE);
 			progressLoadImage.setVisibility(View.INVISIBLE);
 			createView();

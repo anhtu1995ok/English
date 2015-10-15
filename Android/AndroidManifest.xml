@@ -45,10 +45,6 @@
             android:screenOrientation="landscape" >
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:screenOrientation="landscape" >
-        </activity>
-        <activity
             android:name=".StudyActivity"
             android:screenOrientation="landscape" >
         </activity>

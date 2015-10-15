@@ -23,8 +23,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import it.sephiroth.android.library.widget.HListView;
 
-public class SubjectActivity extends MasterActivity
-		implements OnClickListener, it.sephiroth.android.library.widget.AdapterView.OnItemClickListener {
+public class SubjectActivity extends MasterActivity implements OnClickListener,
+		it.sephiroth.android.library.widget.AdapterView.OnItemClickListener {
 
 	private HListView listView;
 	private SubjectAdapter adapter;
@@ -32,7 +32,7 @@ public class SubjectActivity extends MasterActivity
 	private ImageView image, leftArrow, rightArrow, home;
 
 	private String title, bg_image;
-	SPUtil sp;
+	private GetDataFromDB gdfdb;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,8 @@ public class SubjectActivity extends MasterActivity
 		listView = (HListView) findViewById(R.id.listView);
 
 		image = (ImageView) findViewById(R.id.image);
-		String fileImage = Environment.getExternalStorageDirectory() + "/Sjsoft/Home/Content/" + bg_image;
+		String fileImage = Environment.getExternalStorageDirectory()
+				+ "/Sjsoft/Home/Content/" + bg_image;
 		File file = new File(fileImage);
 		if (file.exists()) {
 			Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
@@ -74,14 +75,15 @@ public class SubjectActivity extends MasterActivity
 
 		@Override
 		protected String doInBackground(String... params) {
-			GetDataFromDB gdfdb = new GetDataFromDB(getApplicationContext());
+			gdfdb = new GetDataFromDB(getApplicationContext());
 			data = gdfdb.getDataFromDB(title.toLowerCase());
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(String result) {
-			adapter = new SubjectAdapter(getApplicationContext(), R.layout.item_subject, data, title);
+			adapter = new SubjectAdapter(getApplicationContext(),
+					R.layout.item_subject, data, title);
 			listView.setAdapter(adapter);
 			listView.setSelector(R.drawable.listview_onclick);
 			super.onPostExecute(result);
@@ -91,15 +93,12 @@ public class SubjectActivity extends MasterActivity
 
 	@Override
 	protected void onResume() {
+		if (adapter != null)
+			if (gdfdb != null) {
+				data = gdfdb.getDataFromDB(title.toLowerCase());
+				this.adapter.notifyDataSetChanged(data);
+			}
 		super.onResume();
-		sp = new SPUtil(SubjectActivity.this);
-
-		boolean success = sp.get("SUCCESS", false);
-		if (success) {
-			int pos = sp.get("POS", 0);
-			listView.smoothScrollToPosition(pos);
-			sp.set("SUCCESS", false);
-		}
 	}
 
 	@Override
@@ -128,10 +127,12 @@ public class SubjectActivity extends MasterActivity
 	}
 
 	@Override
-	public void onItemClick(it.sephiroth.android.library.widget.AdapterView<?> parent, View view, int position,
-			long id) {
+	public void onItemClick(
+			it.sephiroth.android.library.widget.AdapterView<?> parent,
+			View view, int position, long id) {
 		Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);
-		view.startAnimation(AnimationUtils.loadAnimation(SubjectActivity.this, R.anim.abc_fade_in));
+		view.startAnimation(AnimationUtils.loadAnimation(SubjectActivity.this,
+				R.anim.abc_fade_in));
 		// Home home = (Home) parent.getAdapter().getItem(position);
 		Intent intent = new Intent(SubjectActivity.this, StudyActivity.class);
 		// intent.putExtra("SUBJECT", home);

@@ -37,7 +37,7 @@ public class SubjectAdapter extends ArrayAdapter<Home> {
 	}
 
 	public void notifyDataSetChanged(ArrayList<Home> list) {
-		arrayList = list;
+		this.arrayList = list;
 		super.notifyDataSetChanged();
 	}
 
