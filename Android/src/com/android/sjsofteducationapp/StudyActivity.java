@@ -196,7 +196,6 @@ public class StudyActivity extends Activity implements OnClickListener {
 		idRawSvgs.add(R.raw.shape15);
 		idRawSvgs.add(R.raw.shape17);
 		idRawSvgs.add(R.raw.shape18);
-		idRawSvgs.add(R.raw.shape19);
 		idRawSvgs.add(R.raw.shape20);
 		idRawSvgs.add(R.raw.shape21);
 		idRawSvgs.add(R.raw.shape22);
