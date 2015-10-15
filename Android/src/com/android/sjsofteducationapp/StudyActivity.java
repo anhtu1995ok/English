@@ -77,8 +77,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_study);
 
 		Handler handler = new Handler();
@@ -98,16 +97,15 @@ public class StudyActivity extends Activity implements OnClickListener {
 				}
 
 				textSpeech = home.getTitle();
-				textToSpeech = new TextToSpeech(StudyActivity.this,
-						new OnInitListener() {
+				textToSpeech = new TextToSpeech(StudyActivity.this, new OnInitListener() {
 
-							@Override
-							public void onInit(int status) {
-								if (status != TextToSpeech.ERROR) {
-									textToSpeech.setLanguage(Locale.ENGLISH);
-								}
-							}
-						});
+					@Override
+					public void onInit(int status) {
+						if (status != TextToSpeech.ERROR) {
+							textToSpeech.setLanguage(Locale.ENGLISH);
+						}
+					}
+				});
 				file = loadFile(home.getContent_image());
 				if (file == null) {
 					finish();
@@ -150,8 +148,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 		next.setOnClickListener(this);
 
 		try {
-			Typeface type = Typeface.createFromAsset(getApplicationContext()
-					.getAssets(), "fonts/brlnsb.ttf");
+			Typeface type = Typeface.createFromAsset(getApplicationContext().getAssets(), "fonts/brlnsb.ttf");
 			tvTitle.setTypeface(type);
 			tvTitle.setText(textSpeech);
 		} catch (Exception e) {
@@ -168,20 +165,18 @@ public class StudyActivity extends Activity implements OnClickListener {
 	}
 
 	private void loadImage() {
-		Glide.with(StudyActivity.this).load(file)
-				.into(new GlideDrawableImageViewTarget(imageContent) {
-					@Override
-					public void onResourceReady(GlideDrawable drawable,
-							GlideAnimation anim) {
-						super.onResourceReady(drawable, anim);
-						new LoadContent();
-					}
+		Glide.with(StudyActivity.this).load(file).into(new GlideDrawableImageViewTarget(imageContent) {
+			@Override
+			public void onResourceReady(GlideDrawable drawable, GlideAnimation anim) {
+				super.onResourceReady(drawable, anim);
+				new LoadContent();
+			}
 
-					@Override
-					public void onLoadFailed(Exception e, Drawable errorDrawable) {
-						super.onLoadFailed(e, errorDrawable);
-					}
-				});
+			@Override
+			public void onLoadFailed(Exception e, Drawable errorDrawable) {
+				super.onLoadFailed(e, errorDrawable);
+			}
+		});
 	}
 
 	// tao array svg
@@ -191,9 +186,6 @@ public class StudyActivity extends Activity implements OnClickListener {
 		idRawSvgs.add(R.raw.shape2);
 		idRawSvgs.add(R.raw.shape3);
 		idRawSvgs.add(R.raw.shape4);
-		idRawSvgs.add(R.raw.shape5);
-		idRawSvgs.add(R.raw.shape6);
-		idRawSvgs.add(R.raw.shape7);
 		idRawSvgs.add(R.raw.shape8);
 		idRawSvgs.add(R.raw.shape9);
 		idRawSvgs.add(R.raw.shape10);
@@ -204,6 +196,29 @@ public class StudyActivity extends Activity implements OnClickListener {
 		idRawSvgs.add(R.raw.shape15);
 		idRawSvgs.add(R.raw.shape17);
 		idRawSvgs.add(R.raw.shape18);
+		idRawSvgs.add(R.raw.shape19);
+		idRawSvgs.add(R.raw.shape20);
+		idRawSvgs.add(R.raw.shape21);
+		idRawSvgs.add(R.raw.shape22);
+		idRawSvgs.add(R.raw.shape23);
+		idRawSvgs.add(R.raw.shape24);
+		idRawSvgs.add(R.raw.shape25);
+		idRawSvgs.add(R.raw.shape26);
+		idRawSvgs.add(R.raw.shape27);
+		idRawSvgs.add(R.raw.shape28);
+		idRawSvgs.add(R.raw.shape29);
+		idRawSvgs.add(R.raw.shape30);
+		idRawSvgs.add(R.raw.shape31);
+		idRawSvgs.add(R.raw.shape32);
+		idRawSvgs.add(R.raw.shape33);
+		idRawSvgs.add(R.raw.shape34);
+		idRawSvgs.add(R.raw.shape35);
+		idRawSvgs.add(R.raw.shape36);
+		idRawSvgs.add(R.raw.shape37);
+		idRawSvgs.add(R.raw.shape38);
+		idRawSvgs.add(R.raw.shape39);
+		idRawSvgs.add(R.raw.shape40);
+
 		Collections.shuffle(idRawSvgs, new Random(seed));
 	}
 
@@ -228,121 +243,87 @@ public class StudyActivity extends Activity implements OnClickListener {
 	// khoi tao view
 	private void createView() {
 		imageDrags = new ArrayList<ImageDrag>();
-		imageDrags.add(new ImageDrag(arrImage.get(0), imageDrag1, bitmap1,
-				idRawSvgs.get(0), 0));
-		imageDrags.add(new ImageDrag(arrImage.get(1), imageDrag2, bitmap2,
-				idRawSvgs.get(1), 1));
-		imageDrags.add(new ImageDrag(arrImage.get(2), imageDrag3, bitmap3,
-				idRawSvgs.get(2), 2));
-		imageDrags.add(new ImageDrag(arrImage.get(3), imageDrag4, bitmap4,
-				idRawSvgs.get(3), 3));
+		imageDrags.add(new ImageDrag(arrImage.get(0), imageDrag1, bitmap1, idRawSvgs.get(0), 0));
+		imageDrags.add(new ImageDrag(arrImage.get(1), imageDrag2, bitmap2, idRawSvgs.get(1), 1));
+		imageDrags.add(new ImageDrag(arrImage.get(2), imageDrag3, bitmap3, idRawSvgs.get(2), 2));
+		imageDrags.add(new ImageDrag(arrImage.get(3), imageDrag4, bitmap4, idRawSvgs.get(3), 3));
 		for (int i = 0; i < imageDrags.size(); i++) {
 			final int p = i;
 			final ImageDrag imageDrag = imageDrags.get(p);
 			imageDrag.getImageView().setImageBitmap(imageDrag.getBitmap());
-			imageDrag.getImageView()
-					.setSvgRaw(imageDrags.get(p).getIdRawDrag());
-			imageDrag.getDragImageView().setSvgRaw(
-					imageDrags.get(p).getIdRawDrag());
+			imageDrag.getImageView().setSvgRaw(imageDrags.get(p).getIdRawDrag());
+			imageDrag.getDragImageView().setSvgRaw(imageDrags.get(p).getIdRawDrag());
 			imageDrag.getDragImageView().invalidate();
-			imageDrag.getImageView().setOnTouchListener(
-					new View.OnTouchListener() {
-						@Override
-						public boolean onTouch(View v, MotionEvent event) {
-							if (event.getAction() == MotionEvent.ACTION_DOWN) {
-								startMussicOnclick(R.raw.comedy_pop_finger_in_mouth_001);
-								// ringTouch.start();
-								ClipData data = ClipData.newPlainText("", "");
-								View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
-										v);
-								v.startDrag(data, shadowBuilder, imageDrags
-										.get(p).getPosition(), 0);
-								return true;
-							} else {
-								return false;
-							}
-						}
-					});
+			imageDrag.getImageView().setOnTouchListener(new View.OnTouchListener() {
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					if (event.getAction() == MotionEvent.ACTION_DOWN) {
+						startMussicOnclick(R.raw.comedy_pop_finger_in_mouth_001);
+						// ringTouch.start();
+						ClipData data = ClipData.newPlainText("", "");
+						View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+						v.startDrag(data, shadowBuilder, imageDrags.get(p).getPosition(), 0);
+						return true;
+					} else {
+						return false;
+					}
+				}
+			});
 
-			imageDrag.getDragImageView().setOnDragListener(
-					new View.OnDragListener() {
-						@Override
-						public boolean onDrag(View v, DragEvent event) {
-							switch (event.getAction()) {
-							case DragEvent.ACTION_DROP:
-								if (((Integer) event.getLocalState()) == imageDrag
-										.getPosition()) {
-									imageDrag.getDragImageView().setVisibility(
-											View.INVISIBLE);
-									imageDrag.getImageView().setVisibility(
-											View.INVISIBLE);
-									imageDrag.setDrag(true);
+			imageDrag.getDragImageView().setOnDragListener(new View.OnDragListener() {
+				@Override
+				public boolean onDrag(View v, DragEvent event) {
+					switch (event.getAction()) {
+					case DragEvent.ACTION_DROP:
+						if (((Integer) event.getLocalState()) == imageDrag.getPosition()) {
+							imageDrag.getDragImageView().setVisibility(View.INVISIBLE);
+							imageDrag.getImageView().setVisibility(View.INVISIBLE);
+							imageDrag.setDrag(true);
 
-									if (checkSuccess()) {
-										new ParticleSystem(StudyActivity.this,
-												100,
-												R.drawable.ic_star_dropdown,
-												800).setSpeedRange(0.1f, 0.25f)
-												.oneShot(imageContent, 50);
-										new ParticleSystem(StudyActivity.this,
-												100,
-												R.drawable.ic_star_dropdown,
-												800).setSpeedRange(0.1f, 0.25f)
-												.oneShot(imageDrag1, 50);
-										new ParticleSystem(StudyActivity.this,
-												100,
-												R.drawable.ic_star_dropdown,
-												800).setSpeedRange(0.1f, 0.25f)
-												.oneShot(imageDrag2, 50);
-										new ParticleSystem(StudyActivity.this,
-												100,
-												R.drawable.ic_star_dropdown,
-												800).setSpeedRange(0.1f, 0.25f)
-												.oneShot(imageDrag3, 50);
-										new ParticleSystem(StudyActivity.this,
-												100,
-												R.drawable.ic_star_dropdown,
-												800).setSpeedRange(0.1f, 0.25f)
-												.oneShot(imageDrag4, 50);
-										if (mpOnClick != null)
-											if (mpOnClick.isPlaying())
-												mpOnClick.stop();
-										textToSpeech.speak(textSpeech,
-												TextToSpeech.QUEUE_FLUSH, null);
-										YoYo.with(Techniques.DropOut).playOn(
-												tvTitle);
-										tvTitle.setVisibility(View.VISIBLE);
-										replay.setVisibility(View.VISIBLE);
+							if (checkSuccess()) {
+								new ParticleSystem(StudyActivity.this, 100, R.drawable.ic_star_dropdown, 800)
+										.setSpeedRange(0.1f, 0.25f).oneShot(imageContent, 50);
+								new ParticleSystem(StudyActivity.this, 100, R.drawable.ic_star_dropdown, 800)
+										.setSpeedRange(0.1f, 0.25f).oneShot(imageDrag1, 50);
+								new ParticleSystem(StudyActivity.this, 100, R.drawable.ic_star_dropdown, 800)
+										.setSpeedRange(0.1f, 0.25f).oneShot(imageDrag2, 50);
+								new ParticleSystem(StudyActivity.this, 100, R.drawable.ic_star_dropdown, 800)
+										.setSpeedRange(0.1f, 0.25f).oneShot(imageDrag3, 50);
+								new ParticleSystem(StudyActivity.this, 100, R.drawable.ic_star_dropdown, 800)
+										.setSpeedRange(0.1f, 0.25f).oneShot(imageDrag4, 50);
+								if (mpOnClick != null)
+									if (mpOnClick.isPlaying())
+										mpOnClick.stop();
+								textToSpeech.speak(textSpeech, TextToSpeech.QUEUE_FLUSH, null);
+								YoYo.with(Techniques.DropOut).playOn(tvTitle);
+								tvTitle.setVisibility(View.VISIBLE);
+								replay.setVisibility(View.VISIBLE);
 
-										image1.setVisibility(View.GONE);
-										image2.setVisibility(View.GONE);
-										image3.setVisibility(View.GONE);
-										image4.setVisibility(View.GONE);
+								image1.setVisibility(View.GONE);
+								image2.setVisibility(View.GONE);
+								image3.setVisibility(View.GONE);
+								image4.setVisibility(View.GONE);
 
-										if (position < data.size() - 1) {
-											YoYo.with(Techniques.BounceIn)
-													.playOn(next);
-											next.setVisibility(View.VISIBLE);
-										}
-
-										db.setSuccess(home.getId());
-									} else {
-										new ParticleSystem(StudyActivity.this,
-												100,
-												R.drawable.ic_star_dropdown,
-												800).setSpeedRange(0.1f, 0.25f)
-												.oneShot(v, 50);
-										// ringSuccess.start();
-										startMussicOnclick(R.raw.cartoon_slide_whistle_ascend_version_2);
-									}
-								} else {
-									YoYo.with(Techniques.Swing).playOn(v);
+								if (position < data.size() - 1) {
+									YoYo.with(Techniques.BounceIn).playOn(next);
+									next.setVisibility(View.VISIBLE);
 								}
-								break;
+
+								db.setSuccess(home.getId());
+							} else {
+								new ParticleSystem(StudyActivity.this, 100, R.drawable.ic_star_dropdown, 800)
+										.setSpeedRange(0.1f, 0.25f).oneShot(v, 50);
+								// ringSuccess.start();
+								startMussicOnclick(R.raw.cartoon_slide_whistle_ascend_version_2);
 							}
-							return true;
+						} else {
+							YoYo.with(Techniques.Swing).playOn(v);
 						}
-					});
+						break;
+					}
+					return true;
+				}
+			});
 		}
 	}
 
@@ -366,16 +347,13 @@ public class StudyActivity extends Activity implements OnClickListener {
 		return file;
 	}
 
-	private Bitmap createImage(Bitmap bitmap, int startX, int startY,
-			int width, int height) {
-		Bitmap newBitmap = Bitmap.createBitmap(bitmap, startX, startY, width,
-				height);
+	private Bitmap createImage(Bitmap bitmap, int startX, int startY, int width, int height) {
+		Bitmap newBitmap = Bitmap.createBitmap(bitmap, startX, startY, width, height);
 		return newBitmap;
 	}
 
 	public static Bitmap getBitmapFromView(View view) {
-		Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(),
-				view.getHeight(), Bitmap.Config.ARGB_8888);
+		Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(returnedBitmap);
 		view.draw(canvas);
 		return returnedBitmap;
@@ -416,8 +394,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			String fileImage = Environment.getExternalStorageDirectory()
-					+ "/Sjsoft/Home/Content/" + bg_image;
+			String fileImage = Environment.getExternalStorageDirectory() + "/Sjsoft/Home/Content/" + bg_image;
 			file = new File(fileImage);
 
 			createArraySvg();
@@ -425,24 +402,17 @@ public class StudyActivity extends Activity implements OnClickListener {
 			createArrayImageDrag();
 
 			Bitmap bitmap = getBitmapFromView(imageContent);
-			FrameLayout.LayoutParams layoutParams1 = (FrameLayout.LayoutParams) imageDrag1
-					.getLayoutParams();
+			FrameLayout.LayoutParams layoutParams1 = (FrameLayout.LayoutParams) imageDrag1.getLayoutParams();
 			int x1 = (int) imageDrag1.getX() + imageContent.getPaddingLeft();
 			int y1 = layoutContent.getPaddingTop();
-			bitmap1 = createImage(bitmap, x1, y1, imageDrag1.getWidth(),
-					imageDrag1.getHeight());
-			int x2 = (int) (x1 + imageDrag1.getWidth()
-					+ layoutParams1.rightMargin + imageDrag2.getX());
-			bitmap2 = createImage(bitmap, x2, layoutContent.getPaddingTop(),
-					imageDrag2.getWidth(), imageDrag2.getHeight());
-			FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) imageDrag3
-					.getLayoutParams();
-			int y3 = y1 + imageDrag1.getHeight() + layoutParams1.bottomMargin
-					+ layoutParams3.topMargin;
-			bitmap3 = createImage(bitmap, x1, y3, imageDrag3.getWidth(),
-					imageDrag3.getHeight());
-			bitmap4 = createImage(bitmap, x2, y3, imageDrag4.getWidth(),
-					imageDrag4.getHeight());
+			bitmap1 = createImage(bitmap, x1, y1, imageDrag1.getWidth(), imageDrag1.getHeight());
+			int x2 = (int) (x1 + imageDrag1.getWidth() + layoutParams1.rightMargin + imageDrag2.getX());
+			bitmap2 = createImage(bitmap, x2, layoutContent.getPaddingTop(), imageDrag2.getWidth(),
+					imageDrag2.getHeight());
+			FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) imageDrag3.getLayoutParams();
+			int y3 = y1 + imageDrag1.getHeight() + layoutParams1.bottomMargin + layoutParams3.topMargin;
+			bitmap3 = createImage(bitmap, x1, y3, imageDrag3.getWidth(), imageDrag3.getHeight());
+			bitmap4 = createImage(bitmap, x2, y3, imageDrag4.getWidth(), imageDrag4.getHeight());
 			return null;
 		}
 
