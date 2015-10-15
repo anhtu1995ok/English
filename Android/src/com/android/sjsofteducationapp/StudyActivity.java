@@ -31,6 +31,7 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.util.Log;
@@ -61,7 +62,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 	private ArrayList<Integer> idRawSvgs;
 	private long seed;
 	private File file;
-	private MediaPlayer ringSuccess, ringError, ringTouch, mpOnClick;
+	private MediaPlayer mpOnClick;
 	private TextToSpeech textToSpeech;
 	private String textSpeech, bg_image;
 	private int width, height, padding, marginTop, marginLeft, iWidth, iHeight;
@@ -80,46 +81,45 @@ public class StudyActivity extends Activity implements OnClickListener {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_study);
 
-		Intent intent = getIntent();
-		// home = (Home) intent.getSerializableExtra("SUBJECT");
-		title = intent.getStringExtra("TITLE");
-		GetDataFromDB gdfdb = new GetDataFromDB(getApplicationContext());
-		data = gdfdb.getDataFromDB(title.toLowerCase());
-		position = intent.getIntExtra("POSITION", 0);
-		bg_image = intent.getStringExtra("HOME_BG");
+		Handler handler = new Handler();
+		handler.post(new Runnable() {
 
-		home = data.get(position);
+			@Override
+			public void run() {
+				Intent intent = getIntent();
+				title = intent.getStringExtra("TITLE");
+				GetDataFromDB gdfdb = new GetDataFromDB(getApplicationContext());
+				data = gdfdb.getDataFromDB(title.toLowerCase());
+				position = intent.getIntExtra("POSITION", 0);
+				bg_image = intent.getStringExtra("HOME_BG");
+				home = data.get(position);
+				if (home == null) {
+					finish();
+				}
 
-		if (home == null) {
-			finish();
-		}
-		textSpeech = home.getTitle();
+				textSpeech = home.getTitle();
+				textToSpeech = new TextToSpeech(StudyActivity.this,
+						new OnInitListener() {
 
-		textToSpeech = new TextToSpeech(StudyActivity.this,
-				new OnInitListener() {
+							@Override
+							public void onInit(int status) {
+								if (status != TextToSpeech.ERROR) {
+									textToSpeech.setLanguage(Locale.ENGLISH);
+								}
+							}
+						});
+				file = loadFile(home.getContent_image());
+				if (file == null) {
+					finish();
+				}
 
-					@Override
-					public void onInit(int status) {
-						if (status != TextToSpeech.ERROR) {
-							textToSpeech.setLanguage(Locale.ENGLISH);
-						}
-					}
-				});
-		file = loadFile(home.getContent_image());
-		if (file == null) {
-			finish();
-		}
+				seed = System.nanoTime();
+				initView();
+				loadImage();
+				db = EducationDBControler.getInstance(StudyActivity.this);
+			}
+		});
 
-		ringSuccess = MediaPlayer.create(StudyActivity.this,
-				R.raw.cartoon_slide_whistle_ascend_version_2);
-		ringTouch = MediaPlayer.create(StudyActivity.this,
-				R.raw.comedy_pop_finger_in_mouth_001);
-		ringError = MediaPlayer.create(StudyActivity.this, R.raw.ring3);
-		seed = System.nanoTime();
-
-		initView();
-
-		db = EducationDBControler.getInstance(StudyActivity.this);
 	}
 
 	@Override
@@ -145,6 +145,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 		imageDrag2 = (SvgImageView) findViewById(R.id.image_drag2);
 		imageDrag3 = (SvgImageView) findViewById(R.id.image_drag3);
 		imageDrag4 = (SvgImageView) findViewById(R.id.image_drag4);
+		bottom_image = (ImageView) findViewById(R.id.bottom_image);
 
 		next = (ImageView) findViewById(R.id.rightarrow);
 		next.setOnClickListener(this);
@@ -163,20 +164,8 @@ public class StudyActivity extends Activity implements OnClickListener {
 		frameContent.setVisibility(View.INVISIBLE);
 		progressLoadImage.setVisibility(View.VISIBLE);
 
-		loadImage();
 		back.setOnClickListener(this);
 		replay.setOnClickListener(this);
-
-		bottom_image = (ImageView) findViewById(R.id.bottom_image);
-
-		String fileImage = Environment.getExternalStorageDirectory()
-				+ "/Sjsoft/Home/Content/" + bg_image;
-		File file = new File(fileImage);
-		if (file.exists()) {
-			Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-			bottom_image.setImageBitmap(myBitmap);
-			Log.d("ToanNM", "bg_image : " + bg_image);
-		}
 	}
 
 	private void loadImage() {
@@ -448,6 +437,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 
 	private class LoadContent extends AsyncTask<Void, Void, Void> {
 		LinearLayout.LayoutParams params1, params2, params3, params4, params5;
+		File file;
 
 		public LoadContent() {
 			execute();
@@ -455,6 +445,10 @@ public class StudyActivity extends Activity implements OnClickListener {
 
 		@Override
 		protected Void doInBackground(Void... params) {
+			String fileImage = Environment.getExternalStorageDirectory()
+					+ "/Sjsoft/Home/Content/" + bg_image;
+			file = new File(fileImage);
+
 			createArraySvg();
 			createArrayImage();
 			createArrayImageDrag();
@@ -506,6 +500,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 
 		@Override
 		protected void onPostExecute(Void result) {
+			Glide.with(StudyActivity.this).load(file).into(bottom_image);
 			image1.setLayoutParams(params5);
 			image2.setLayoutParams(params5);
 			image3.setLayoutParams(params5);
