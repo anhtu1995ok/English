@@ -12,7 +12,6 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
 import android.content.Intent;
-import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -50,7 +49,6 @@ public class MainActivity extends MasterActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		// initData();
 		EducationDBControler dbController = EducationDBControler.getInstance(MainActivity.this);
 		try {
 			dbController.createDataBase();
@@ -58,14 +56,6 @@ public class MainActivity extends MasterActivity
 		} catch (IOException e) {
 		}
 		listView = (HListView) findViewById(R.id.listView);
-
-		// adapter = new Hori(getApplicationContext(), data);
-
-		// listView.setHasFixedSize(true);
-		// listView.setLayoutManager(
-		// new LinearLayoutManager(getApplicationContext(),
-		// LinearLayoutManager.HORIZONTAL, false));
-		// listView.setItemAnimator(new DefaultItemAnimator());
 		listView.setOnItemClickListener(this);
 		listView.setOnScrollListener(new OnScrollListener() {
 
@@ -100,14 +90,7 @@ public class MainActivity extends MasterActivity
 		buttonMedia = MediaPlayer.create(getApplicationContext(), R.raw.pop);
 
 	}
-
-	// private void initData() {
-	// data = new ArrayList<Home>();
-	// data.add(new Home(1, "ABC", R.drawable.ic_home_text));
-	// data.add(new Home(2, "School", R.drawable.ic_home_school));
-	// data.add(new Home(3, "Animals", R.drawable.ic_home_animal));
-	// data.add(new Home(4, "Number", R.drawable.ic_home_number));
-	// }
+	
 	private class initData extends AsyncTask<String, String, String> {
 
 		@Override
@@ -143,7 +126,6 @@ public class MainActivity extends MasterActivity
 		    width = metrics.widthPixels + marginInPX;
 		    lWidth = - metrics.widthPixels - marginInPX;
 		}
-
 
 		switch (v.getId()) {
 		case R.id.image:
@@ -204,7 +186,7 @@ public class MainActivity extends MasterActivity
 
 			@Override
 			public void onAnimationRepeat(Animation animation) {
-				// TODO Auto-generated method stub
+				
 			}
 
 			@Override

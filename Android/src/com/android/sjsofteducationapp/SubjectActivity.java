@@ -49,7 +49,6 @@ public class SubjectActivity extends MasterActivity
 		}
 
 		new initData().execute("");
-		// initData();
 
 		listView = (HListView) findViewById(R.id.listView);
 

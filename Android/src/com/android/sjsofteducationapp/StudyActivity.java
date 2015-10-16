@@ -10,7 +10,6 @@ import com.android.sjsofteducationapp.database.EducationDBControler;
 import com.android.sjsofteducationapp.model.Home;
 import com.android.sjsofteducationapp.model.ImageDrag;
 import com.android.sjsofteducationapp.utils.GetDataFromDB;
-import com.android.sjsofteducationapp.utils.Sound;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;

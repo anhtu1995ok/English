@@ -6,7 +6,6 @@ import java.util.TimerTask;
 import com.android.sjsofteducationapp.R;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Handler;
@@ -80,8 +79,6 @@ public class Sound {
 			ex.printStackTrace();
 		}
 	}
-
-	SharedPreferences mPrefs;
 
 	public static void playSound(int sound) {
 		soundPool.play(sound, 1.0f, 1.0f, 0, 0, 1.0f);
