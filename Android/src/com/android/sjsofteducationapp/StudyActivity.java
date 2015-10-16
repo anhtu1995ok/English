@@ -6,10 +6,23 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Random;
 
+import com.android.sjsofteducationapp.database.EducationDBControler;
+import com.android.sjsofteducationapp.model.Home;
+import com.android.sjsofteducationapp.model.ImageDrag;
+import com.android.sjsofteducationapp.utils.GetDataFromDB;
+import com.android.sjsofteducationapp.utils.Sound;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.meg7.widget.SvgImageView;
+import com.plattysoft.leonids.ParticleSystem;
+
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
@@ -21,7 +34,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
@@ -34,19 +46,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.android.sjsofteducationapp.database.EducationDBControler;
-import com.android.sjsofteducationapp.model.Home;
-import com.android.sjsofteducationapp.model.ImageDrag;
-import com.android.sjsofteducationapp.utils.GetDataFromDB;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
-import com.meg7.widget.SvgImageView;
-import com.plattysoft.leonids.ParticleSystem;
 
 public class StudyActivity extends Activity implements OnClickListener {
 	private LinearLayout layoutContent;
@@ -122,7 +121,11 @@ public class StudyActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onPause() {
-		textToSpeech.stop();
+		if (textToSpeech != null) {
+			if (textToSpeech.isSpeaking()) {
+				textToSpeech.stop();
+			}
+		}
 		super.onPause();
 	}
 
@@ -182,8 +185,6 @@ public class StudyActivity extends Activity implements OnClickListener {
 	// tao array svg
 	private void createArraySvg() {
 		idRawSvgs = new ArrayList<Integer>();
-		idRawSvgs.add(R.raw.shape1);
-		idRawSvgs.add(R.raw.shape2);
 		idRawSvgs.add(R.raw.shape3);
 		idRawSvgs.add(R.raw.shape4);
 		idRawSvgs.add(R.raw.shape8);
@@ -207,9 +208,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 		idRawSvgs.add(R.raw.shape28);
 		idRawSvgs.add(R.raw.shape29);
 		idRawSvgs.add(R.raw.shape30);
-		idRawSvgs.add(R.raw.shape31);
 		idRawSvgs.add(R.raw.shape32);
-		idRawSvgs.add(R.raw.shape33);
 		idRawSvgs.add(R.raw.shape34);
 		idRawSvgs.add(R.raw.shape35);
 		idRawSvgs.add(R.raw.shape36);
@@ -318,7 +317,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 						} else {
 							YoYo.with(Techniques.Swing).playOn(v);
 						}
-						break;
+						// break;
 					}
 					return true;
 				}
@@ -424,10 +423,10 @@ public class StudyActivity extends Activity implements OnClickListener {
 			super.onPostExecute(result);
 		}
 	}
-
+	Thread thread;
 	private void startMussicOnclick(int raw) {
 		final int r = raw;
-		Thread thread;
+		
 		if (mpOnClick != null)
 			if (mpOnClick.isPlaying())
 				mpOnClick.stop();
@@ -441,5 +440,13 @@ public class StudyActivity extends Activity implements OnClickListener {
 		};
 		thread = new Thread(runnable);
 		thread.start();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (mpOnClick != null)
+			if (mpOnClick.isPlaying())
+				mpOnClick.stop();
 	}
 }

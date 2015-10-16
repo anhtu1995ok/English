@@ -17,6 +17,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -126,12 +127,23 @@ public class MainActivity extends MasterActivity
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onClick(View v) {
-		Display display = getWindowManager().getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
-		int width = size.x;
+		int width = 0;
+		int lWidth = 0;
+		int marginInPX = 25;
+		if(android.os.Build.VERSION.SDK_INT <= 10) {
+		    Display display = getWindowManager().getDefaultDisplay();
+		    width = display.getWidth();
+		    lWidth = - width;
+		} else {
+		    DisplayMetrics metrics = new DisplayMetrics();
+		    getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		    width = metrics.widthPixels + marginInPX;
+		    lWidth = - metrics.widthPixels - marginInPX;
+		}
+
 
 		switch (v.getId()) {
 		case R.id.image:
@@ -139,7 +151,7 @@ public class MainActivity extends MasterActivity
 		case R.id.leftarrow:
 			Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);
 			YoYo.with(Techniques.BounceInLeft).playOn(leftArrow);
-			listView.smoothScrollBy(-width, 1000);
+			listView.smoothScrollBy(lWidth, 1000);
 			break;
 		case R.id.rightarrow:
 			Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);

@@ -71,7 +71,7 @@ public class Sound {
 		try {
 			// new Thread() {
 			// public void run() {
-			mService = new MusicBackground(mContext, musicRaw, true);
+			mService = new MusicBackground(mContext, musicRaw, false);
 			mService.execute("");
 			// }
 			//
