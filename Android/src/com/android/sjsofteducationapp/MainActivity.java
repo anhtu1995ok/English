@@ -150,7 +150,7 @@ public class MainActivity extends MasterActivity
 			break;
 		case R.id.moreapp:
 			YoYo.with(Techniques.Bounce).playOn(moreapp);
-			String url = "https://play.google.com/store/apps/developer?id=Studio+True+Kids";
+			String url = "https://play.google.com/store/apps/developer?id=TrueKids!";
 			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			// Intent intent = new Intent(Intent.ACTION_VIEW,
