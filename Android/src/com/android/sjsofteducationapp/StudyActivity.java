@@ -21,11 +21,13 @@ import com.plattysoft.leonids.ParticleSystem;
 
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,7 +35,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
-import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -81,6 +82,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 		Handler handler = new Handler();
 		handler.post(new Runnable() {
 
+			@SuppressWarnings("deprecation")
 			@Override
 			public void run() {
 				Intent intent = getIntent();
@@ -113,6 +115,16 @@ public class StudyActivity extends Activity implements OnClickListener {
 				initView();
 				loadImage();
 				db = EducationDBControler.getInstance(StudyActivity.this);
+
+				AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+				if (audioManager.isWiredHeadsetOn()) {
+					audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+							audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 2, 0);
+
+				} else {
+					audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+							audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+				}
 			}
 		});
 
@@ -422,10 +434,12 @@ public class StudyActivity extends Activity implements OnClickListener {
 			super.onPostExecute(result);
 		}
 	}
+
 	Thread thread;
+
 	private void startMussicOnclick(int raw) {
 		final int r = raw;
-		
+
 		if (mpOnClick != null)
 			if (mpOnClick.isPlaying())
 				mpOnClick.stop();
@@ -440,7 +454,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 		thread = new Thread(runnable);
 		thread.start();
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();

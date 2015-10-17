@@ -20,16 +20,21 @@ public class MusicBackground extends AsyncTask<String, String, String> {
 	private int raw;
 	boolean isLooping;
 
+	@SuppressWarnings("deprecation")
 	public void init() {
 		try {
 			player = MediaPlayer.create(context, raw);
 			player.setLooping(isLooping); // Set looping
-			// AudioManager audioManager = (AudioManager)
-			// context.getSystemService(Context.AUDIO_SERVICE);
-			// audioManager.setVolumeControlStream(AudioManager.STREAM_MUSIC);
-			// audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
-			// AudioManager.ADJUST_RAISE,
-			// AudioManager.FLAG_SHOW_UI);
+			AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+			if(audioManager.isWiredHeadsetOn()){
+				audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+						audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) /2, 0);
+				
+			} else {
+				audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+						audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+			}
+			
 			player.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			player.setVolume(10, 10);
 		} catch (Exception eee) {
