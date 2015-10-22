@@ -18,8 +18,6 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AnimationUtils;
@@ -38,14 +36,14 @@ public class SubjectActivity extends MasterActivity
 	private GetDataFromDB gdfdb;
 
 	private AdView mAdView;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_subject);
-		
+
 		mAdView = (AdView) findViewById(R.id.adView);
-		
+
 		Intent intent = getIntent();
 		title = intent.getStringExtra("HOME_TITLE");
 		bg_image = intent.getStringExtra("HOME_BG");
@@ -98,7 +96,7 @@ public class SubjectActivity extends MasterActivity
 	@Override
 	protected void onResume() {
 		AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+		mAdView.loadAd(adRequest);
 		if (adapter != null)
 			if (gdfdb != null) {
 				data = gdfdb.getDataFromDB(title.toLowerCase());
@@ -107,35 +105,34 @@ public class SubjectActivity extends MasterActivity
 		super.onResume();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onClick(View v) {
-		int width = 0;
-		int lWidth = 0;
-		int marginInPX = 25;
-		if(android.os.Build.VERSION.SDK_INT <= 10) {
-		    Display display = getWindowManager().getDefaultDisplay();
-		    width = display.getWidth();
-		    lWidth = - width;
-		} else {
-		    DisplayMetrics metrics = new DisplayMetrics();
-		    getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		    width = metrics.widthPixels + marginInPX;
-		    lWidth = - metrics.widthPixels - marginInPX;
-		}
-
+		// int width = 0;
+		// int lWidth = 0;
+		// int marginInPX = 25;
+		// if(android.os.Build.VERSION.SDK_INT <= 10) {
+		// Display display = getWindowManager().getDefaultDisplay();
+		// width = display.getWidth();
+		// lWidth = - width;
+		// } else {
+		// DisplayMetrics metrics = new DisplayMetrics();
+		// getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		// width = metrics.widthPixels + marginInPX;
+		// lWidth = - metrics.widthPixels - marginInPX;
+		// }
+		int mWidth = listView.getMeasuredWidth();
 		switch (v.getId()) {
 		case R.id.image:
 			break;
 		case R.id.leftarrow:
 			Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);
 			YoYo.with(Techniques.BounceInLeft).playOn(leftArrow);
-			listView.smoothScrollBy(lWidth, 1000);
+			listView.smoothScrollBy(-mWidth, 1000);
 			break;
 		case R.id.rightarrow:
 			Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);
 			YoYo.with(Techniques.BounceInRight).playOn(rightArrow);
-			listView.smoothScrollBy(width, 1000);
+			listView.smoothScrollBy(mWidth, 1000);
 			break;
 		case R.id.home:
 			Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);

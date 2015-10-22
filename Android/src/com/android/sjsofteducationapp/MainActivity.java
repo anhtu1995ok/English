@@ -1,27 +1,7 @@
 package com.android.sjsofteducationapp;
 
-import it.sephiroth.android.library.widget.AbsHListView;
-import it.sephiroth.android.library.widget.AbsHListView.OnScrollListener;
-import it.sephiroth.android.library.widget.HListView;
-
 import java.io.IOException;
 import java.util.ArrayList;
-
-import android.content.Intent;
-import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
 
 import com.android.sjsofteducationapp.adapter.HorizontalListViewAdapter;
 import com.android.sjsofteducationapp.database.EducationDBControler;
@@ -34,6 +14,22 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+
+import android.content.Intent;
+import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
+import it.sephiroth.android.library.widget.AbsHListView;
+import it.sephiroth.android.library.widget.AbsHListView.OnScrollListener;
+import it.sephiroth.android.library.widget.HListView;
 
 public class MainActivity extends MasterActivity implements OnClickListener,
 		it.sephiroth.android.library.widget.AdapterView.OnItemClickListener {
@@ -127,35 +123,35 @@ public class MainActivity extends MasterActivity implements OnClickListener,
 
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onClick(View v) {
-		int width = 0;
-		int lWidth = 0;
-		int marginInPX = 25;
-		if (android.os.Build.VERSION.SDK_INT <= 10) {
-			Display display = getWindowManager().getDefaultDisplay();
-			width = display.getWidth();
-			lWidth = -width;
-		} else {
-			DisplayMetrics metrics = new DisplayMetrics();
-			getWindowManager().getDefaultDisplay().getMetrics(metrics);
-			width = metrics.widthPixels + marginInPX;
-			lWidth = -metrics.widthPixels - marginInPX;
-		}
-
+//		int width = 0;
+//		int lWidth = 0;
+//		int marginInPX = 25;
+//		if (android.os.Build.VERSION.SDK_INT <= 10) {
+//			Display display = getWindowManager().getDefaultDisplay();
+//			width = display.getWidth();
+//			lWidth = -width;
+//		} else {
+//			DisplayMetrics metrics = new DisplayMetrics();
+//			getWindowManager().getDefaultDisplay().getMetrics(metrics);
+//			width = metrics.widthPixels + marginInPX;
+//			lWidth = -metrics.widthPixels - marginInPX;
+//		}
+		int mWidth = listView.getMeasuredWidth();
+		
 		switch (v.getId()) {
 		case R.id.image:
 			break;
 		case R.id.leftarrow:
 			Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);
 			YoYo.with(Techniques.BounceInLeft).playOn(leftArrow);
-			listView.smoothScrollBy(lWidth, 1000);
+			listView.smoothScrollBy(-mWidth, 1000);
 			break;
 		case R.id.rightarrow:
 			Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);
 			YoYo.with(Techniques.BounceInRight).playOn(rightArrow);
-			listView.smoothScrollBy(width, 1000);
+			listView.smoothScrollBy(mWidth, 1000);
 			break;
 		case R.id.share:
 			YoYo.with(Techniques.Bounce).playOn(share);
