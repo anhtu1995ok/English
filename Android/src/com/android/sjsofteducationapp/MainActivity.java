@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,11 +30,14 @@ import com.android.sjsofteducationapp.utils.GetDataFromDB;
 import com.android.sjsofteducationapp.utils.Sound;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 
-public class MainActivity extends MasterActivity
-		implements OnClickListener, it.sephiroth.android.library.widget.AdapterView.OnItemClickListener {
+public class MainActivity extends MasterActivity implements OnClickListener,
+		it.sephiroth.android.library.widget.AdapterView.OnItemClickListener {
+	InterstitialAd mInterstitialAd;
 
 	HListView listView;
 	HorizontalListViewAdapter adapter;
@@ -43,19 +47,24 @@ public class MainActivity extends MasterActivity
 
 	private Animation aFlicker;
 	private boolean flicker = false;
-	
+
 	MediaPlayer itemMedia, buttonMedia;
 	int visibleItem, totalItem;
-	
+
 	private AdView mAdView;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
+		mInterstitialAd = new InterstitialAd(this);
+		mInterstitialAd.setAdUnitId("ca-app-pub-8818569204723527/7877358093");
+
 		mAdView = (AdView) findViewById(R.id.adView);
 
-		EducationDBControler dbController = EducationDBControler.getInstance(MainActivity.this);
+		EducationDBControler dbController = EducationDBControler
+				.getInstance(MainActivity.this);
 		try {
 			dbController.createDataBase();
 			new initData().execute("");
@@ -71,7 +80,8 @@ public class MainActivity extends MasterActivity
 			}
 
 			@Override
-			public void onScroll(AbsHListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+			public void onScroll(AbsHListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
 				visibleItem = visibleItemCount;
 				totalItem = totalItemCount;
 
@@ -96,7 +106,7 @@ public class MainActivity extends MasterActivity
 		buttonMedia = MediaPlayer.create(getApplicationContext(), R.raw.pop);
 
 	}
-	
+
 	private class initData extends AsyncTask<String, String, String> {
 
 		@Override
@@ -108,7 +118,8 @@ public class MainActivity extends MasterActivity
 
 		@Override
 		protected void onPostExecute(String result) {
-			adapter = new HorizontalListViewAdapter(getApplicationContext(), R.layout.item_home, data);
+			adapter = new HorizontalListViewAdapter(getApplicationContext(),
+					R.layout.item_home, data);
 			listView.setAdapter(adapter);
 			listView.setSelector(R.drawable.listview_onclick);
 			super.onPostExecute(result);
@@ -122,15 +133,15 @@ public class MainActivity extends MasterActivity
 		int width = 0;
 		int lWidth = 0;
 		int marginInPX = 25;
-		if(android.os.Build.VERSION.SDK_INT <= 10) {
-		    Display display = getWindowManager().getDefaultDisplay();
-		    width = display.getWidth();
-		    lWidth = - width;
+		if (android.os.Build.VERSION.SDK_INT <= 10) {
+			Display display = getWindowManager().getDefaultDisplay();
+			width = display.getWidth();
+			lWidth = -width;
 		} else {
-		    DisplayMetrics metrics = new DisplayMetrics();
-		    getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		    width = metrics.widthPixels + marginInPX;
-		    lWidth = - metrics.widthPixels - marginInPX;
+			DisplayMetrics metrics = new DisplayMetrics();
+			getWindowManager().getDefaultDisplay().getMetrics(metrics);
+			width = metrics.widthPixels + marginInPX;
+			lWidth = -metrics.widthPixels - marginInPX;
 		}
 
 		switch (v.getId()) {
@@ -150,9 +161,11 @@ public class MainActivity extends MasterActivity
 			YoYo.with(Techniques.Bounce).playOn(share);
 			Intent sendIntent = new Intent();
 			sendIntent.setAction(Intent.ACTION_SEND);
-			sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getText(R.string.share_text));
+			sendIntent.putExtra(Intent.EXTRA_TEXT,
+					getResources().getText(R.string.share_text));
 			sendIntent.setType("text/plain");
-			startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.send_to)));
+			startActivity(Intent.createChooser(sendIntent, getResources()
+					.getText(R.string.send_to)));
 			break;
 		case R.id.moreapp:
 			YoYo.with(Techniques.Bounce).playOn(moreapp);
@@ -173,11 +186,11 @@ public class MainActivity extends MasterActivity
 		super.onDestroy();
 		mb.pause();
 	}
-	
+
 	@Override
 	protected void onResume() {
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+		AdRequest adRequest = new AdRequest.Builder().build();
+		mAdView.loadAd(adRequest);
 		super.onResume();
 	}
 
@@ -199,7 +212,7 @@ public class MainActivity extends MasterActivity
 
 			@Override
 			public void onAnimationRepeat(Animation animation) {
-				
+
 			}
 
 			@Override
@@ -210,18 +223,42 @@ public class MainActivity extends MasterActivity
 	}
 
 	@Override
-	public void onItemClick(it.sephiroth.android.library.widget.AdapterView<?> parent, View view, int position,
-			long id) {
+	public void onItemClick(
+			it.sephiroth.android.library.widget.AdapterView<?> parent,
+			View view, int position, long id) {
 		Sound.playSound(Sound.SOUND_BUTTON_ONCLICK);
-		String title = ((Home) parent.getAdapter().getItem(position)).getTitle();
-		String bg_image = ((Home) parent.getAdapter().getItem(position)).getBg_image();
+		String title = ((Home) parent.getAdapter().getItem(position))
+				.getTitle();
+		String bg_image = ((Home) parent.getAdapter().getItem(position))
+				.getBg_image();
 
-		view.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.abc_fade_in));
+		view.startAnimation(AnimationUtils.loadAnimation(
+				getApplicationContext(), R.anim.abc_fade_in));
 		// if (title.equalsIgnoreCase("Animals")) {
-		Intent intent = new Intent(getApplicationContext(), SubjectActivity.class);
+		Intent intent = new Intent(getApplicationContext(),
+				SubjectActivity.class);
 		intent.putExtra("HOME_TITLE", title);
 		intent.putExtra("HOME_BG", bg_image);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
+	}
+
+	@Override
+	public void onBackPressed() {
+		AdRequest adRequest = new AdRequest.Builder().build();
+		mInterstitialAd.loadAd(adRequest);
+		mInterstitialAd.show();
+		mInterstitialAd.setAdListener(new AdListener() {
+			@Override
+			public void onAdClosed() {
+				finish();
+			}
+			
+			@Override
+			public void onAdFailedToLoad(int errorCode) {
+				finish();
+				super.onAdFailedToLoad(errorCode);
+			}
+		});
 	}
 }
