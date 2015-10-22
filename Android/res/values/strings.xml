@@ -14,5 +14,5 @@
     <string name="check_update">Checking version...</string>
     <string name="unzip">Extracting data...</string>
     <string name="downloading">Downloading...</string>
-
+	<string name="banner_ad_unit_id">ca-app-pub-8818569204723527/2461449691</string>
 </resources>

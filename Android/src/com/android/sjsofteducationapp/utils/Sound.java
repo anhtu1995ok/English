@@ -19,7 +19,7 @@ public class Sound {
 			R.raw.comedy_pop_finger_in_mouth_001, R.raw.ring3 };
 	public static int SOUND_ITEM_ONCLICK;
 	public static int SOUND_BUTTON_ONCLICK;
-	public static int SOUND_RING_CUCCESS;
+	public static int SOUND_RING_SUCCESS;
 	public static int SOUND_RING_TOUCH;
 	public static int SOUND_RING_ERROR;
 
@@ -34,7 +34,7 @@ public class Sound {
 		soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 		SOUND_ITEM_ONCLICK = soundPool.load(mContext, soundRes[0], 1);
 		SOUND_BUTTON_ONCLICK = soundPool.load(mContext, soundRes[1], 1);
-		SOUND_RING_CUCCESS = soundPool.load(mContext, soundRes[2], 1);
+		SOUND_RING_SUCCESS = soundPool.load(mContext, soundRes[2], 1);
 		SOUND_RING_TOUCH = soundPool.load(mContext, soundRes[3], 1);
 		SOUND_RING_ERROR = soundPool.load(mContext, soundRes[4], 1);
 

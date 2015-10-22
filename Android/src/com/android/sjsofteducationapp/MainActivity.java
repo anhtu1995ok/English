@@ -1,15 +1,11 @@
 package com.android.sjsofteducationapp;
 
+import it.sephiroth.android.library.widget.AbsHListView;
+import it.sephiroth.android.library.widget.AbsHListView.OnScrollListener;
+import it.sephiroth.android.library.widget.HListView;
+
 import java.io.IOException;
 import java.util.ArrayList;
-
-import com.android.sjsofteducationapp.adapter.HorizontalListViewAdapter;
-import com.android.sjsofteducationapp.database.EducationDBControler;
-import com.android.sjsofteducationapp.model.Home;
-import com.android.sjsofteducationapp.utils.GetDataFromDB;
-import com.android.sjsofteducationapp.utils.Sound;
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -25,9 +21,16 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
-import it.sephiroth.android.library.widget.AbsHListView;
-import it.sephiroth.android.library.widget.AbsHListView.OnScrollListener;
-import it.sephiroth.android.library.widget.HListView;
+
+import com.android.sjsofteducationapp.adapter.HorizontalListViewAdapter;
+import com.android.sjsofteducationapp.database.EducationDBControler;
+import com.android.sjsofteducationapp.model.Home;
+import com.android.sjsofteducationapp.utils.GetDataFromDB;
+import com.android.sjsofteducationapp.utils.Sound;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 public class MainActivity extends MasterActivity
 		implements OnClickListener, it.sephiroth.android.library.widget.AdapterView.OnItemClickListener {
@@ -40,14 +43,17 @@ public class MainActivity extends MasterActivity
 
 	private Animation aFlicker;
 	private boolean flicker = false;
-
+	
 	MediaPlayer itemMedia, buttonMedia;
 	int visibleItem, totalItem;
-
+	
+	private AdView mAdView;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		mAdView = (AdView) findViewById(R.id.adView);
 
 		EducationDBControler dbController = EducationDBControler.getInstance(MainActivity.this);
 		try {
@@ -166,6 +172,13 @@ public class MainActivity extends MasterActivity
 	protected void onDestroy() {
 		super.onDestroy();
 		mb.pause();
+	}
+	
+	@Override
+	protected void onResume() {
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+		super.onResume();
 	}
 
 	private void startMoreappFlicker() {

@@ -6,19 +6,6 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Random;
 
-import com.android.sjsofteducationapp.database.EducationDBControler;
-import com.android.sjsofteducationapp.model.Home;
-import com.android.sjsofteducationapp.model.ImageDrag;
-import com.android.sjsofteducationapp.utils.GetDataFromDB;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
-import com.meg7.widget.SvgImageView;
-import com.plattysoft.leonids.ParticleSystem;
-
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
@@ -47,6 +34,22 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.sjsofteducationapp.database.EducationDBControler;
+import com.android.sjsofteducationapp.model.Home;
+import com.android.sjsofteducationapp.model.ImageDrag;
+import com.android.sjsofteducationapp.utils.GetDataFromDB;
+import com.android.sjsofteducationapp.utils.Sound;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.meg7.widget.SvgImageView;
+import com.plattysoft.leonids.ParticleSystem;
+
 public class StudyActivity extends Activity implements OnClickListener {
 	private LinearLayout layoutContent;
 	private FrameLayout frameContent;
@@ -72,13 +75,18 @@ public class StudyActivity extends Activity implements OnClickListener {
 	String title;
 	int position = 0;
 
+	private AdView mAdView;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_study);
-
+		
+		mAdView = (AdView) findViewById(R.id.adView);
+		
+		Sound.initSoundRes(getApplicationContext());
 		Handler handler = new Handler();
 		handler.post(new Runnable() {
 
@@ -267,7 +275,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
 					if (event.getAction() == MotionEvent.ACTION_DOWN) {
-						startMussicOnclick(R.raw.comedy_pop_finger_in_mouth_001);
+						Sound.playSound(Sound.SOUND_RING_TOUCH);
 						// ringTouch.start();
 						ClipData data = ClipData.newPlainText("", "");
 						View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
@@ -323,7 +331,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 								new ParticleSystem(StudyActivity.this, 100, R.drawable.ic_star_dropdown, 800)
 										.setSpeedRange(0.1f, 0.25f).oneShot(v, 50);
 								// ringSuccess.start();
-								startMussicOnclick(R.raw.cartoon_slide_whistle_ascend_version_2);
+								Sound.playSound(Sound.SOUND_RING_SUCCESS);
 							}
 						} else {
 							YoYo.with(Techniques.Swing).playOn(v);
@@ -435,28 +443,10 @@ public class StudyActivity extends Activity implements OnClickListener {
 		}
 	}
 
-	Thread thread;
-
-	private void startMussicOnclick(int raw) {
-		final int r = raw;
-
-		if (mpOnClick != null)
-			if (mpOnClick.isPlaying())
-				mpOnClick.stop();
-		Runnable runnable = new Runnable() {
-
-			@Override
-			public void run() {
-				mpOnClick = MediaPlayer.create(StudyActivity.this, r);
-				mpOnClick.start();
-			}
-		};
-		thread = new Thread(runnable);
-		thread.start();
-	}
-
 	@Override
 	protected void onResume() {
+		AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 		super.onResume();
 		if (mpOnClick != null)
 			if (mpOnClick.isPlaying())

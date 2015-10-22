@@ -9,6 +9,8 @@ import com.android.sjsofteducationapp.utils.GetDataFromDB;
 import com.android.sjsofteducationapp.utils.Sound;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -35,11 +37,15 @@ public class SubjectActivity extends MasterActivity
 	private String title, bg_image;
 	private GetDataFromDB gdfdb;
 
+	private AdView mAdView;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_subject);
-
+		
+		mAdView = (AdView) findViewById(R.id.adView);
+		
 		Intent intent = getIntent();
 		title = intent.getStringExtra("HOME_TITLE");
 		bg_image = intent.getStringExtra("HOME_BG");
@@ -91,6 +97,8 @@ public class SubjectActivity extends MasterActivity
 
 	@Override
 	protected void onResume() {
+		AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 		if (adapter != null)
 			if (gdfdb != null) {
 				data = gdfdb.getDataFromDB(title.toLowerCase());

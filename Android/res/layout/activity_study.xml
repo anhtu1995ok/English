@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:strokeAttrs="http://schemas.android.com/apk/res-auto"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -238,7 +239,7 @@
         </FrameLayout>
     </FrameLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
@@ -249,6 +250,14 @@
             android:id="@+id/bottom_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </LinearLayout>
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/banner_ad_unit_id" >
+        </com.google.android.gms.ads.AdView>
+    </FrameLayout>
 
 </LinearLayout>
