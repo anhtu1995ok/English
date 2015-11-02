@@ -57,7 +57,7 @@ public class SubjectActivity extends MasterActivity
 		listView = (HListView) findViewById(R.id.listView);
 
 		image = (ImageView) findViewById(R.id.image);
-		String fileImage = Environment.getExternalStorageDirectory() + "/Sjsoft/Home/Content/" + bg_image;
+		String fileImage = Environment.getExternalStorageDirectory() + "/Sjsoft/Home/Content/" + bg_image + ".jsc";
 		File file = new File(fileImage);
 		if (file.exists()) {
 			Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());

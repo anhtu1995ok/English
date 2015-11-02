@@ -60,7 +60,7 @@ public class HorizontalListViewAdapter extends ArrayAdapter<Home> {
 		ImageView image = (ImageView) convertView.findViewById(R.id.image);
 		TextView title = (TextView) convertView.findViewById(R.id.title);
 
-		String imageFile = Environment.getExternalStorageDirectory() + "/Sjsoft/Home/Icon/" + home.getIcon();
+		String imageFile = Environment.getExternalStorageDirectory() + "/Sjsoft/Home/Icon/" + home.getIcon() + ".jsc";
 		final String name = home.getTitle();
 		File file = new File(imageFile);
 		if (file.exists()) {

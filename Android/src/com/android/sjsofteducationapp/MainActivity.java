@@ -10,7 +10,6 @@ import com.android.sjsofteducationapp.utils.GetDataFromDB;
 import com.android.sjsofteducationapp.utils.Sound;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
@@ -56,6 +55,8 @@ public class MainActivity extends MasterActivity implements OnClickListener,
 
 		mInterstitialAd = new InterstitialAd(this);
 		mInterstitialAd.setAdUnitId("ca-app-pub-8818569204723527/7877358093");
+		AdRequest adRequest = new AdRequest.Builder().build();
+		mInterstitialAd.loadAd(adRequest);
 
 		mAdView = (AdView) findViewById(R.id.adView);
 
@@ -241,20 +242,8 @@ public class MainActivity extends MasterActivity implements OnClickListener,
 
 	@Override
 	public void onBackPressed() {
-		AdRequest adRequest = new AdRequest.Builder().build();
-		mInterstitialAd.loadAd(adRequest);
 		mInterstitialAd.show();
-		mInterstitialAd.setAdListener(new AdListener() {
-			@Override
-			public void onAdClosed() {
-				finish();
-			}
-			
-			@Override
-			public void onAdFailedToLoad(int errorCode) {
-				finish();
-				super.onAdFailedToLoad(errorCode);
-			}
-		});
+		super.onBackPressed();
 	}
+	
 }

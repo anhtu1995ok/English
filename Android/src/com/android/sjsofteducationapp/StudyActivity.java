@@ -114,7 +114,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 						}
 					}
 				});
-				file = loadFile(home.getContent_image());
+				file = loadFile(home.getContent_image() + ".jsc");
 				if (file == null) {
 					finish();
 				}
@@ -411,7 +411,7 @@ public class StudyActivity extends Activity implements OnClickListener {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			String fileImage = Environment.getExternalStorageDirectory() + "/Sjsoft/Home/Content/" + bg_image;
+			String fileImage = Environment.getExternalStorageDirectory() + "/Sjsoft/Home/Content/" + bg_image + ".jsc";
 			file = new File(fileImage);
 
 			createArraySvg();

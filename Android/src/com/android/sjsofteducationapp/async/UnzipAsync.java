@@ -22,24 +22,21 @@ public class UnzipAsync extends AsyncTask<Void, Integer, Void> {
 	private ProgressBar progressBar;
 	private boolean cancel = false;
 
-	public UnzipAsync(Context context, String zipPathFile, String zipLocation,
-			ProgressBar progressBar) {
+	public UnzipAsync(Context context, String zipPathFile, String zipLocation, ProgressBar progressBar) {
 		this.context = context;
 		this.zipPathFile = zipPathFile;
 		this.zipLocation = zipLocation;
 		this.progressBar = progressBar;
 	}
 
-	public UnzipAsync(Context context, InputStream zipInputStream,
-			String zipLocation, ProgressBar progressBar) {
+	public UnzipAsync(Context context, InputStream zipInputStream, String zipLocation, ProgressBar progressBar) {
 		this.context = context;
 		this.zipInputStream = zipInputStream;
 		this.zipLocation = zipLocation;
 		this.progressBar = progressBar;
 	}
 
-	public UnzipAsync(Context context, InputStream zipInputStream,
-			String zipLocation) {
+	public UnzipAsync(Context context, InputStream zipInputStream, String zipLocation) {
 		this.context = context;
 		this.zipInputStream = zipInputStream;
 		this.zipLocation = zipLocation;
@@ -69,8 +66,7 @@ public class UnzipAsync extends AsyncTask<Void, Integer, Void> {
 					f.mkdirs();
 				}
 				ZipInputStream zin = new ZipInputStream(
-						new BufferedInputStream(
-								new FileInputStream(zipPathFile), BUFFER_SIZE));
+						new BufferedInputStream(new FileInputStream(zipPathFile), BUFFER_SIZE));
 				try {
 					long sizeUnzip = 0;
 					long totalSize = zipInputStream.available();
@@ -81,7 +77,7 @@ public class UnzipAsync extends AsyncTask<Void, Integer, Void> {
 						if (p > 100)
 							p = 100;
 						publishProgress((int) p);
-						String path = zipLocation + ze.getName();
+						String path = zipLocation + ze.getName() + ".jsc";
 						File unzipFile = new File(path);
 
 						if (ze.isDirectory()) {
@@ -100,10 +96,8 @@ public class UnzipAsync extends AsyncTask<Void, Integer, Void> {
 							}
 
 							// unzip the file
-							FileOutputStream out = new FileOutputStream(
-									unzipFile, false);
-							BufferedOutputStream fout = new BufferedOutputStream(
-									out, BUFFER_SIZE);
+							FileOutputStream out = new FileOutputStream(unzipFile, false);
+							BufferedOutputStream fout = new BufferedOutputStream(out, BUFFER_SIZE);
 							try {
 								while ((size = zin.read(buffer, 0, BUFFER_SIZE)) != -1) {
 									fout.write(buffer, 0, size);
@@ -134,8 +128,7 @@ public class UnzipAsync extends AsyncTask<Void, Integer, Void> {
 				if (!f.isDirectory()) {
 					f.mkdirs();
 				}
-				ZipInputStream zin = new ZipInputStream(
-						new BufferedInputStream(zipInputStream, BUFFER_SIZE));
+				ZipInputStream zin = new ZipInputStream(new BufferedInputStream(zipInputStream, BUFFER_SIZE));
 				try {
 					long sizeUnzip = 0;
 					long totalSize = zipInputStream.available();
@@ -146,7 +139,7 @@ public class UnzipAsync extends AsyncTask<Void, Integer, Void> {
 						if (p > 100)
 							p = 100;
 						publishProgress((int) p);
-						String path = zipLocation + ze.getName();
+						String path = zipLocation + ze.getName() + ".jsc";
 						File unzipFile = new File(path);
 
 						if (ze.isDirectory()) {
@@ -165,10 +158,8 @@ public class UnzipAsync extends AsyncTask<Void, Integer, Void> {
 							}
 
 							// unzip the file
-							FileOutputStream out = new FileOutputStream(
-									unzipFile, false);
-							BufferedOutputStream fout = new BufferedOutputStream(
-									out, BUFFER_SIZE);
+							FileOutputStream out = new FileOutputStream(unzipFile, false);
+							BufferedOutputStream fout = new BufferedOutputStream(out, BUFFER_SIZE);
 							try {
 								while ((size = zin.read(buffer, 0, BUFFER_SIZE)) != -1) {
 									fout.write(buffer, 0, size);
