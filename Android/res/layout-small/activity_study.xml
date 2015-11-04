@@ -21,7 +21,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/selector_back" />
 
-        <com.android.sjsofteducationapp.extras.StrokeTextView
+        <com.vn.studiotruekids.englishforkids.extras.StrokeTextView
             android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -103,7 +103,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1" >
 
-                            <com.android.sjsofteducationapp.extras.SquareSvgImageView
+                            <com.vn.studiotruekids.englishforkids.extras.SquareSvgImageView
                                 android:id="@+id/image1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
@@ -113,7 +113,7 @@
                                 android:src="@drawable/drag"
                                 app:svg_raw_resource="@raw/shape_star" />
 
-                            <com.android.sjsofteducationapp.extras.SquareSvgImageView
+                            <com.vn.studiotruekids.englishforkids.extras.SquareSvgImageView
                                 android:id="@+id/image_drag1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
@@ -131,7 +131,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1" >
 
-                            <com.android.sjsofteducationapp.extras.SquareSvgImageView
+                            <com.vn.studiotruekids.englishforkids.extras.SquareSvgImageView
                                 android:id="@+id/image2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
@@ -141,7 +141,7 @@
                                 android:src="@drawable/drag"
                                 app:svg_raw_resource="@raw/shape_star" />
 
-                            <com.android.sjsofteducationapp.extras.SquareSvgImageView
+                            <com.vn.studiotruekids.englishforkids.extras.SquareSvgImageView
                                 android:id="@+id/image_drag2"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
@@ -166,7 +166,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1" >
 
-                            <com.android.sjsofteducationapp.extras.SquareSvgImageView
+                            <com.vn.studiotruekids.englishforkids.extras.SquareSvgImageView
                                 android:id="@+id/image3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
@@ -176,7 +176,7 @@
                                 android:src="@drawable/drag"
                                 app:svg_raw_resource="@raw/shape_star" />
 
-                            <com.android.sjsofteducationapp.extras.SquareSvgImageView
+                            <com.vn.studiotruekids.englishforkids.extras.SquareSvgImageView
                                 android:id="@+id/image_drag3"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
@@ -194,7 +194,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1" >
 
-                            <com.android.sjsofteducationapp.extras.SquareSvgImageView
+                            <com.vn.studiotruekids.englishforkids.extras.SquareSvgImageView
                                 android:id="@+id/image4"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
@@ -204,7 +204,7 @@
                                 android:src="@drawable/drag"
                                 app:svg_raw_resource="@raw/shape_star" />
 
-                            <com.android.sjsofteducationapp.extras.SquareSvgImageView
+                            <com.vn.studiotruekids.englishforkids.extras.SquareSvgImageView
                                 android:id="@+id/image_drag4"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
